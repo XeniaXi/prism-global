@@ -1013,6 +1013,12 @@
                         <textarea id="f-desc" placeholder="Property description..."></textarea>
                     </div>
                     <div class="form-group full">
+                        <label>VR 360° Tour URL</label>
+                        <input type="url" id="f-vr-url" placeholder="e.g. https://real-vr-360.vercel.app/tour/abc123">
+                        <small style="color:var(--muted);font-size:.75rem;margin-top:.2rem">Paste the VR tour link from
+                            RealVR360 or any 360° tour platform. This embeds directly into the property listing.</small>
+                    </div>
+                    <div class="form-group full">
                         <label>Property Images</label>
                         <div class="upload-zone" id="modal-upload-zone">
                             <input type="file" accept="image/*" multiple id="modal-file-input">
@@ -1185,7 +1191,7 @@
         function showAddModal() {
             document.getElementById('modal-title').textContent = 'Add New Property';
             document.getElementById('edit-id').value = '';
-            ['f-title', 'f-price', 'f-location', 'f-beds', 'f-baths', 'f-area', 'f-desc'].forEach(id => document.getElementById(id).value = '');
+            ['f-title', 'f-price', 'f-location', 'f-beds', 'f-baths', 'f-area', 'f-desc', 'f-vr-url'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('f-type').selectedIndex = 0;
             document.getElementById('f-status').value = 'active';
             modalImages = [];
@@ -1207,6 +1213,7 @@
             document.getElementById('f-area').value = p.area;
             document.getElementById('f-status').value = p.status;
             document.getElementById('f-desc').value = p.desc || '';
+            document.getElementById('f-vr-url').value = p.vrUrl || '';
             modalImages = [...(p.images || [])];
             renderModalPreview();
             document.getElementById('property-modal').classList.add('open');
@@ -1230,6 +1237,7 @@
                 area: document.getElementById('f-area').value,
                 status: document.getElementById('f-status').value,
                 desc: document.getElementById('f-desc').value,
+                vrUrl: document.getElementById('f-vr-url').value.trim(),
                 images: modalImages,
                 created: new Date().toISOString(),
             };
@@ -1281,6 +1289,15 @@
                 <div class="view-field"><label>Images</label><p>${p.images?.length || 0} photos</p></div>
             </div>`;
             if (p.desc) html += `<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)"><label style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Description</label><p style="margin-top:.4rem;line-height:1.7;color:rgba(255,255,255,.8)">${esc(p.desc)}</p></div>`;
+            if (p.vrUrl) {
+                html += `<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
+                    <label style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">🎮 VR 360° Tour</label>
+                    <div style="margin-top:.8rem;background:#0a0a1a;border-radius:14px;padding:1rem;border:1px solid rgba(0,255,255,.15)">
+                        <iframe src="${p.vrUrl}" style="width:100%;height:300px;border:none;border-radius:10px" allowfullscreen></iframe>
+                        <a href="${p.vrUrl}" target="_blank" style="display:inline-block;margin-top:.8rem;color:var(--cyan);font-size:.85rem;text-decoration:none">🔗 Open in new tab →</a>
+                    </div>
+                </div>`;
+            }
             document.getElementById('view-body').innerHTML = html;
             document.getElementById('view-modal').classList.add('open');
         }

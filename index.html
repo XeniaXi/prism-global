@@ -331,6 +331,279 @@
             cursor: pointer
         }
 
+        /* Property Detail Modal */
+        .detail-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .35s;
+            padding: 1rem;
+        }
+
+        .detail-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .detail-modal {
+            background: #fff;
+            border-radius: 24px;
+            max-width: 880px;
+            width: 100%;
+            max-height: 92vh;
+            overflow-y: auto;
+            transform: translateY(30px) scale(.97);
+            transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, .3);
+        }
+
+        .detail-overlay.open .detail-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .detail-hero {
+            height: 380px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .detail-hero-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px 24px 0 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, .7) 0%, transparent 50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+
+        .detail-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(4px);
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+        }
+
+        .detail-close:hover {
+            background: rgba(255, 60, 60, .8);
+            transform: scale(1.1);
+        }
+
+        .detail-hero-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .detail-hero-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .85);
+            margin-top: .3rem;
+        }
+
+        .detail-hero-loc {
+            font-size: .9rem;
+            color: rgba(255, 255, 255, .6);
+            margin-top: .3rem;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .detail-body {
+            padding: 2rem;
+        }
+
+        .detail-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-spec {
+            background: #f8f9fa;
+            border-radius: 14px;
+            padding: 1.2rem;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .detail-spec-val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--bg-dark);
+        }
+
+        .detail-spec-label {
+            font-size: .78rem;
+            color: #888;
+            margin-top: .2rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .detail-desc {
+            color: #555;
+            line-height: 1.8;
+            font-size: .95rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-desc h3 {
+            color: var(--bg-dark);
+            font-size: 1.1rem;
+            margin-bottom: .8rem;
+        }
+
+        .detail-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .6rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-feat {
+            background: linear-gradient(135deg, rgba(0, 255, 255, .08), rgba(255, 0, 255, .05));
+            border: 1px solid rgba(0, 200, 200, .15);
+            border-radius: 10px;
+            padding: .6rem 1.1rem;
+            font-size: .85rem;
+            font-weight: 500;
+            color: var(--bg-dark);
+        }
+
+        .detail-vr-section {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .detail-vr-section h3 {
+            color: var(--cyan);
+            font-size: 1.1rem;
+            margin-bottom: .6rem;
+        }
+
+        .detail-vr-section p {
+            color: rgba(255, 255, 255, .6);
+            font-size: .88rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-vr-frame {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 255, .2);
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, .4);
+            font-size: .9rem;
+            overflow: hidden;
+        }
+
+        .detail-vr-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem;
+            border-radius: 14px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+        }
+
+        .detail-btn-wa {
+            background: #25D366;
+            color: #fff;
+        }
+
+        .detail-btn-wa:hover {
+            background: #20b858;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, .4);
+        }
+
+        .detail-btn-call {
+            background: var(--bg-dark);
+            color: #fff;
+        }
+
+        .detail-btn-call:hover {
+            background: #222;
+            transform: translateY(-2px);
+        }
+
+        .detail-btn-vr {
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            color: #fff;
+        }
+
+        .detail-btn-vr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, .4);
+        }
+
+        @media (max-width: 600px) {
+            .detail-hero {
+                height: 260px;
+            }
+
+            .detail-hero-price {
+                font-size: 1.5rem;
+            }
+
+            .detail-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .p-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, .15)
@@ -929,7 +1202,7 @@
             <p>Every listing is inspected, documented, and guaranteed. Invest with peace of mind.</p>
         </div>
         <div class="properties-grid">
-            <div class="p-card">
+            <div class="p-card" onclick="showDetail(0)">
                 <div class="p-img">
                     <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -967,7 +1240,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-card">
+            <div class="p-card" onclick="showDetail(1)">
                 <div class="p-img">
                     <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -991,7 +1264,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-card">
+            <div class="p-card" onclick="showDetail(2)">
                 <div class="p-img">
                     <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -1015,7 +1288,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-card">
+            <div class="p-card" onclick="showDetail(3)">
                 <div class="p-img">
                     <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -1039,7 +1312,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-card">
+            <div class="p-card" onclick="showDetail(4)">
                 <div class="p-img">
                     <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -1077,7 +1350,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-card">
+            <div class="p-card" onclick="showDetail(5)">
                 <div class="p-img">
                     <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -1281,6 +1554,156 @@
             <p>&copy; 2026 Prism Global Nigeria. All rights reserved. RC: 0000000</p>
         </div>
     </footer>
+
+    <!-- Property Detail Modal -->
+    <div class="detail-overlay" id="detail-overlay" onclick="if(event.target===this)closeDetail()">
+        <div class="detail-modal">
+            <div class="detail-hero" id="detail-hero">
+                <div class="detail-hero-overlay">
+                    <button class="detail-close" onclick="closeDetail()">✕</button>
+                    <div class="detail-hero-price" id="detail-price"></div>
+                    <div class="detail-hero-title" id="detail-title"></div>
+                    <div class="detail-hero-loc" id="detail-loc">📍 <span id="detail-loc-text"></span></div>
+                </div>
+            </div>
+            <div class="detail-body">
+                <div class="detail-specs" id="detail-specs"></div>
+                <div class="detail-desc" id="detail-desc"></div>
+                <div class="detail-features" id="detail-features"></div>
+                <div class="detail-vr-section" id="detail-vr" style="display:none">
+                    <h3>🎮 VR 360° Virtual Tour</h3>
+                    <p>Explore this property from anywhere in the world</p>
+                    <div class="detail-vr-frame" id="detail-vr-frame"></div>
+                </div>
+                <div class="detail-actions">
+                    <a class="detail-btn detail-btn-wa" id="detail-wa" href="#" target="_blank">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        WhatsApp Inquiry
+                    </a>
+                    <a class="detail-btn detail-btn-call" href="tel:+2348000000000">
+                        📞 Call Now
+                    </a>
+                    <button class="detail-btn detail-btn-vr" id="detail-vr-btn" style="display:none"
+                        onclick="document.getElementById('detail-vr').scrollIntoView({behavior:'smooth'})">
+                        🎮 View VR Tour
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PROPERTIES = [
+            {
+                title: '5 Bedroom Detached Duplex', price: '₦185,000,000', location: 'Lekki Phase 1, Lagos',
+                type: 'Detached Duplex', beds: 5, baths: 5, area: '450 sqm', badge: 'Featured',
+                image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&h=800&fit=crop',
+                desc: 'This stunning 5-bedroom fully detached duplex sits in one of Lagos\' most prestigious addresses. Finished to the highest specification with imported Italian marble flooring, designer kitchen fittings, and smart home automation throughout. The property features a private cinema room, gym, swimming pool, and expansive gardens with a dedicated staff quarters. Ideal for the discerning investor who wants luxury, security, and strong appreciation potential.',
+                features: ['Smart Home System', 'Swimming Pool', 'Cinema Room', 'BQ', 'Fully Fitted Kitchen', 'CCTV Security', '24/7 Power Supply', 'Gated Estate'],
+                hasVR: true, vrUrl: ''
+            },
+            {
+                title: '4 Bedroom Semi-Detached', price: '₦95,000,000', location: 'Maitama, Abuja',
+                type: 'Semi-Detached Duplex', beds: 4, baths: 4, area: '380 sqm', badge: 'New Listing',
+                image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=800&fit=crop',
+                desc: 'Newly built 4-bedroom semi-detached duplex in the heart of Abuja\'s most exclusive neighborhood. Features open-plan living, floor-to-ceiling windows, and premium finishes throughout. Each bedroom is en-suite with walk-in closets. Within walking distance to major embassies, international schools, and shopping centers. Perfect for families or as a high-yield rental investment.',
+                features: ['En-Suite Rooms', 'Walk-in Closets', 'Servant Quarters', 'Car Port', 'Tarred Road Access', 'Near Embassies', 'Underground Parking'],
+                hasVR: false, vrUrl: ''
+            },
+            {
+                title: '3 Bedroom Apartment', price: '₦45,000,000', location: 'Ikeja GRA, Lagos',
+                type: 'Apartment', beds: 3, baths: 3, area: '200 sqm', badge: 'Hot Deal',
+                image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+                desc: 'Modern 3-bedroom apartment in the well-secured Ikeja GRA precinct. Features smart home controls, centralized air conditioning, and a fully equipped kitchen with modern appliances. The building includes a rooftop lounge, dedicated parking, and 24-hour security. An excellent entry point for diaspora investors seeking strong rental returns in mainland Lagos.',
+                features: ['Smart Home Controls', 'Central AC', 'Rooftop Lounge', 'Elevator Access', 'Dedicated Parking', '24/7 Security', 'Backup Generator'],
+                hasVR: false, vrUrl: ''
+            },
+            {
+                title: '600sqm Plot — C of O', price: '₦35,000,000', location: 'Ibeju-Lekki, Lagos',
+                type: 'Land', beds: 0, baths: 0, area: '600 sqm', badge: 'Land',
+                image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&h=800&fit=crop',
+                desc: 'Prime 600sqm plot with a clean Certificate of Occupancy in the rapidly developing Ibeju-Lekki corridor — the future economic hub of Lagos. Located near the Dangote Refinery, Lekki Free Trade Zone, and the new Lekki Deep Sea Port. This area has seen 300%+ land appreciation in the last 5 years. Build your dream home or hold for investment — either way, you win.',
+                features: ['Certificate of Occupancy', 'Survey Plan', 'Gazette Available', 'Near Free Trade Zone', 'Near Dangote Refinery', 'Road Network', 'Build Ready'],
+                hasVR: false, vrUrl: ''
+            },
+            {
+                title: 'Waterfront Mansion', price: '₦320,000,000', location: 'Banana Island, Lagos',
+                type: 'Mansion', beds: 6, baths: 7, area: '1,200 sqm', badge: 'Luxury',
+                image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop',
+                desc: 'An ultra-luxury waterfront mansion on Nigeria\'s most exclusive address — Banana Island, Ikoyi. This architectural masterpiece features 6 en-suite bedrooms, an infinity pool overlooking the lagoon, private jetty, home automation, and triple-level living spaces. The property includes a wine cellar, private elevator, and 4-car underground garage. For the investor who demands nothing less than the absolute finest.',
+                features: ['Waterfront View', 'Infinity Pool', 'Private Jetty', 'Wine Cellar', 'Private Elevator', 'Underground Garage', 'Home Automation', 'Staff Quarters', 'Gym & Spa'],
+                hasVR: true, vrUrl: ''
+            },
+            {
+                title: '2 Bedroom Smart Flat', price: '₦28,000,000', location: 'Wuse 2, Abuja',
+                type: 'Apartment', beds: 2, baths: 2, area: '120 sqm', badge: 'Selling Fast',
+                image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop',
+                desc: 'A beautifully finished 2-bedroom smart apartment in the vibrant Wuse 2 district of Abuja. Equipped with automated lighting, smart locks, and energy-efficient appliances. Located near major shopping malls, restaurants, and the Abuja nightlife scene. Perfect for young professionals or as a short-let investment property with guaranteed high occupancy rates.',
+                features: ['Smart Locks', 'Automated Lighting', 'Energy Efficient', 'Near Shopping', 'Fiber Internet Ready', 'Gym Access', 'Concierge Service'],
+                hasVR: true, vrUrl: ''
+            }
+        ];
+
+        function showDetail(idx) {
+            const p = PROPERTIES[idx];
+            if (!p) return;
+            document.getElementById('detail-hero').style.backgroundImage = `url(${p.image})`;
+            document.getElementById('detail-price').textContent = p.price;
+            document.getElementById('detail-title').textContent = p.title;
+            document.getElementById('detail-loc-text').textContent = p.location;
+
+            // Specs
+            let specs = '';
+            if (p.beds) specs += `<div class="detail-spec"><div class="detail-spec-val">${p.beds}</div><div class="detail-spec-label">Bedrooms</div></div>`;
+            if (p.baths) specs += `<div class="detail-spec"><div class="detail-spec-val">${p.baths}</div><div class="detail-spec-label">Bathrooms</div></div>`;
+            specs += `<div class="detail-spec"><div class="detail-spec-val">${p.area}</div><div class="detail-spec-label">Total Area</div></div>`;
+            specs += `<div class="detail-spec"><div class="detail-spec-val">${p.type}</div><div class="detail-spec-label">Property Type</div></div>`;
+            document.getElementById('detail-specs').innerHTML = specs;
+
+            // Description
+            document.getElementById('detail-desc').innerHTML = `<h3>About This Property</h3><p>${p.desc}</p>`;
+
+            // Features
+            document.getElementById('detail-features').innerHTML = p.features.map(f => `<div class="detail-feat">✓ ${f}</div>`).join('');
+
+            // VR section
+            const vrSection = document.getElementById('detail-vr');
+            const vrBtn = document.getElementById('detail-vr-btn');
+            if (p.hasVR) {
+                vrSection.style.display = '';
+                vrBtn.style.display = '';
+                const vrFrame = document.getElementById('detail-vr-frame');
+                if (p.vrUrl) {
+                    vrFrame.innerHTML = `<iframe src="${p.vrUrl}" allowfullscreen></iframe>`;
+                } else {
+                    vrFrame.innerHTML = '🎮 VR Tour coming soon — check back for an immersive 360° experience';
+                }
+            } else {
+                vrSection.style.display = 'none';
+                vrBtn.style.display = 'none';
+            }
+
+            // WhatsApp link
+            const waMsg = encodeURIComponent(`Hi, I'm interested in the ${p.title} at ${p.location} (${p.price}). Please send me more details.`);
+            document.getElementById('detail-wa').href = `https://wa.me/2348000000000?text=${waMsg}`;
+
+            document.getElementById('detail-overlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-overlay').classList.remove('open');
+            document.body.style.overflow = '';
+            // Clear iframe to stop any playing content
+            document.getElementById('detail-vr-frame').innerHTML = '';
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+    </script>
 
 </body>
 

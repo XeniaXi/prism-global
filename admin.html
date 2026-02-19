@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Global — Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --card: #141414;
+            --card2: #1a1a1a;
+            --hover: #222;
+            --border: #2a2a2a;
+            --cyan: #00ffff;
+            --accent: #ff00ff;
+            --green: #00ff88;
+            --warn: #ffaa00;
+            --danger: #ff4444;
+            --text: #fff;
+            --muted: #777;
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ─── Sidebar ─── */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo-area {
+            padding: 1.5rem 1.5rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: .5px;
+        }
+
+        .logo-area svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 1rem 0;
+            flex: 1;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+            width: 100%;
+            padding: .85rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: .9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .25s;
+            border-left: 3px solid transparent;
+            text-align: left;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--hover);
+            color: var(--text);
+            border-left-color: var(--cyan);
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            flex-shrink: 0;
+        }
+
+        .avatar-info {
+            font-size: .85rem;
+            line-height: 1.4;
+        }
+
+        .avatar-info span {
+            display: block;
+            color: var(--muted);
+            font-size: .75rem;
+        }
+
+        /* ─── Main ─── */
+        .main {
+            margin-left: 260px;
+            padding: 2rem 2.5rem;
+            min-height: 100vh;
+        }
+
+        /* ─── Page header ─── */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            gap: .8rem;
+            align-items: center;
+        }
+
+        /* ─── Buttons ─── */
+        .btn {
+            padding: .7rem 1.4rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s;
+            font-size: .88rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, .25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, .45);
+        }
+
+        .btn-outline {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--hover);
+            border-color: var(--cyan);
+        }
+
+        .btn-danger {
+            background: rgba(255, 68, 68, .15);
+            color: var(--danger);
+            border: 1px solid rgba(255, 68, 68, .3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 68, 68, .25);
+        }
+
+        .btn-sm {
+            padding: .5rem 1rem;
+            font-size: .8rem;
+            border-radius: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+        }
+
+        .btn-icon:hover {
+            color: var(--text);
+            border-color: var(--cyan);
+            background: var(--hover);
+        }
+
+        .btn-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ─── Stat cards ─── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all .3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-4px);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .8rem;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: .85rem;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-val {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-delta {
+            font-size: .8rem;
+            color: var(--green);
+            margin-top: .3rem;
+        }
+
+        /* ─── Table ─── */
+        .table-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .table-top {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .8rem;
+        }
+
+        .table-top h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            background: var(--bg);
+            padding: .55rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            width: 260px;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            color: var(--text);
+            outline: none;
+            width: 100%;
+            font-size: .88rem;
+        }
+
+        .search-box svg {
+            width: 16px;
+            height: 16px;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg);
+        }
+
+        th {
+            text-align: left;
+            padding: .9rem 1.5rem;
+            font-weight: 600;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--muted);
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        tbody tr {
+            transition: background .2s;
+        }
+
+        tbody tr:hover {
+            background: var(--hover);
+        }
+
+        .prop-cell {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+        }
+
+        .prop-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--hover);
+        }
+
+        .prop-name {
+            font-weight: 600;
+            font-size: .92rem;
+            margin-bottom: .2rem;
+        }
+
+        .prop-meta {
+            font-size: .82rem;
+            color: var(--muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: .3rem .75rem;
+            border-radius: 20px;
+            font-size: .78rem;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: rgba(0, 255, 136, .12);
+            color: var(--green);
+        }
+
+        .badge-pending {
+            background: rgba(255, 170, 0, .12);
+            color: var(--warn);
+        }
+
+        .badge-sold {
+            background: rgba(255, 68, 68, .12);
+            color: var(--danger);
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: .4rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--muted);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ─── Modal ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            width: 680px;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform .3s;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0);
+        }
+
+        .modal-head {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-head h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-foot {
+            padding: 1.2rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: .8rem;
+        }
+
+        /* ─── Form ─── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: .75rem 1rem;
+            color: var(--text);
+            font-size: .9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--cyan);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: var(--card);
+        }
+
+        /* ─── Image upload ─── */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all .3s;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.drag-over {
+            border-color: var(--cyan);
+            background: rgba(0, 255, 255, .03);
+        }
+
+        .upload-zone .icon {
+            font-size: 2.5rem;
+            margin-bottom: .8rem;
+        }
+
+        .upload-zone p {
+            color: var(--muted);
+            font-size: .85rem;
+            line-height: 1.6;
+        }
+
+        .upload-zone input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-preview {
+            display: flex;
+            gap: .8rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .preview-thumb {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid var(--border);
+        }
+
+        .preview-thumb .remove {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: .7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── Recent activity ─── */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .activity-dot.green {
+            background: var(--green);
+        }
+
+        .activity-dot.cyan {
+            background: var(--cyan);
+        }
+
+        .activity-dot.warn {
+            background: var(--warn);
+        }
+
+        .activity-text {
+            font-size: .88rem;
+            line-height: 1.5;
+        }
+
+        .activity-time {
+            font-size: .78rem;
+            color: var(--muted);
+            margin-top: .2rem;
+        }
+
+        /* ─── View Property Modal ─── */
+        .view-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: .8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .view-gallery img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform .2s;
+        }
+
+        .view-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .view-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .view-field label {
+            font-size: .78rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .view-field p {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: .2rem;
+        }
+
+        /* ─── Toast ─── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card2);
+            border: 1px solid var(--green);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            font-size: .9rem;
+            z-index: 300;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all .3s;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast .toast-icon {
+            font-size: 1.2rem;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ═══ Sidebar ═══ -->
+    <aside class="sidebar">
+        <div class="logo-area">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <line x1="30" y1="80" x2="30" y2="30" stroke="#888" stroke-width="2" />
+                <line x1="70" y1="80" x2="70" y2="40" stroke="#888" stroke-width="2" />
+                <polyline points="30,30 50,20 70,40" fill="none" stroke="#888" stroke-width="2" />
+                <defs>
+                    <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00ffff;stop-opacity:.8" />
+                        <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:0" />
+                    </linearGradient>
+                </defs>
+                <path d="M50 20 L90 90 L10 90 Z" fill="url(#lg)" opacity=".5" />
+                <circle cx="50" cy="20" r="3" fill="white" />
+            </svg>
+            <span>PRISM GLOBAL</span>
+        </div>
+        <nav>
+            <ul class="nav-list">
+                <li><button class="nav-btn active" data-page="dashboard">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        Dashboard
+                    </button></li>
+                <li><button class="nav-btn" data-page="properties">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        Properties
+                    </button></li>
+                <li><button class="nav-btn" data-page="upload">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Upload Images
+                    </button></li>
+                <li><button class="nav-btn" data-page="activity">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Activity Log
+                    </button></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="avatar"></div>
+            <div class="avatar-info">Admin<span>Property Manager</span></div>
+        </div>
+    </aside>
+
+    <!-- ═══ Main ═══ -->
+    <main class="main">
+
+        <!-- ═══ PAGE: Dashboard ═══ -->
+        <section id="page-dashboard" class="page">
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <div class="header-right">
+                    <button class="btn btn-primary" onclick="showAddModal()">➕ Add Property</button>
+                    <button class="btn btn-outline" onclick="switchPage('properties')">📋 All Properties</button>
+                </div>
+            </div>
+
+            <div class="stats-row" id="stats-row"></div>
+
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;">
+                <div class="table-wrap">
+                    <div class="table-top">
+                        <h2>Recent Properties</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-tbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="table-wrap">
+                    <div class="table-top">
+                        <h2>Recent Activity</h2>
+                    </div>
+                    <ul class="activity-list" id="activity-list"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ PAGE: Properties ═══ -->
+        <section id="page-properties" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>All Properties</h1>
+                <div class="header-right">
+                    <button class="btn btn-primary" onclick="showAddModal()">➕ Add Property</button>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <div class="table-top">
+                    <h2 id="props-count">Properties (0)</h2>
+                    <div class="search-box">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Search properties..."
+                            oninput="renderProperties()">
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Location</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Images</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="props-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ═══ PAGE: Upload ═══ -->
+        <section id="page-upload" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>Upload Property Images</h1>
+            </div>
+
+            <div class="table-wrap" style="padding:2rem;">
+                <div class="form-group full" style="margin-bottom:1.5rem;">
+                    <label>Select Property</label>
+                    <select id="upload-property-select"
+                        style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;color:var(--text);font-size:.9rem;">
+                        <option value="">-- Choose a property --</option>
+                    </select>
+                </div>
+
+                <div class="upload-zone" id="bulk-upload-zone">
+                    <input type="file" accept="image/*" multiple id="bulk-file-input">
+                    <div class="icon">📷</div>
+                    <p><strong>Drop images here</strong> or click to browse<br>
+                        Supports JPG, PNG, WebP — up to 10 images at once</p>
+                </div>
+                <div class="upload-preview" id="bulk-preview"></div>
+                <div style="margin-top:1.5rem;text-align:right;">
+                    <button class="btn btn-primary" onclick="saveBulkImages()">💾 Save Images to Property</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ PAGE: Activity ═══ -->
+        <section id="page-activity" class="page" style="display:none;">
+            <div class="page-header">
+                <h1>Activity Log</h1>
+            </div>
+            <div class="table-wrap">
+                <div class="table-top">
+                    <h2>All Activity</h2>
+                </div>
+                <ul class="activity-list" id="full-activity-list"></ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══ Add/Edit Modal ═══ -->
+    <div class="modal-overlay" id="property-modal">
+        <div class="modal">
+            <div class="modal-head">
+                <h2 id="modal-title">Add New Property</h2>
+                <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Property Title</label>
+                        <input type="text" id="f-title" placeholder="e.g. 5 Bedroom Duplex">
+                    </div>
+                    <div class="form-group">
+                        <label>Property Type</label>
+                        <select id="f-type">
+                            <option>Detached Duplex</option>
+                            <option>Semi-Detached Duplex</option>
+                            <option>Apartment</option>
+                            <option>Terraced House</option>
+                            <option>Land</option>
+                            <option>Mansion</option>
+                            <option>Penthouse</option>
+                            <option>Commercial</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₦)</label>
+                        <input type="text" id="f-price" placeholder="e.g. 185000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="f-location" placeholder="e.g. Lekki Phase 1, Lagos">
+                    </div>
+                    <div class="form-group">
+                        <label>Bedrooms</label>
+                        <input type="number" id="f-beds" placeholder="5" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Bathrooms</label>
+                        <input type="number" id="f-baths" placeholder="5" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Area (sqm)</label>
+                        <input type="number" id="f-area" placeholder="450" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="f-status">
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label>Description</label>
+                        <textarea id="f-desc" placeholder="Property description..."></textarea>
+                    </div>
+                    <div class="form-group full">
+                        <label>Property Images</label>
+                        <div class="upload-zone" id="modal-upload-zone">
+                            <input type="file" accept="image/*" multiple id="modal-file-input">
+                            <div class="icon">📸</div>
+                            <p><strong>Drop images here</strong> or click to browse<br>JPG, PNG, WebP</p>
+                        </div>
+                        <div class="upload-preview" id="modal-preview"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProperty()">💾 Save Property</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ View Modal ═══ -->
+    <div class="modal-overlay" id="view-modal">
+        <div class="modal">
+            <div class="modal-head">
+                <h2 id="view-title">Property Details</h2>
+                <button class="btn-icon" onclick="closeViewModal()">✕</button>
+            </div>
+            <div class="modal-body" id="view-body"></div>
+            <div class="modal-foot">
+                <button class="btn btn-outline" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"><span class="toast-icon">✅</span><span id="toast-msg"></span></div>
+
+    <script>
+        /* ─── Data Layer ─── */
+        const STORE_KEY = 'prism_properties';
+        const LOG_KEY = 'prism_activity';
+
+        function loadProperties() {
+            try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch { return []; }
+        }
+        function saveProperties(data) { localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+        function loadLog() {
+            try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch { return []; }
+        }
+        function saveLog(entries) { localStorage.setItem(LOG_KEY, JSON.stringify(entries)); }
+        function addLogEntry(text, type = 'green') {
+            const log = loadLog();
+            log.unshift({ text, type, time: new Date().toISOString() });
+            if (log.length > 50) log.length = 50;
+            saveLog(log);
+        }
+
+        /* Seed demo data if empty */
+        function seedIfEmpty() {
+            if (loadProperties().length) return;
+            const demo = [
+                { id: '1', title: '5 Bedroom Detached Duplex', type: 'Detached Duplex', price: '185000000', location: 'Lekki Phase 1, Lagos', beds: '5', baths: '5', area: '450', status: 'active', desc: 'Luxury finished duplex in a prime estate.', images: [], created: new Date().toISOString() },
+                { id: '2', title: '4 Bedroom Semi-Detached', type: 'Semi-Detached Duplex', price: '95000000', location: 'Maitama, Abuja', beds: '4', baths: '4', area: '380', status: 'active', desc: 'Newly built in the Abuja highbrow area.', images: [], created: new Date().toISOString() },
+                { id: '3', title: '3 Bedroom Apartment', type: 'Apartment', price: '45000000', location: 'Ikeja GRA, Lagos', beds: '3', baths: '3', area: '200', status: 'pending', desc: 'Modern apartment with smart home features.', images: [], created: new Date().toISOString() },
+                { id: '4', title: '600sqm Plot — C of O', type: 'Land', price: '35000000', location: 'Ibeju-Lekki, Lagos', beds: '0', baths: '0', area: '600', status: 'active', desc: 'Build-ready land with Certificate of Occupancy.', images: [], created: new Date().toISOString() },
+                { id: '5', title: 'Waterfront Mansion', type: 'Mansion', price: '320000000', location: 'Banana Island, Lagos', beds: '6', baths: '7', area: '1200', status: 'active', desc: 'Exclusive waterfront property on the island.', images: [], created: new Date().toISOString() },
+                { id: '6', title: '2 Bedroom Smart Flat', type: 'Apartment', price: '28000000', location: 'Wuse 2, Abuja', beds: '2', baths: '2', area: '120', status: 'sold', desc: 'Smart apartment with automated lighting.', images: [], created: new Date().toISOString() },
+            ];
+            saveProperties(demo);
+            addLogEntry('System seeded with 6 demo properties', 'cyan');
+        }
+
+        /* ─── Nav ─── */
+        function switchPage(name) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById('page-' + name).style.display = '';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === name));
+            if (name === 'dashboard') renderDashboard();
+            if (name === 'properties') renderProperties();
+            if (name === 'upload') populateUploadSelect();
+            if (name === 'activity') renderFullActivity();
+        }
+        document.querySelectorAll('.nav-btn').forEach(b => b.addEventListener('click', () => switchPage(b.dataset.page)));
+
+        /* ─── Dashboard ─── */
+        function renderDashboard() {
+            const props = loadProperties();
+            const active = props.filter(p => p.status === 'active').length;
+            const pending = props.filter(p => p.status === 'pending').length;
+            const sold = props.filter(p => p.status === 'sold').length;
+            const totalImages = props.reduce((s, p) => s + (p.images?.length || 0), 0);
+
+            document.getElementById('stats-row').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-top"><span class="stat-label">Total Properties</span><div class="stat-icon">🏢</div></div>
+                    <div class="stat-val">${props.length}</div>
+                    <div class="stat-delta">All listings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-top"><span class="stat-label">Active Listings</span><div class="stat-icon">✅</div></div>
+                    <div class="stat-val">${active}</div>
+                    <div class="stat-delta">Live on site</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-top"><span class="stat-label">Pending / Sold</span><div class="stat-icon">📊</div></div>
+                    <div class="stat-val">${pending} / ${sold}</div>
+                    <div class="stat-delta">Under review or sold</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-top"><span class="stat-label">Total Images</span><div class="stat-icon">📷</div></div>
+                    <div class="stat-val">${totalImages}</div>
+                    <div class="stat-delta">Uploaded photos</div>
+                </div>
+            `;
+
+            // Recent 5
+            const recent = props.slice(0, 5);
+            document.getElementById('recent-tbody').innerHTML = recent.length
+                ? recent.map(p => `<tr>
+                    <td>
+                        <div class="prop-cell">
+                            <div class="prop-thumb" style="${p.images?.[0] ? 'background-image:url(' + p.images[0] + ')' : 'background:linear-gradient(135deg,#667eea,#764ba2)'}"></div>
+                            <div><div class="prop-name">${esc(p.title)}</div><div class="prop-meta">${esc(p.type)}</div></div>
+                        </div>
+                    </td>
+                    <td style="font-weight:600">₦${formatPrice(p.price)}</td>
+                    <td><span class="badge badge-${p.status}">${cap(p.status)}</span></td>
+                </tr>`).join('')
+                : '<tr><td colspan="3" class="empty-state">No properties yet</td></tr>';
+
+            // Activity
+            renderActivityList('activity-list', 6);
+        }
+
+        /* ─── Properties Table ─── */
+        function renderProperties() {
+            const search = (document.getElementById('search-input')?.value || '').toLowerCase();
+            let props = loadProperties();
+            if (search) props = props.filter(p => p.title.toLowerCase().includes(search) || p.location.toLowerCase().includes(search));
+
+            document.getElementById('props-count').textContent = `Properties (${props.length})`;
+            const tbody = document.getElementById('props-tbody');
+
+            if (!props.length) {
+                tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">🏠</div><p>No properties found. Click "Add Property" to get started.</p></div></td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = props.map(p => `<tr>
+                <td>
+                    <div class="prop-cell">
+                        <div class="prop-thumb" style="${p.images?.[0] ? 'background-image:url(' + p.images[0] + ')' : 'background:linear-gradient(135deg,#667eea,#764ba2)'}"></div>
+                        <div><div class="prop-name">${esc(p.title)}</div><div class="prop-meta">${esc(p.type)} · ${p.beds || 0} bed · ${p.baths || 0} bath · ${p.area || 0} sqm</div></div>
+                    </div>
+                </td>
+                <td>${esc(p.location)}</td>
+                <td style="font-weight:600;white-space:nowrap;">₦${formatPrice(p.price)}</td>
+                <td><span class="badge badge-${p.status}">${cap(p.status)}</span></td>
+                <td>${p.images?.length || 0} 📷</td>
+                <td>
+                    <div class="actions-cell">
+                        <button class="btn-icon" title="View" onclick="viewProperty('${p.id}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon" title="Edit" onclick="editProperty('${p.id}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                        <button class="btn-icon" title="Delete" onclick="deleteProperty('${p.id}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+        }
+
+        /* ─── Add / Edit ─── */
+        let modalImages = [];
+
+        function showAddModal() {
+            document.getElementById('modal-title').textContent = 'Add New Property';
+            document.getElementById('edit-id').value = '';
+            ['f-title', 'f-price', 'f-location', 'f-beds', 'f-baths', 'f-area', 'f-desc'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('f-type').selectedIndex = 0;
+            document.getElementById('f-status').value = 'active';
+            modalImages = [];
+            renderModalPreview();
+            document.getElementById('property-modal').classList.add('open');
+        }
+
+        function editProperty(id) {
+            const p = loadProperties().find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modal-title').textContent = 'Edit Property';
+            document.getElementById('edit-id').value = id;
+            document.getElementById('f-title').value = p.title;
+            document.getElementById('f-type').value = p.type;
+            document.getElementById('f-price').value = p.price;
+            document.getElementById('f-location').value = p.location;
+            document.getElementById('f-beds').value = p.beds;
+            document.getElementById('f-baths').value = p.baths;
+            document.getElementById('f-area').value = p.area;
+            document.getElementById('f-status').value = p.status;
+            document.getElementById('f-desc').value = p.desc || '';
+            modalImages = [...(p.images || [])];
+            renderModalPreview();
+            document.getElementById('property-modal').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('property-modal').classList.remove('open'); }
+
+        function saveProperty() {
+            const title = document.getElementById('f-title').value.trim();
+            if (!title) return showToast('Please enter a property title', '⚠️');
+
+            const editId = document.getElementById('edit-id').value;
+            const props = loadProperties();
+            const data = {
+                id: editId || Date.now().toString(36),
+                title, type: document.getElementById('f-type').value,
+                price: document.getElementById('f-price').value,
+                location: document.getElementById('f-location').value,
+                beds: document.getElementById('f-beds').value,
+                baths: document.getElementById('f-baths').value,
+                area: document.getElementById('f-area').value,
+                status: document.getElementById('f-status').value,
+                desc: document.getElementById('f-desc').value,
+                images: modalImages,
+                created: new Date().toISOString(),
+            };
+
+            if (editId) {
+                const idx = props.findIndex(p => p.id === editId);
+                if (idx !== -1) { data.created = props[idx].created; props[idx] = data; }
+                addLogEntry(`Updated "${title}"`, 'cyan');
+            } else {
+                props.unshift(data);
+                addLogEntry(`Added new property "${title}"`, 'green');
+            }
+
+            saveProperties(props);
+            closeModal();
+            renderDashboard();
+            renderProperties();
+            showToast(editId ? 'Property updated!' : 'Property added!');
+        }
+
+        function deleteProperty(id) {
+            const props = loadProperties();
+            const p = props.find(x => x.id === id);
+            if (!p || !confirm(`Delete "${p.title}"?`)) return;
+            saveProperties(props.filter(x => x.id !== id));
+            addLogEntry(`Deleted "${p.title}"`, 'warn');
+            renderDashboard();
+            renderProperties();
+            showToast('Property deleted', '🗑️');
+        }
+
+        /* ─── View ─── */
+        function viewProperty(id) {
+            const p = loadProperties().find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('view-title').textContent = p.title;
+            let html = '';
+            if (p.images?.length) {
+                html += '<div class="view-gallery">' + p.images.map(img => `<img src="${img}" alt="">`).join('') + '</div>';
+            }
+            html += `<div class="view-details">
+                <div class="view-field"><label>Type</label><p>${esc(p.type)}</p></div>
+                <div class="view-field"><label>Price</label><p>₦${formatPrice(p.price)}</p></div>
+                <div class="view-field"><label>Location</label><p>${esc(p.location)}</p></div>
+                <div class="view-field"><label>Status</label><p><span class="badge badge-${p.status}">${cap(p.status)}</span></p></div>
+                <div class="view-field"><label>Bedrooms</label><p>${p.beds || 'N/A'}</p></div>
+                <div class="view-field"><label>Bathrooms</label><p>${p.baths || 'N/A'}</p></div>
+                <div class="view-field"><label>Area</label><p>${p.area ? p.area + ' sqm' : 'N/A'}</p></div>
+                <div class="view-field"><label>Images</label><p>${p.images?.length || 0} photos</p></div>
+            </div>`;
+            if (p.desc) html += `<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)"><label style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Description</label><p style="margin-top:.4rem;line-height:1.7;color:rgba(255,255,255,.8)">${esc(p.desc)}</p></div>`;
+            document.getElementById('view-body').innerHTML = html;
+            document.getElementById('view-modal').classList.add('open');
+        }
+        function closeViewModal() { document.getElementById('view-modal').classList.remove('open'); }
+
+        /* ─── Image handling ─── */
+        function handleFiles(files, targetArr, renderFn) {
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = e => { targetArr.push(e.target.result); renderFn(); };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Modal upload
+        document.getElementById('modal-file-input').addEventListener('change', e => handleFiles(e.target.files, modalImages, renderModalPreview));
+        const mZone = document.getElementById('modal-upload-zone');
+        mZone.addEventListener('dragover', e => { e.preventDefault(); mZone.classList.add('drag-over'); });
+        mZone.addEventListener('dragleave', () => mZone.classList.remove('drag-over'));
+        mZone.addEventListener('drop', e => { e.preventDefault(); mZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files, modalImages, renderModalPreview); });
+
+        function renderModalPreview() {
+            document.getElementById('modal-preview').innerHTML = modalImages.map((img, i) =>
+                `<div class="preview-thumb" style="background-image:url(${img})"><button class="remove" onclick="modalImages.splice(${i},1);renderModalPreview()">✕</button></div>`
+            ).join('');
+        }
+
+        // Bulk upload page
+        let bulkImages = [];
+        document.getElementById('bulk-file-input').addEventListener('change', e => handleFiles(e.target.files, bulkImages, renderBulkPreview));
+        const bZone = document.getElementById('bulk-upload-zone');
+        bZone.addEventListener('dragover', e => { e.preventDefault(); bZone.classList.add('drag-over'); });
+        bZone.addEventListener('dragleave', () => bZone.classList.remove('drag-over'));
+        bZone.addEventListener('drop', e => { e.preventDefault(); bZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files, bulkImages, renderBulkPreview); });
+
+        function renderBulkPreview() {
+            document.getElementById('bulk-preview').innerHTML = bulkImages.map((img, i) =>
+                `<div class="preview-thumb" style="background-image:url(${img})"><button class="remove" onclick="bulkImages.splice(${i},1);renderBulkPreview()">✕</button></div>`
+            ).join('');
+        }
+
+        function populateUploadSelect() {
+            const select = document.getElementById('upload-property-select');
+            const props = loadProperties();
+            select.innerHTML = '<option value="">-- Choose a property --</option>' +
+                props.map(p => `<option value="${p.id}">${esc(p.title)} — ${esc(p.location)}</option>`).join('');
+        }
+
+        function saveBulkImages() {
+            const pid = document.getElementById('upload-property-select').value;
+            if (!pid) return showToast('Please select a property first', '⚠️');
+            if (!bulkImages.length) return showToast('No images to save', '⚠️');
+            const props = loadProperties();
+            const p = props.find(x => x.id === pid);
+            if (!p) return;
+            p.images = [...(p.images || []), ...bulkImages];
+            saveProperties(props);
+            addLogEntry(`Uploaded ${bulkImages.length} image(s) to "${p.title}"`, 'green');
+            bulkImages = [];
+            renderBulkPreview();
+            showToast(`${p.images.length} images saved to "${p.title}"!`);
+        }
+
+        /* ─── Activity ─── */
+        function renderActivityList(containerId, limit) {
+            const log = loadLog().slice(0, limit || 50);
+            const el = document.getElementById(containerId);
+            if (!log.length) { el.innerHTML = '<li class="activity-item"><div style="color:var(--muted)">No activity yet</div></li>'; return; }
+            el.innerHTML = log.map(a => `
+                <li class="activity-item">
+                    <div class="activity-dot ${a.type}"></div>
+                    <div>
+                        <div class="activity-text">${esc(a.text)}</div>
+                        <div class="activity-time">${timeAgo(a.time)}</div>
+                    </div>
+                </li>
+            `).join('');
+        }
+        function renderFullActivity() { renderActivityList('full-activity-list', 50); }
+
+        /* ─── Helpers ─── */
+        function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+        function cap(s) { return s ? s[0].toUpperCase() + s.slice(1) : ''; }
+        function formatPrice(p) {
+            const n = parseInt(p);
+            if (isNaN(n)) return p || '0';
+            return n.toLocaleString('en-NG');
+        }
+        function timeAgo(iso) {
+            const d = new Date(iso); const now = Date.now();
+            const diff = Math.floor((now - d.getTime()) / 1000);
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            return d.toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+        function showToast(msg, icon = '✅') {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.querySelector('.toast-icon').textContent = icon;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        /* ─── Init ─── */
+        seedIfEmpty();
+        renderDashboard();
+    </script>
+</body>
+
+</html>

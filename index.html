@@ -577,53 +577,113 @@
             font-size: .95rem
         }
 
-        /* Why Trust */
+        /* No More Section */
         .why-trust {
-            background: linear-gradient(135deg, var(--bg-dark), #1a1a1a);
-            color: #fff
+            background: linear-gradient(135deg, #0a0a0a, #1a0a0a, #0a0a1a);
+            color: #fff;
+            overflow: hidden;
+            position: relative
+        }
+
+        .why-trust::before {
+            content: 'NO MORE';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(6rem, 15vw, 14rem);
+            font-weight: 900;
+            color: rgba(255, 40, 40, .04);
+            white-space: nowrap;
+            pointer-events: none;
+            letter-spacing: .2em
+        }
+
+        .nomore-subtitle {
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            color: rgba(255, 255, 255, .55);
+            font-size: 1rem;
+            line-height: 1.7
         }
 
         .trust-grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1
         }
 
         .trust-card {
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid rgba(255, 255, 255, .1);
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .08);
             border-radius: 16px;
             padding: 2rem;
-            transition: all .3s
+            transition: all .35s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .trust-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff2828, transparent);
+            opacity: 0;
+            transition: opacity .3s
         }
 
         .trust-card:hover {
-            border-color: var(--cyan);
-            background: rgba(255, 255, 255, .08)
+            border-color: rgba(255, 40, 40, .3);
+            background: rgba(255, 255, 255, .05);
+            transform: translateY(-4px)
         }
 
-        .trust-card h3 {
+        .trust-card:hover::before {
+            opacity: 1
+        }
+
+        .nomore-badge {
+            display: inline-block;
+            background: rgba(255, 40, 40, .15);
+            color: #ff4444;
+            font-weight: 800;
+            font-size: .7rem;
+            letter-spacing: 1.5px;
+            padding: .35rem .8rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-transform: uppercase
+        }
+
+        .pain-point {
             font-size: 1.15rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, .4);
+            text-decoration: line-through;
+            text-decoration-color: #ff4444;
+            text-decoration-thickness: 2px;
             margin-bottom: .8rem;
-            color: var(--cyan)
+            line-height: 1.4
+        }
+
+        .solution {
+            color: var(--cyan);
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: .6rem
         }
 
         .trust-card p {
-            color: rgba(255, 255, 255, .7);
+            color: rgba(255, 255, 255, .6);
             line-height: 1.7;
-            font-size: .9rem
-        }
-
-        .trust-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--cyan), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: .3rem
+            font-size: .88rem
         }
 
         /* Stats */
@@ -1086,37 +1146,57 @@
         </div>
     </section>
 
-    <!-- Why Trust Us -->
+    <!-- NO MORE Section -->
     <section class="section why-trust" id="why-us">
         <div class="section-header">
-            <h2 style="color:#fff">Why Diaspora Investors Trust Us</h2>
-            <p style="color:rgba(255,255,255,.6)">We understand the fear. That's why we built every process around
-                transparency.</p>
+            <h2 style="color:#fff">We Say <span style="color:#ff4444;font-weight:900">NO MORE.</span></h2>
+            <p class="nomore-subtitle">
+                Every Nigerian abroad has a horror story. Money sent home and never seen again.
+                A "completed" building that doesn't exist. We built Prism Global to end this — permanently.
+            </p>
         </div>
         <div class="trust-grid">
             <div class="trust-card">
-                <div class="trust-number">100%</div>
-                <h3>Verified Titles</h3>
-                <p>Every property passes our multi-step verification — government registry checks, survey confirmation,
-                    and legal review before listing.</p>
+                <div class="nomore-badge">❌ No More</div>
+                <div class="pain-point">"My cousin collected ₦25M and disappeared"</div>
+                <div class="solution">✅ Escrow-Protected Payments</div>
+                <p>Your money never goes directly to anyone. Funds are held in escrow and released only when milestones
+                    are verified — with photo and video proof you can see from anywhere.</p>
             </div>
             <div class="trust-card">
-                <div class="trust-number">48hr</div>
-                <h3>Inspection Reports</h3>
-                <p>Request a physical inspection of any property. We send you a detailed video report with photos within
-                    48 hours.</p>
+                <div class="nomore-badge">❌ No More</div>
+                <div class="pain-point">"They showed me a building that wasn't even mine"</div>
+                <div class="solution">✅ GPS-Verified Site Inspections</div>
+                <p>Every property comes with geotagged video walkthroughs, live drone footage, and on-demand 48-hour
+                    inspection reports sent straight to your WhatsApp.</p>
             </div>
             <div class="trust-card">
-                <div class="trust-number">24/7</div>
-                <h3>WhatsApp Support</h3>
-                <p>Your dedicated account manager is always available on WhatsApp — across any timezone. Ask questions,
-                    get updates, no delays.</p>
+                <div class="nomore-badge">❌ No More</div>
+                <div class="pain-point">"The land title was fake — omo onile wahala"</div>
+                <div class="solution">✅ Triple-Verified Documentation</div>
+                <p>We run government registry checks, independent survey confirmation, and full legal review. If the
+                    title isn't clean, it doesn't touch our platform. Period.</p>
             </div>
             <div class="trust-card">
-                <div class="trust-number">500+</div>
-                <h3>Happy Investors</h3>
-                <p>Nigerians in the UK, US, Canada, and beyond have used Prism Global to secure their investments back
-                    home. We deliver — every time.</p>
+                <div class="nomore-badge">❌ No More</div>
+                <div class="pain-point">"Nobody picks my calls when I ask for updates"</div>
+                <div class="solution">✅ 24/7 Dedicated Account Manager</div>
+                <p>Your personal manager is on WhatsApp across every timezone — UK, US, Canada, anywhere. Weekly
+                    progress reports, instant replies, zero excuses.</p>
+            </div>
+            <div class="trust-card">
+                <div class="nomore-badge">❌ No More</div>
+                <div class="pain-point">"I paid for 5 bedrooms, they built 3 and pocketed the rest"</div>
+                <div class="solution">✅ Milestone-Based Construction Tracking</div>
+                <p>Every build project is broken into verified stages. You see real-time photos of each phase. Funds
+                    only release when the work matches the plan — no shortcuts, no stories.</p>
+            </div>
+            <div class="trust-card">
+                <div class="nomore-badge">❌ No More</div>
+                <div class="pain-point">"They sold the same land to 4 different people"</div>
+                <div class="solution">✅ Blockchain-Backed Ownership Records</div>
+                <p>Every transaction is recorded with tamper-proof digital documentation. Your C of O, receipts, and
+                    survey plans are stored securely — accessible anytime, from anywhere in the world.</p>
             </div>
         </div>
     </section>

@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Global - Verified Nigerian Real Estate for Diaspora</title>
+    <meta name="description"
+        content="Invest in verified Nigerian properties from anywhere in the world. We build, sell, and deliver — no wahala.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --primary: #1a1a1a;
+            --cyan: #00ffff;
+            --accent: #ff00ff;
+            --green: #00c853;
+            --gold: #DAA520;
+            --text: #333;
+            --text-light: #666;
+            --bg: #fff;
+            --bg-dark: #0a0a0a
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: var(--bg)
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1)
+        }
+
+        .nav-c {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: .5px
+        }
+
+        .logo svg {
+            width: 38px;
+            height: 38px
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, .8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: .9rem;
+            transition: all .3s;
+            position: relative
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan)
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--accent));
+            transition: width .3s
+        }
+
+        .nav-links a:hover::after {
+            width: 100%
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            color: #fff;
+            padding: .65rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all .3s;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, .3);
+            font-size: .9rem
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 255, .5)
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 255, 255, .08) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255, 0, 255, .08) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: .5
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: #fff;
+            z-index: 1;
+            max-width: 950px;
+            padding: 2rem
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(0, 200, 83, .15);
+            color: var(--green);
+            padding: .5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: .85rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 200, 83, .3)
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.15
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, .8);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            color: #fff;
+            padding: .95rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all .3s;
+            box-shadow: 0 8px 30px rgba(0, 255, 255, .4)
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 255, 255, .6)
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            padding: .95rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all .3s;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, .3);
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, .5)
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+            padding: .95rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid rgba(255, 255, 255, .25);
+            transition: all .3s;
+            backdrop-filter: blur(10px)
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, .15);
+            border-color: var(--cyan)
+        }
+
+        /* Trust Strip */
+        .trust-strip {
+            background: #111;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #222
+        }
+
+        .trust-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            color: rgba(255, 255, 255, .7);
+            font-size: .9rem;
+            font-weight: 500
+        }
+
+        .trust-item svg {
+            color: var(--green);
+            flex-shrink: 0
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 6rem 2rem
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: .8rem
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto
+        }
+
+        /* Properties */
+        .properties-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+            gap: 2rem
+        }
+
+        .p-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+            transition: all .4s cubic-bezier(.4, 0, .2, 1);
+            cursor: pointer
+        }
+
+        .p-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .15)
+        }
+
+        .p-img {
+            height: 270px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .p-card:nth-child(1) .p-img {
+            background: linear-gradient(135deg, #667eea, #764ba2)
+        }
+
+        .p-card:nth-child(2) .p-img {
+            background: linear-gradient(135deg, #f093fb, #f5576c)
+        }
+
+        .p-card:nth-child(3) .p-img {
+            background: linear-gradient(135deg, #4facfe, #00f2fe)
+        }
+
+        .p-card:nth-child(4) .p-img {
+            background: linear-gradient(135deg, #fa709a, #fee140)
+        }
+
+        .p-card:nth-child(5) .p-img {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb)
+        }
+
+        .p-card:nth-child(6) .p-img {
+            background: linear-gradient(135deg, #fccb90, #d57eeb)
+        }
+
+        .p-badge {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: .4rem .9rem;
+            border-radius: 50px;
+            font-size: .8rem;
+            font-weight: 600
+        }
+
+        .p-verified {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.2rem;
+            background: rgba(0, 200, 83, .9);
+            color: #fff;
+            padding: .4rem .9rem;
+            border-radius: 50px;
+            font-size: .75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: .3rem
+        }
+
+        .p-info {
+            padding: 1.8rem
+        }
+
+        .p-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: .4rem
+        }
+
+        .p-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: .4rem
+        }
+
+        .p-loc {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .9rem
+        }
+
+        .p-feats {
+            display: flex;
+            gap: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid #eee
+        }
+
+        .feat {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            color: var(--text-light);
+            font-size: .85rem
+        }
+
+        /* VR Badge */
+        .p-vr-badge {
+            position: absolute;
+            bottom: 1.2rem;
+            left: 1.2rem;
+            background: rgba(0, 255, 255, .9);
+            color: #000;
+            padding: .4rem .9rem;
+            border-radius: 50px;
+            font-size: .75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            animation: vrPulse 2s ease-in-out infinite
+        }
+
+        @keyframes vrPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 255, .4)
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(0, 255, 255, 0)
+            }
+        }
+
+        .vr-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity .3s;
+            cursor: pointer
+        }
+
+        .p-card:hover .vr-overlay {
+            opacity: 1
+        }
+
+        .vr-btn {
+            background: rgba(0, 255, 255, .9);
+            color: #000;
+            border: none;
+            padding: .8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: .9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            transition: all .3s
+        }
+
+        .vr-btn:hover {
+            transform: scale(1.05);
+            background: #fff
+        }
+
+        .vr-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            background: rgba(0, 255, 255, .1);
+            color: #00bcd4;
+            padding: .2rem .6rem;
+            border-radius: 6px;
+            font-size: .75rem;
+            font-weight: 600;
+            margin-left: auto
+        }
+
+        /* Services */
+        .services {
+            background: #f8f9fa
+        }
+
+        .services-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem
+        }
+
+        .service-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+            transition: all .3s;
+            border: 1px solid #eee;
+            text-align: center
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .12);
+            border-color: var(--cyan)
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem
+        }
+
+        .service-card:nth-child(1) .service-icon {
+            background: rgba(0, 255, 255, .1)
+        }
+
+        .service-card:nth-child(2) .service-icon {
+            background: rgba(255, 0, 255, .1)
+        }
+
+        .service-card:nth-child(3) .service-icon {
+            background: rgba(0, 200, 83, .1)
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: .8rem;
+            color: var(--primary)
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: .95rem
+        }
+
+        /* Why Trust */
+        .why-trust {
+            background: linear-gradient(135deg, var(--bg-dark), #1a1a1a);
+            color: #fff
+        }
+
+        .trust-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem
+        }
+
+        .trust-card {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all .3s
+        }
+
+        .trust-card:hover {
+            border-color: var(--cyan);
+            background: rgba(255, 255, 255, .08)
+        }
+
+        .trust-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: .8rem;
+            color: var(--cyan)
+        }
+
+        .trust-card p {
+            color: rgba(255, 255, 255, .7);
+            line-height: 1.7;
+            font-size: .9rem
+        }
+
+        .trust-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: .3rem
+        }
+
+        /* Stats */
+        .stats {
+            background: #f8f9fa;
+            padding: 5rem 2rem
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            text-align: center
+        }
+
+        .stat h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: .3rem
+        }
+
+        .stat p {
+            font-size: 1rem;
+            color: var(--text-light)
+        }
+
+        /* Diaspora CTA */
+        .diaspora-cta {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: #fff;
+            text-align: center;
+            padding: 6rem 2rem
+        }
+
+        .diaspora-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .diaspora-cta p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, .7);
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7
+        }
+
+        .diaspora-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: rgba(255, 255, 255, .8);
+            padding: 4rem 2rem 2rem
+        }
+
+        .footer-c {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem
+        }
+
+        .footer-s h4 {
+            color: #fff;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem
+        }
+
+        .footer-s ul {
+            list-style: none
+        }
+
+        .footer-s ul li {
+            margin-bottom: .7rem
+        }
+
+        .footer-s a {
+            color: rgba(255, 255, 255, .7);
+            text-decoration: none;
+            transition: color .3s
+        }
+
+        .footer-s a:hover {
+            color: var(--cyan)
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, .1);
+            color: rgba(255, 255, 255, .5);
+            font-size: .85rem
+        }
+
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 2.3rem
+            }
+
+            .nav-links {
+                display: none
+            }
+
+            .properties-grid,
+            .services-grid,
+            .trust-grid {
+                grid-template-columns: 1fr
+            }
+
+            .trust-inner {
+                gap: 1.5rem
+            }
+
+            .section-header h2 {
+                font-size: 2rem
+            }
+
+            .diaspora-cta h2 {
+                font-size: 2rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Nav -->
+    <nav>
+        <div class="nav-c">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="30" y1="80" x2="30" y2="30" stroke="#888" stroke-width="2" />
+                    <line x1="70" y1="80" x2="70" y2="40" stroke="#888" stroke-width="2" />
+                    <polyline points="30,30 50,20 70,40" fill="none" stroke="#888" stroke-width="2" />
+                    <defs>
+                        <linearGradient id="nb" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00ffff;stop-opacity:.8" />
+                            <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 20 L90 90 L10 90 Z" fill="url(#nb)" opacity=".5" />
+                    <circle cx="50" cy="20" r="3" fill="white" />
+                </svg>
+                <span>PRISM GLOBAL</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#properties">Properties</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#why-us">Why Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="cta-nav">Talk to Us</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">🇳🇬 Trusted by 500+ Diaspora Investors</div>
+            <h1>Invest in Nigeria With Confidence, From Anywhere</h1>
+            <p>We find, verify, build, and deliver real estate in Lagos, Abuja, and beyond — so you don't have to worry.
+                Every property is vetted. Every deal is transparent. No stories.</p>
+            <div class="hero-buttons">
+                <a href="#properties" class="btn-primary">Browse Verified Properties</a>
+                <a href="https://wa.me/2348000000000" class="btn-whatsapp">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    WhatsApp Us
+                </a>
+                <a href="#services" class="btn-outline">Our Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Strip -->
+    <div class="trust-strip">
+        <div class="trust-inner">
+            <div class="trust-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                All Properties Verified
+            </div>
+            <div class="trust-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Proper Documentation
+            </div>
+            <div class="trust-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Video Updates on Progress
+            </div>
+            <div class="trust-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                VR 360° Property Tours
+            </div>
+            <div class="trust-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Flexible Payment Plans
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Properties -->
+    <section class="section" id="properties">
+        <div class="section-header">
+            <h2>Verified Properties</h2>
+            <p>Every listing is inspected, documented, and guaranteed. Invest with peace of mind.</p>
+        </div>
+        <div class="properties-grid">
+            <div class="p-card">
+                <div class="p-img">
+                    <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg> Verified</div>
+                    <div class="p-badge">Featured</div>
+                    <div class="p-vr-badge"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                        </svg> VR 360°</div>
+                    <div class="vr-overlay"><button class="vr-btn"
+                            onclick="alert('Launching VR Tour for this property...')"><svg width="18" height="18"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                            </svg> Launch VR Tour</button></div>
+                </div>
+                <div class="p-info">
+                    <div class="p-price">₦185,000,000</div>
+                    <div class="p-title">5 Bedroom Detached Duplex</div>
+                    <div class="p-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg> Lekki Phase 1, Lagos</div>
+                    <div class="p-feats">
+                        <div class="feat">🛏 5 Beds</div>
+                        <div class="feat">🚿 5 Baths</div>
+                        <div class="feat">📐 450 sqm</div>
+                        <div class="vr-tag"><svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                            </svg> VR</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img">
+                    <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg> Verified</div>
+                    <div class="p-badge">New Listing</div>
+                </div>
+                <div class="p-info">
+                    <div class="p-price">₦95,000,000</div>
+                    <div class="p-title">4 Bedroom Semi-Detached</div>
+                    <div class="p-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg> Maitama, Abuja</div>
+                    <div class="p-feats">
+                        <div class="feat">🛏 4 Beds</div>
+                        <div class="feat">🚿 4 Baths</div>
+                        <div class="feat">📐 380 sqm</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img">
+                    <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg> Verified</div>
+                    <div class="p-badge">Hot Deal</div>
+                </div>
+                <div class="p-info">
+                    <div class="p-price">₦45,000,000</div>
+                    <div class="p-title">3 Bedroom Apartment</div>
+                    <div class="p-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg> Ikeja GRA, Lagos</div>
+                    <div class="p-feats">
+                        <div class="feat">🛏 3 Beds</div>
+                        <div class="feat">🚿 3 Baths</div>
+                        <div class="feat">📐 200 sqm</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img">
+                    <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg> Verified</div>
+                    <div class="p-badge">Land</div>
+                </div>
+                <div class="p-info">
+                    <div class="p-price">₦35,000,000</div>
+                    <div class="p-title">600sqm Plot — C of O</div>
+                    <div class="p-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg> Ibeju-Lekki, Lagos</div>
+                    <div class="p-feats">
+                        <div class="feat">📄 C of O</div>
+                        <div class="feat">📐 600 sqm</div>
+                        <div class="feat">🏗 Build Ready</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img">
+                    <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg> Verified</div>
+                    <div class="p-badge">Luxury</div>
+                    <div class="p-vr-badge"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                        </svg> VR 360°</div>
+                    <div class="vr-overlay"><button class="vr-btn"
+                            onclick="alert('Launching VR Tour for this property...')"><svg width="18" height="18"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                            </svg> Launch VR Tour</button></div>
+                </div>
+                <div class="p-info">
+                    <div class="p-price">₦320,000,000</div>
+                    <div class="p-title">Waterfront Mansion</div>
+                    <div class="p-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg> Banana Island, Lagos</div>
+                    <div class="p-feats">
+                        <div class="feat">🛏 6 Beds</div>
+                        <div class="feat">🚿 7 Baths</div>
+                        <div class="feat">📐 1,200 sqm</div>
+                        <div class="vr-tag"><svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                            </svg> VR</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img">
+                    <div class="p-verified"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg> Verified</div>
+                    <div class="p-badge">Selling Fast</div>
+                    <div class="p-vr-badge"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                        </svg> VR 360°</div>
+                    <div class="vr-overlay"><button class="vr-btn"
+                            onclick="alert('Launching VR Tour for this property...')"><svg width="18" height="18"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                            </svg> Launch VR Tour</button></div>
+                </div>
+                <div class="p-info">
+                    <div class="p-price">₦28,000,000</div>
+                    <div class="p-title">2 Bedroom Smart Flat</div>
+                    <div class="p-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg> Wuse 2, Abuja</div>
+                    <div class="p-feats">
+                        <div class="feat">🛏 2 Beds</div>
+                        <div class="feat">🚿 2 Baths</div>
+                        <div class="feat">📐 120 sqm</div>
+                        <div class="vr-tag"><svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v2c0 .55-.45 1-1 1H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1c0-1.1.9-2 2-2s2 .9 2 2v1c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1V9c2-.17 4.14-.5 6-1l-.5-2z" />
+                            </svg> VR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section services" id="services">
+        <div class="section-header">
+            <h2>What We Do</h2>
+            <p>Whether you're buying, building, or selling — we've got you covered.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏠</div>
+                <h3>Buy Verified Properties</h3>
+                <p>Every property on our platform is inspected, legally verified, and comes with full documentation. We
+                    handle the due diligence so you can invest with confidence from anywhere in the world.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🏗️</div>
+                <h3>We Build For You</h3>
+                <p>Got land? Got a dream home blueprint? We manage the entire construction process — from architectural
+                    design to final handover. Regular video updates keep you in the loop, no matter your timezone.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💰</div>
+                <h3>Sell Your Property</h3>
+                <p>Own property in Nigeria and want to sell? We list, market, and handle buyer negotiations for you.
+                    Professional photography, legal support, and swift closings — all managed remotely.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Trust Us -->
+    <section class="section why-trust" id="why-us">
+        <div class="section-header">
+            <h2 style="color:#fff">Why Diaspora Investors Trust Us</h2>
+            <p style="color:rgba(255,255,255,.6)">We understand the fear. That's why we built every process around
+                transparency.</p>
+        </div>
+        <div class="trust-grid">
+            <div class="trust-card">
+                <div class="trust-number">100%</div>
+                <h3>Verified Titles</h3>
+                <p>Every property passes our multi-step verification — government registry checks, survey confirmation,
+                    and legal review before listing.</p>
+            </div>
+            <div class="trust-card">
+                <div class="trust-number">48hr</div>
+                <h3>Inspection Reports</h3>
+                <p>Request a physical inspection of any property. We send you a detailed video report with photos within
+                    48 hours.</p>
+            </div>
+            <div class="trust-card">
+                <div class="trust-number">24/7</div>
+                <h3>WhatsApp Support</h3>
+                <p>Your dedicated account manager is always available on WhatsApp — across any timezone. Ask questions,
+                    get updates, no delays.</p>
+            </div>
+            <div class="trust-card">
+                <div class="trust-number">500+</div>
+                <h3>Happy Investors</h3>
+                <p>Nigerians in the UK, US, Canada, and beyond have used Prism Global to secure their investments back
+                    home. We deliver — every time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <h3>₦15B+</h3>
+                <p>Properties Delivered</p>
+            </div>
+            <div class="stat">
+                <h3>500+</h3>
+                <p>Diaspora Clients</p>
+            </div>
+            <div class="stat">
+                <h3>12+</h3>
+                <p>Nigerian Cities</p>
+            </div>
+            <div class="stat">
+                <h3>98%</h3>
+                <p>Client Satisfaction</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diaspora CTA -->
+    <section class="diaspora-cta" id="contact">
+        <h2>Ready to Invest in Nigeria?</h2>
+        <p>Whether you're in London, Houston, Toronto, or Dubai — we make Nigerian real estate safe and simple. Talk to
+            a property advisor today.</p>
+        <div class="diaspora-buttons">
+            <a href="https://wa.me/2348000000000" class="btn-whatsapp">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                Chat on WhatsApp
+            </a>
+            <a href="tel:+2348000000000" class="btn-primary">📞 Call Us Now</a>
+            <a href="mailto:invest@prismglobal.ng" class="btn-outline">✉️ Email Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-c">
+            <div class="footer-s">
+                <h4>Prism Global</h4>
+                <p style="color:rgba(255,255,255,.6);line-height:1.7">Your trusted partner for Nigerian real estate —
+                    verified properties, construction management, and property sales for the diaspora.</p>
+            </div>
+            <div class="footer-s">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#properties">Properties</a></li>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#why-us">Why Trust Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-s">
+                <h4>Locations</h4>
+                <ul>
+                    <li>Lagos, Nigeria</li>
+                    <li>Abuja, Nigeria</li>
+                    <li>Port Harcourt, Nigeria</li>
+                    <li>Ibadan, Nigeria</li>
+                </ul>
+            </div>
+            <div class="footer-s">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:invest@prismglobal.ng">invest@prismglobal.ng</a></li>
+                    <li>+234 800 000 0000</li>
+                    <li>Lagos Office: Victoria Island</li>
+                    <li><a href="https://wa.me/2348000000000">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Prism Global Nigeria. All rights reserved. RC: 0000000</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

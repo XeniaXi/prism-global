@@ -1827,87 +1827,59 @@
     </div>
 
     <script>
-        const PROPERTIES = [
-            {
-                title: '5 Bedroom Detached Duplex', price: '&#8358;185,000,000', location: 'Lekki Phase 1, Lagos',
-                type: 'Detached Duplex', beds: 5, baths: 5, area: '450 sqm', badge: 'Featured',
-                images: [
-                    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1600607687939-ce8a7c24e1e5?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop'
-                ],
-                desc: "This stunning 5-bedroom fully detached duplex sits in one of Lagos' most prestigious addresses. Finished to the highest specification with imported Italian marble flooring, designer kitchen fittings, and smart home automation throughout. The property features a private cinema room, gym, swimming pool, and expansive gardens with a dedicated staff quarters.",
-                features: ['Smart Home System', 'Swimming Pool', 'Cinema Room', 'BQ', 'Fully Fitted Kitchen', 'CCTV Security', '24/7 Power Supply', 'Gated Estate'],
-                hasVR: true, vrUrl: ''
-            },
-            {
-                title: '4 Bedroom Semi-Detached', price: '&#8358;95,000,000', location: 'Maitama, Abuja',
-                type: 'Semi-Detached Duplex', beds: 4, baths: 4, area: '380 sqm', badge: 'New Listing',
-                images: [
-                    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1600210491892-03d54c0abb4e?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=800&fit=crop'
-                ],
-                desc: "Newly built 4-bedroom semi-detached duplex in the heart of Abuja's most exclusive neighborhood. Features open-plan living, floor-to-ceiling windows, and premium finishes throughout. Each bedroom is en-suite with walk-in closets. Within walking distance to major embassies, international schools, and shopping centers.",
-                features: ['En-Suite Rooms', 'Walk-in Closets', 'Servant Quarters', 'Car Port', 'Tarred Road Access', 'Near Embassies', 'Underground Parking'],
-                hasVR: false, vrUrl: ''
-            },
-            {
-                title: '3 Bedroom Apartment', price: '&#8358;45,000,000', location: 'Ikeja GRA, Lagos',
-                type: 'Apartment', beds: 3, baths: 3, area: '200 sqm', badge: 'Hot Deal',
-                images: [
-                    'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=800&fit=crop'
-                ],
-                desc: "Modern 3-bedroom apartment in the well-secured Ikeja GRA precinct. Features smart home controls, centralized air conditioning, and a fully equipped kitchen with modern appliances. The building includes a rooftop lounge, dedicated parking, and 24-hour security.",
-                features: ['Smart Home Controls', 'Central AC', 'Rooftop Lounge', 'Elevator Access', 'Dedicated Parking', '24/7 Security', 'Backup Generator'],
-                hasVR: false, vrUrl: ''
-            },
-            {
-                title: '600sqm Plot &#8212; C of O', price: '&#8358;35,000,000', location: 'Ibeju-Lekki, Lagos',
-                type: 'Land', beds: 0, baths: 0, area: '600 sqm', badge: 'Land',
-                images: [
-                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1416331108676-a22ccb276e35?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&h=800&fit=crop'
-                ],
-                desc: "Prime 600sqm plot with a clean Certificate of Occupancy in the rapidly developing Ibeju-Lekki corridor &#8212; the future economic hub of Lagos. Located near the Dangote Refinery, Lekki Free Trade Zone, and the new Lekki Deep Sea Port. This area has seen 300%+ land appreciation in the last 5 years.",
-                features: ['Certificate of Occupancy', 'Survey Plan', 'Gazette Available', 'Near Free Trade Zone', 'Near Dangote Refinery', 'Road Network', 'Build Ready'],
-                hasVR: false, vrUrl: ''
-            },
-            {
-                title: 'Waterfront Mansion', price: '&#8358;320,000,000', location: 'Banana Island, Lagos',
-                type: 'Mansion', beds: 6, baths: 7, area: '1,200 sqm', badge: 'Luxury',
-                images: [
-                    'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&h=800&fit=crop'
-                ],
-                desc: "An ultra-luxury waterfront mansion on Nigeria's most exclusive address &#8212; Banana Island, Ikoyi. This architectural masterpiece features 6 en-suite bedrooms, an infinity pool overlooking the lagoon, private jetty, home automation, and triple-level living spaces. Includes a wine cellar, private elevator, and 4-car underground garage.",
-                features: ['Waterfront View', 'Infinity Pool', 'Private Jetty', 'Wine Cellar', 'Private Elevator', 'Underground Garage', 'Home Automation', 'Staff Quarters', 'Gym & Spa'],
-                hasVR: true, vrUrl: ''
-            },
-            {
-                title: '2 Bedroom Smart Flat', price: '&#8358;28,000,000', location: 'Wuse 2, Abuja',
-                type: 'Apartment', beds: 2, baths: 2, area: '120 sqm', badge: 'Selling Fast',
-                images: [
-                    'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=800&fit=crop',
-                    'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=1200&h=800&fit=crop'
-                ],
-                desc: "A beautifully finished 2-bedroom smart apartment in the vibrant Wuse 2 district of Abuja. Equipped with automated lighting, smart locks, and energy-efficient appliances. Located near major shopping malls, restaurants, and the Abuja nightlife scene. Perfect for young professionals or short-let investment.",
-                features: ['Smart Locks', 'Automated Lighting', 'Energy Efficient', 'Near Shopping', 'Fiber Internet Ready', 'Gym Access', 'Concierge Service'],
-                hasVR: true, vrUrl: ''
+        
+        let PROPERTIES = [];
+        
+        async function fetchProperties() {
+            try {
+                // Add timestamp to prevent browser caching the JSON file
+                const res = await fetch('api.php?action=getData&t=' + Date.now());
+                if(res.ok) {
+                    const data = await res.json();
+                    if(data && data.properties) {
+                        PROPERTIES = data.properties.filter(p => p.status === 'active' || p.status === 'sold' || p.status === 'pending');
+                        renderProperties();
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load properties:", err);
             }
-        ];
+        }
+        
+        function renderProperties() {
+            const grid = document.getElementById('props-grid');
+            if(!grid) return;
+            
+            if(PROPERTIES.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light)">No properties available at the moment. Please check back later.</div>';
+                return;
+            }
+            
+            grid.innerHTML = PROPERTIES.map((p, idx) => `
+                <div class="prop-card" onclick="showDetail(${idx})">
+                    <div class="prop-img-wrapper" style="background-image:url('${p.images && p.images[0] ? p.images[0] : ''}')">
+                        <div class="prop-badges">
+                            ${p.status === 'sold' || p.status === 'pending' ? `<span class="badge badge-sale">${p.status.toUpperCase()}</span>` : ''}
+                            ${p.hasVR || p.vrUrl ? '<span class="badge badge-vr">360° VR Tour</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="prop-content">
+                        <div class="prop-price">₦${parseInt(p.price).toLocaleString('en-NG')}</div>
+                        <h3>${p.title}</h3>
+                        <p class="prop-location">📍 ${p.location}</p>
+                        <div class="prop-meta-grid">
+                            ${p.beds ? `<div>🛏️ ${p.beds} Beds</div>` : ''}
+                            ${p.baths ? `<div>🚿 ${p.baths} Baths</div>` : ''}
+                            ${p.area ? `<div>📏 ${p.area} sqm</div>` : ''}
+                            <div>🏢 ${p.type}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        document.addEventListener('DOMContentLoaded', fetchProperties);
+
 
         let _galIdx = 0, _galImages = [];
 

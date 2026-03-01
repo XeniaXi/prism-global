@@ -459,6 +459,42 @@
 </head>
 <body>
 
+<!-- Login Gate -->
+<div id="login-gate" style="position:fixed;inset:0;background:#0a0f0d;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#0f1a14;border:1px solid #1B6B2A;border-radius:16px;padding:2.5rem;width:100%;max-width:380px;text-align:center;">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🔐</div>
+    <h2 style="font-family:'Playfair Display',serif;color:#FFC107;font-size:1.4rem;margin-bottom:0.25rem;">Prism Global</h2>
+    <p style="color:#6a7a70;font-size:0.8rem;margin-bottom:1.5rem;">Admin Dashboard</p>
+    <input type="password" id="admin-pass" placeholder="Enter password" 
+      style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:1rem;outline:none;"
+      onkeydown="if(event.key==='Enter') checkLogin()">
+    <button onclick="checkLogin()" 
+      style="width:100%;background:#FFC107;color:#000;border:none;padding:0.85rem;border-radius:10px;font-weight:800;font-size:0.95rem;cursor:pointer;">
+      Enter Dashboard
+    </button>
+    <p id="login-error" style="color:#e05555;font-size:0.75rem;margin-top:0.75rem;display:none;">Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<script>
+  function checkLogin() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === 'Egonabia@2022') {
+      document.getElementById('login-gate').style.display = 'none';
+      sessionStorage.setItem('prism-admin', '1');
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('admin-pass').value = '';
+    }
+  }
+  // Auto-unlock if already authenticated this session
+  if (sessionStorage.getItem('prism-admin') === '1') {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('login-gate').style.display = 'none';
+    });
+  }
+</script>
+
 <!-- HEADER -->
 <header>
   <a href="/" class="header-brand">

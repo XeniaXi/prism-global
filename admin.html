@@ -713,13 +713,24 @@
 
   // ── Data API
   async function loadData() {
-    const res = await fetch('/api.php?action=getData');
+    // Try serverless API first, fall back to JSONBlob directly
+    let res;
+    try {
+      res = await fetch('/api.php?action=getData');
+      if (!res.ok) throw new Error('API unavailable');
+    } catch {
+      res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
+        headers: { 'Accept': 'application/json' }
+      });
+    }
     if (!res.ok) throw new Error('Failed to load data');
     return res.json();
   }
 
   async function saveData(data) {
-    const res = await fetch('/api.php?action=saveData', {
+    // Save directly to JSONBlob (works on any deployment)
+    const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
+      method: 'PUT',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

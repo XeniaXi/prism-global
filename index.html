@@ -934,6 +934,14 @@
   <p class="section-sub">Hand-picked, thoroughly vetted properties across Lagos, Abuja and Port Harcourt. Every listing is title-confirmed before it reaches you.</p>
 
   <!-- FILTER BAR -->
+  <!-- VR Filter Chips -->
+  <div id="filter-chips" style="display:flex;gap:10px;flex-wrap:wrap;padding:0 5%;margin-bottom:-8px;margin-top:12px;">
+    <button id="chip-vr" onclick="toggleVRFilter()"
+      style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.4);color:#10b981;padding:6px 14px;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;">
+      🥽 VR Tours Available
+    </button>
+  </div>
+
   <div class="filter-bar">
     <div class="filter-group">
       <label for="filter-location">Location</label>
@@ -1266,7 +1274,15 @@
               ${p.bathrooms ? `<span>🚿 ${p.bathrooms} bath</span>` : ''}
               ${p.size ? `<span>📐 ${p.size}</span>` : ''}
             </div>
-            <button class="prop-cta">View Details →</button>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+              <button class="prop-cta" style="flex:1;" onclick="event.stopPropagation();openProperty('${p.id}')">View Details →</button>
+              <button
+                onclick="event.stopPropagation();takeVRTour('${p.id}', '${p.title.replace(/'/g, "\\'")}', '${p.vrTourUrl || ''}')"
+                style="flex:1;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:8px;padding:0.65rem 1rem;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity 0.2s;"
+                onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                🥽 Take VR Tour
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -1428,6 +1444,31 @@
   }
 
   loadProperties();
+
+  function takeVRTour(id, title, vrTourUrl) {
+    if (vrTourUrl) {
+      window.open(vrTourUrl, '_blank');
+    } else {
+      const msg = encodeURIComponent(`Hi, I'd like to book a VR tour for ${title}`);
+      window.open(`https://wa.me/2348165160797?text=${msg}`, '_blank');
+    }
+  }
+
+  let vrFilterActive = false;
+  function toggleVRFilter() {
+    vrFilterActive = !vrFilterActive;
+    const chip = document.getElementById('chip-vr');
+    if (vrFilterActive) {
+      chip.style.background = 'rgba(16,185,129,0.35)';
+      chip.style.borderColor = '#10b981';
+      const vrProps = allProperties.filter(p => p.vrTourUrl);
+      renderProperties(vrProps.length ? vrProps : allProperties, true);
+    } else {
+      chip.style.background = 'rgba(16,185,129,0.12)';
+      chip.style.borderColor = 'rgba(16,185,129,0.4)';
+      renderProperties(allProperties);
+    }
+  }
 </script>
 </body>
 </html>

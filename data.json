@@ -2,48 +2,107 @@
   "properties": [
     {
       "id": "prop_001",
-      "title": "4-Bedroom Luxury Duplex, Lekki Phase 1",
+      "title": "4-Bedroom Luxury Duplex, Estate Layout, Abuja",
       "price": 185000000,
-      "location": "Lekki Phase 1, Lagos",
+      "location": "Lugbe, Abuja",
       "type": "Duplex",
       "bedrooms": 4,
       "bathrooms": 5,
       "size": "450 sqm",
       "status": "Available",
-      "description": "Stunning 4-bedroom luxury duplex in the heart of Lekki Phase 1. Fully detached, BQ, swimming pool, 24/7 security, backup power. C of O available. Perfect for families and diaspora investors.",
-      "images": ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"],
+      "description": "Stunning 4-bedroom luxury duplex in a fully developed estate with paved roads, green spaces and mountain views. Newly built with POP ceilings, marble flooring, modern fixtures, and en-suite bathrooms throughout. Fully fenced with gate house and ample parking. Ready for immediate move-in. C of O available.",
+      "features": [
+        "POP Ceiling",
+        "Marble Flooring",
+        "En-suite Bathrooms",
+        "Estate Living",
+        "Paved Roads",
+        "Mountain Views",
+        "Gate House",
+        "Ample Parking",
+        "C of O Available"
+      ],
+      "images": [
+        "uploads/prop1-hero.jpeg",
+        "uploads/prop1-exterior.jpeg",
+        "uploads/prop1-interior.jpeg",
+        "uploads/prop1-bathroom.jpeg",
+        "uploads/prop1-room.jpeg",
+        "uploads/prop1-room2.jpeg"
+      ],
       "createdAt": "2026-03-01T00:00:00.000Z"
     },
     {
       "id": "prop_002",
-      "title": "3-Bedroom Serviced Apartment, Victoria Island",
+      "title": "Block of 6 Flats — Multi-Unit Investment Property",
       "price": 95000000,
-      "location": "Victoria Island, Lagos",
+      "location": "Kubwa, Abuja",
       "type": "Apartment",
-      "bedrooms": 3,
-      "bathrooms": 3,
-      "size": "210 sqm",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "size": "1,200 sqm total",
       "status": "Available",
-      "description": "Premium serviced apartment on Victoria Island. 24/7 facility management, gym, rooftop pool, concierge service. Walking distance to major banks and embassies. Ideal for executives and investors.",
-      "images": ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80"],
+      "description": "Premium block of 6 self-contained flats in fast-growing Kubwa district. Each unit features 2 bedrooms, modern bathroom with rain shower, spacious living room with polished marble floors, POP ceilings, and recessed lighting. Perfect income-generating investment property with high rental demand. All 6 units ready for immediate occupancy.",
+      "features": [
+        "6 Self-Contained Units",
+        "Rain Showers",
+        "POP Ceilings",
+        "Marble Floors",
+        "Recessed Lighting",
+        "Perimeter Wall",
+        "Water Tank",
+        "High Rental Demand",
+        "Income Property"
+      ],
+      "images": [
+        "uploads/prop2-hero.jpeg",
+        "uploads/prop2-aerial.jpeg",
+        "uploads/prop2-exterior.jpeg",
+        "uploads/prop2-interior.jpeg",
+        "uploads/prop2-living.jpeg",
+        "uploads/prop2-bathroom.jpeg"
+      ],
       "createdAt": "2026-03-01T00:00:00.000Z"
     },
     {
       "id": "prop_003",
-      "title": "Prime Land — 2 Plots, Ibeju-Lekki",
-      "price": 28000000,
-      "location": "Ibeju-Lekki, Lagos",
-      "type": "Land",
-      "bedrooms": null,
+      "title": "Carcass Duplex — Build to Your Taste",
+      "price": 45000000,
+      "location": "Kurudu, Abuja",
+      "type": "Duplex",
+      "bedrooms": 4,
       "bathrooms": null,
-      "size": "1,200 sqm (2 plots)",
+      "size": "400 sqm",
       "status": "Available",
-      "description": "Two plots of prime dry land in fast-growing Ibeju-Lekki corridor. 3 minutes from Dangote Refinery access road. Deed of Assignment available. Excellent investment opportunity — values doubling every 18 months.",
-      "images": ["https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"],
+      "description": "4-bedroom carcass duplex at roofing level — perfect for buyers who want to customise finishes to their exact taste. Stone coated roof already installed. Located in a rapidly developing area with excellent road access. Ideal opportunity to build your dream home at below market value. Deed of Assignment available.",
+      "features": [
+        "Roofing Complete",
+        "Stone Coated Roof",
+        "Customisable Finishes",
+        "4 Bedrooms",
+        "Spacious Compound",
+        "Developing Area",
+        "Below Market Value",
+        "Deed of Assignment"
+      ],
+      "images": [
+        "uploads/prop3-hero.jpeg",
+        "uploads/prop3-exterior.jpeg",
+        "uploads/prop3-exterior2.jpeg",
+        "uploads/prop3-side.jpeg",
+        "uploads/prop3-detail.jpeg"
+      ],
       "createdAt": "2026-03-01T00:00:00.000Z"
     }
   ],
   "activity": [
-    {"action": "Website launched", "time": "2026-03-01T00:00:00.000Z"}
+    {
+      "action": "Website launched",
+      "time": "2026-03-01T00:00:00.000Z"
+    },
+    {
+      "action": "New listings added",
+      "time": "2026-03-11T00:00:00.000Z"
+    }
   ]
 }

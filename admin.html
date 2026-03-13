@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prism Global — Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --bg: #0a0f0d;
@@ -18,7 +27,7 @@
       --gold-dark: #e5a800;
       --cream: #F0EDE6;
       --muted: #6a7a70;
-      --border: rgba(27,107,42,0.25);
+      --border: rgba(27, 107, 42, 0.25);
       --red: #e05252;
     }
 
@@ -35,31 +44,46 @@
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
       height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .header-brand {
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       text-decoration: none;
     }
 
     .brand-icon {
-      width: 32px; height: 32px;
+      width: 32px;
+      height: 32px;
       background: linear-gradient(135deg, var(--green), var(--gold));
       border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Playfair Display', serif;
-      font-weight: 700; font-size: 1rem; color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
     }
 
     .brand-text {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700;
+      font-size: 1rem;
+      font-weight: 700;
       color: var(--cream);
       letter-spacing: 0.08em;
     }
-    .brand-text span { color: var(--gold); }
+
+    .brand-text span {
+      color: var(--gold);
+    }
 
     .header-badge {
       background: var(--green);
@@ -71,7 +95,9 @@
     }
 
     .header-actions {
-      display: flex; align-items: center; gap: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .view-site-btn {
@@ -85,7 +111,11 @@
       text-decoration: none;
       transition: border-color 0.2s, color 0.2s;
     }
-    .view-site-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .view-site-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
 
     /* ── LAYOUT ── */
     .layout {
@@ -117,7 +147,9 @@
     }
 
     .sidebar-item {
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 0.6rem 0.75rem;
       border-radius: 8px;
       color: var(--muted);
@@ -126,10 +158,21 @@
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
       text-decoration: none;
-      border: none; background: transparent; width: 100%; text-align: left;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
     }
-    .sidebar-item:hover { background: rgba(27,107,42,0.15); color: var(--cream); }
-    .sidebar-item.active { background: rgba(27,107,42,0.3); color: var(--gold); }
+
+    .sidebar-item:hover {
+      background: rgba(27, 107, 42, 0.15);
+      color: var(--cream);
+    }
+
+    .sidebar-item.active {
+      background: rgba(27, 107, 42, 0.3);
+      color: var(--gold);
+    }
 
     .sidebar-divider {
       height: 1px;
@@ -145,18 +188,26 @@
 
     /* ── PAGE HEADER ── */
     .page-header {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .page-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; font-weight: 700;
+      font-size: 1.6rem;
+      font-weight: 700;
       color: var(--cream);
       margin-bottom: 0.25rem;
     }
 
-    .page-sub { color: var(--muted); font-size: 0.85rem; }
+    .page-sub {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
 
     .btn-primary {
       background: var(--green);
@@ -168,9 +219,15 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
-      display: flex; align-items: center; gap: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .btn-primary:hover { background: var(--green-light); transform: translateY(-1px); }
+
+    .btn-primary:hover {
+      background: var(--green-light);
+      transform: translateY(-1px);
+    }
 
     /* ── STATS ROW ── */
     .stats-row {
@@ -189,12 +246,16 @@
 
     .stat-card-val {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; font-weight: 700;
+      font-size: 1.6rem;
+      font-weight: 700;
       color: var(--gold);
       margin-bottom: 0.2rem;
     }
 
-    .stat-card-label { color: var(--muted); font-size: 0.78rem; }
+    .stat-card-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
 
     /* ── PROPERTIES TABLE ── */
     .table-section {
@@ -207,13 +268,19 @@
     .table-header {
       padding: 1.25rem 1.5rem;
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .table-title { font-weight: 600; color: var(--cream); font-size: 0.95rem; }
+    .table-title {
+      font-weight: 600;
+      color: var(--cream);
+      font-size: 0.95rem;
+    }
 
     .search-input {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.4rem 0.9rem;
@@ -223,8 +290,14 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .search-input::placeholder { color: var(--muted); }
-    .search-input:focus { border-color: var(--green); }
+
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-input:focus {
+      border-color: var(--green);
+    }
 
     .properties-table {
       width: 100%;
@@ -232,7 +305,7 @@
     }
 
     .properties-table th {
-      background: rgba(0,0,0,0.2);
+      background: rgba(0, 0, 0, 0.2);
       padding: 0.75rem 1.25rem;
       text-align: left;
       font-size: 0.7rem;
@@ -245,24 +318,48 @@
 
     .properties-table td {
       padding: 1rem 1.25rem;
-      border-bottom: 1px solid rgba(27,107,42,0.1);
+      border-bottom: 1px solid rgba(27, 107, 42, 0.1);
       vertical-align: middle;
       font-size: 0.875rem;
     }
 
-    .properties-table tr:last-child td { border-bottom: none; }
-    .properties-table tr:hover td { background: rgba(27,107,42,0.05); }
-
-    .prop-img-thumb {
-      width: 56px; height: 42px; object-fit: cover;
-      border-radius: 6px; border: 1px solid var(--border);
+    .properties-table tr:last-child td {
+      border-bottom: none;
     }
 
-    .prop-name-cell { max-width: 220px; }
-    .prop-name-cell strong { display: block; color: var(--cream); margin-bottom: 0.2rem; font-size: 0.85rem; }
-    .prop-name-cell small { color: var(--muted); font-size: 0.75rem; }
+    .properties-table tr:hover td {
+      background: rgba(27, 107, 42, 0.05);
+    }
 
-    .price-cell { color: var(--gold); font-weight: 700; white-space: nowrap; }
+    .prop-img-thumb {
+      width: 56px;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .prop-name-cell {
+      max-width: 220px;
+    }
+
+    .prop-name-cell strong {
+      display: block;
+      color: var(--cream);
+      margin-bottom: 0.2rem;
+      font-size: 0.85rem;
+    }
+
+    .prop-name-cell small {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .price-cell {
+      color: var(--gold);
+      font-weight: 700;
+      white-space: nowrap;
+    }
 
     .status-badge {
       display: inline-block;
@@ -273,12 +370,25 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .status-available { background: rgba(27,107,42,0.25); color: #4caf50; }
-    .status-sold { background: rgba(224,82,82,0.2); color: #e05252; }
-    .status-off-plan { background: rgba(255,193,7,0.15); color: var(--gold); }
+
+    .status-available {
+      background: rgba(27, 107, 42, 0.25);
+      color: #4caf50;
+    }
+
+    .status-sold {
+      background: rgba(224, 82, 82, 0.2);
+      color: #e05252;
+    }
+
+    .status-off-plan {
+      background: rgba(255, 193, 7, 0.15);
+      color: var(--gold);
+    }
 
     .row-actions {
-      display: flex; gap: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
     }
 
     .btn-sm {
@@ -290,9 +400,20 @@
       border: none;
       transition: opacity 0.2s;
     }
-    .btn-sm:hover { opacity: 0.8; }
-    .btn-edit { background: rgba(27,107,42,0.3); color: #4caf50; }
-    .btn-delete { background: rgba(224,82,82,0.2); color: #e05252; }
+
+    .btn-sm:hover {
+      opacity: 0.8;
+    }
+
+    .btn-edit {
+      background: rgba(27, 107, 42, 0.3);
+      color: #4caf50;
+    }
+
+    .btn-delete {
+      background: rgba(224, 82, 82, 0.2);
+      color: #e05252;
+    }
 
     /* ── ADD PROPERTY FORM ── */
     #add-form-section {
@@ -303,11 +424,15 @@
       padding: 2rem;
       margin-top: 2rem;
     }
-    #add-form-section.visible { display: block; }
+
+    #add-form-section.visible {
+      display: block;
+    }
 
     .form-section-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; color: var(--cream);
+      font-size: 1.2rem;
+      color: var(--cream);
       margin-bottom: 1.5rem;
       padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--border);
@@ -318,10 +443,15 @@
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
-    .form-full { grid-column: 1 / -1; }
+
+    .form-full {
+      grid-column: 1 / -1;
+    }
 
     .form-group {
-      display: flex; flex-direction: column; gap: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .form-label {
@@ -332,8 +462,10 @@
       text-transform: uppercase;
     }
 
-    .form-input, .form-select, .form-textarea {
-      background: rgba(0,0,0,0.3);
+    .form-input,
+    .form-select,
+    .form-textarea {
+      background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.65rem 0.9rem;
@@ -343,16 +475,32 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
       border-color: var(--green);
     }
-    .form-input::placeholder { color: var(--muted); }
-    .form-select option { background: #0f1a14; }
-    .form-textarea { resize: vertical; min-height: 90px; }
+
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    .form-select option {
+      background: #0f1a14;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
 
     .form-actions {
       margin-top: 1.5rem;
-      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .btn-cancel {
@@ -366,53 +514,103 @@
       cursor: pointer;
       transition: border-color 0.2s, color 0.2s;
     }
-    .btn-cancel:hover { border-color: var(--muted); color: var(--cream); }
+
+    .btn-cancel:hover {
+      border-color: var(--muted);
+      color: var(--cream);
+    }
 
     /* ── ACTIVITY LOG ── */
-    .activity-list { padding: 0; list-style: none; }
+    .activity-list {
+      padding: 0;
+      list-style: none;
+    }
+
     .activity-item {
-      display: flex; gap: 0.75rem; align-items: flex-start;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
       padding: 0.75rem 1.5rem;
-      border-bottom: 1px solid rgba(27,107,42,0.08);
+      border-bottom: 1px solid rgba(27, 107, 42, 0.08);
       font-size: 0.82rem;
     }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--green); flex-shrink: 0; margin-top: 3px;
+
+    .activity-item:last-child {
+      border-bottom: none;
     }
-    .activity-text { color: var(--cream); }
-    .activity-time { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+
+    .activity-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .activity-text {
+      color: var(--cream);
+    }
+
+    .activity-time {
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-top: 2px;
+    }
 
     /* ── TOAST ── */
     .toast {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 3000;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 3000;
       padding: 0.75rem 1.5rem;
       border-radius: 8px;
-      font-weight: 600; font-size: 0.9rem;
-      opacity: 0; transform: translateY(10px);
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(10px);
       transition: opacity 0.3s, transform 0.3s;
       pointer-events: none;
     }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .toast-success { background: var(--green); color: #fff; }
-    .toast-error { background: var(--red); color: #fff; }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast-success {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .toast-error {
+      background: var(--red);
+      color: #fff;
+    }
 
     /* ── EDIT MODAL ── */
     #edit-modal {
       display: none;
-      position: fixed; inset: 0; z-index: 2000;
-      background: rgba(0,0,0,0.8);
-      align-items: center; justify-content: center;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
       padding: 1rem;
     }
-    #edit-modal.open { display: flex; }
+
+    #edit-modal.open {
+      display: flex;
+    }
 
     .edit-modal-inner {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 20px;
-      width: 100%; max-width: 700px;
+      width: 100%;
+      max-width: 700px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 2rem;
@@ -420,346 +618,469 @@
     }
 
     .modal-close-btn {
-      position: absolute; top: 1rem; right: 1rem;
-      background: rgba(0,0,0,0.4); border: none; color: var(--cream);
-      width: 36px; height: 36px; border-radius: 50%;
-      font-size: 1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: none;
+      color: var(--cream);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .modal-close-btn:hover { background: rgba(224,82,82,0.3); }
+
+    .modal-close-btn:hover {
+      background: rgba(224, 82, 82, 0.3);
+    }
 
     #loading-overlay {
       display: none;
-      position: fixed; inset: 0; z-index: 9999;
-      background: rgba(10,15,13,0.8);
-      align-items: center; justify-content: center;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(10, 15, 13, 0.8);
+      align-items: center;
+      justify-content: center;
       color: var(--gold);
       font-size: 0.9rem;
       font-weight: 600;
       flex-direction: column;
       gap: 1rem;
     }
-    #loading-overlay.show { display: flex; }
+
+    #loading-overlay.show {
+      display: flex;
+    }
+
     .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid rgba(255,193,7,0.2);
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(255, 193, 7, 0.2);
       border-top-color: var(--gold);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     @media (max-width: 768px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { display: none; }
-      .form-grid { grid-template-columns: 1fr; }
-      .form-full { grid-column: 1; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-full {
+        grid-column: 1;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- Login Gate -->
-<div id="login-gate" style="position:fixed;inset:0;background:#0a0f0d;z-index:9999;display:flex;align-items:center;justify-content:center;">
-  <div style="background:#0f1a14;border:1px solid #1B6B2A;border-radius:16px;padding:2.5rem;width:100%;max-width:380px;text-align:center;">
-    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🔐</div>
-    <h2 style="font-family:'Playfair Display',serif;color:#FFC107;font-size:1.4rem;margin-bottom:0.25rem;">Prism Global</h2>
-    <p style="color:#6a7a70;font-size:0.8rem;margin-bottom:1.5rem;">Admin Dashboard</p>
-    <input type="password" id="admin-pass" placeholder="Enter password" 
-      style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:1rem;outline:none;"
-      onkeydown="if(event.key==='Enter') checkLogin()">
-    <button onclick="checkLogin()" 
-      style="width:100%;background:#FFC107;color:#000;border:none;padding:0.85rem;border-radius:10px;font-weight:800;font-size:0.95rem;cursor:pointer;">
-      Enter Dashboard
-    </button>
-    <p id="login-error" style="color:#e05555;font-size:0.75rem;margin-top:0.75rem;display:none;">Incorrect password. Try again.</p>
+  <!-- Login Gate -->
+  <div id="login-gate"
+    style="position:fixed;inset:0;background:#0a0f0d;z-index:9999;display:flex;align-items:center;justify-content:center;">
+    <div
+      style="background:#0f1a14;border:1px solid #1B6B2A;border-radius:16px;padding:2.5rem;width:100%;max-width:380px;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem;">🔐</div>
+      <h2 style="font-family:'Playfair Display',serif;color:#FFC107;font-size:1.4rem;margin-bottom:0.25rem;">Prism
+        Global</h2>
+      <p style="color:#6a7a70;font-size:0.8rem;margin-bottom:1.5rem;">Admin Dashboard</p>
+      <input type="password" id="admin-pass" placeholder="Enter password"
+        style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:1rem;outline:none;"
+        onkeydown="if(event.key==='Enter') checkLogin()">
+      <button onclick="checkLogin()"
+        style="width:100%;background:#FFC107;color:#000;border:none;padding:0.85rem;border-radius:10px;font-weight:800;font-size:0.95rem;cursor:pointer;">
+        Enter Dashboard
+      </button>
+      <p id="login-error" style="color:#e05555;font-size:0.75rem;margin-top:0.75rem;display:none;">Incorrect password.
+        Try again.</p>
+    </div>
   </div>
-</div>
 
-<script>
-  function checkLogin() {
-    const pass = document.getElementById('admin-pass').value;
-    if (pass === 'Egonabia@2022') {
-      document.getElementById('login-gate').style.display = 'none';
-      sessionStorage.setItem('prism-admin', '1');
-    } else {
-      document.getElementById('login-error').style.display = 'block';
-      document.getElementById('admin-pass').value = '';
+  <script>
+    function checkLogin() {
+      const pass = document.getElementById('admin-pass').value;
+      if (pass === 'Egonabia@2022') {
+        document.getElementById('login-gate').style.display = 'none';
+        sessionStorage.setItem('prism-admin', '1');
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('admin-pass').value = '';
+      }
     }
-  }
-  // Auto-unlock if already authenticated this session
-  if (sessionStorage.getItem('prism-admin') === '1') {
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('login-gate').style.display = 'none';
-    });
-  }
-</script>
-
-<!-- HEADER -->
-<header>
-  <a href="/" class="header-brand">
-    <div class="brand-icon">P</div>
-    <span class="brand-text">PR<span>I</span>SM GLOBAL</span>
-    <span class="header-badge">Admin</span>
-  </a>
-  <div class="header-actions">
-    <a href="/" target="_blank" class="view-site-btn">↗ View Site</a>
-  </div>
-</header>
-
-<div class="layout">
-  <!-- SIDEBAR -->
-  <aside>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Manage</div>
-      <button class="sidebar-item active" onclick="showTab('properties')">🏠 Properties</button>
-      <button class="sidebar-item" onclick="showTab('activity')">📋 Activity Log</button>
-    </div>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Tools</div>
-      <a href="/" target="_blank" class="sidebar-item">🌐 View Website</a>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main>
-
-    <!-- PROPERTIES TAB -->
-    <div id="tab-properties">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Properties</h1>
-          <p class="page-sub">Manage your live listings. Changes reflect instantly on the website.</p>
-        </div>
-        <button class="btn-primary" onclick="toggleAddForm()">
-          <span id="add-btn-icon">+</span> Add Property
-        </button>
-      </div>
-
-      <!-- STATS -->
-      <div class="stats-row" id="stats-row">
-        <div class="stat-card">
-          <div class="stat-card-val" id="stat-total">—</div>
-          <div class="stat-card-label">Total Listings</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-val" id="stat-available">—</div>
-          <div class="stat-card-label">Available</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-val" id="stat-sold">—</div>
-          <div class="stat-card-label">Sold</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-val" id="stat-offplan">—</div>
-          <div class="stat-card-label">Off-Plan</div>
-        </div>
-      </div>
-
-      <!-- ADD FORM -->
-      <div id="add-form-section">
-        <div class="form-section-title" id="form-title">Add New Property</div>
-        <form id="property-form" onsubmit="handleFormSubmit(event)">
-          <input type="hidden" id="edit-id" value="">
-          <div class="form-grid">
-            <div class="form-group form-full">
-              <label class="form-label">Property Title *</label>
-              <input type="text" class="form-input" id="f-title" placeholder="e.g. 4-Bedroom Luxury Duplex, Lekki Phase 1" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Price (₦) *</label>
-              <input type="number" class="form-input" id="f-price" placeholder="185000000" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Location *</label>
-              <input type="text" class="form-input" id="f-location" placeholder="e.g. Lekki Phase 1, Lagos" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Type</label>
-              <select class="form-select" id="f-type">
-                <option value="">Select type</option>
-                <option value="Duplex">Duplex</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Land">Land</option>
-                <option value="Bungalow">Bungalow</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Terrace">Terrace</option>
-                <option value="Penthouse">Penthouse</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Status</label>
-              <select class="form-select" id="f-status">
-                <option value="Available">Available</option>
-                <option value="Sold">Sold</option>
-                <option value="Off-Plan">Off-Plan</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Bedrooms</label>
-              <input type="number" class="form-input" id="f-bedrooms" placeholder="4" min="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Bathrooms</label>
-              <input type="number" class="form-input" id="f-bathrooms" placeholder="3" min="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Size</label>
-              <input type="text" class="form-input" id="f-size" placeholder="e.g. 450 sqm">
-            </div>
-            <div class="form-group form-full">
-              <label class="form-label">Description</label>
-              <textarea class="form-textarea" id="f-description" placeholder="Describe the property..."></textarea>
-            </div>
-            <div class="form-group form-full">
-              <label class="form-label">Image URL 1</label>
-              <input type="url" class="form-input" id="f-img1" placeholder="https://...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Image URL 2 (optional)</label>
-              <input type="url" class="form-input" id="f-img2" placeholder="https://...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Image URL 3 (optional)</label>
-              <input type="url" class="form-input" id="f-img3" placeholder="https://...">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn-primary" id="submit-btn">Save Property</button>
-            <button type="button" class="btn-cancel" onclick="hideAddForm()">Cancel</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- TABLE -->
-      <div class="table-section" style="margin-top:2rem;">
-        <div class="table-header">
-          <span class="table-title">All Properties</span>
-          <input type="text" class="search-input" placeholder="Search..." oninput="filterTable(this.value)" id="search-input">
-        </div>
-        <div id="table-body-wrapper">
-          <table class="properties-table">
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Property</th>
-                <th>Price</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="properties-tbody">
-              <tr>
-                <td colspan="6" style="text-align:center;color:#6a7a70;padding:3rem;">
-                  Loading…
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ACTIVITY TAB -->
-    <div id="tab-activity" style="display:none;">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Activity Log</h1>
-          <p class="page-sub">Recent changes and actions on the platform.</p>
-        </div>
-      </div>
-      <div class="table-section">
-        <ul class="activity-list" id="activity-list">
-          <li style="padding:2rem;color:#6a7a70;text-align:center;">Loading…</li>
-        </ul>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- LOADING OVERLAY -->
-<div id="loading-overlay">
-  <div class="spinner"></div>
-  <span>Saving…</span>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<script>
-  let allProperties = [];
-
-  // ── UI Helpers
-  function showLoading() { document.getElementById('loading-overlay').classList.add('show'); }
-  function hideLoading() { document.getElementById('loading-overlay').classList.remove('show'); }
-
-  function showToast(msg, type = 'success') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = `toast toast-${type} show`;
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-
-  function showTab(tab) {
-    document.getElementById('tab-properties').style.display = tab === 'properties' ? 'block' : 'none';
-    document.getElementById('tab-activity').style.display = tab === 'activity' ? 'block' : 'none';
-    document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-    event.target.classList.add('active');
-    if (tab === 'activity') loadActivity();
-  }
-
-  // ── Data API
-  async function loadData() {
-    // Try serverless API first, fall back to JSONBlob directly
-    let res;
-    try {
-      res = await fetch('/api.php?action=getData');
-      if (!res.ok) throw new Error('API unavailable');
-    } catch {
-      res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
-        headers: { 'Accept': 'application/json' }
+    // Auto-unlock if already authenticated this session
+    if (sessionStorage.getItem('prism-admin') === '1') {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('login-gate').style.display = 'none';
       });
     }
-    if (!res.ok) throw new Error('Failed to load data');
-    return res.json();
-  }
+  </script>
 
-  async function saveData(data) {
-    // Save directly to JSONBlob (works on any deployment)
-    const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
-      method: 'PUT',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error('Failed to save data');
-    return res.json();
-  }
+  <!-- HEADER -->
+  <header>
+    <a href="/" class="header-brand">
+      <div class="brand-icon">P</div>
+      <span class="brand-text">PR<span>I</span>SM GLOBAL</span>
+      <span class="header-badge">Admin</span>
+    </a>
+    <div class="header-actions">
+      <a href="/" target="_blank" class="view-site-btn">↗ View Site</a>
+    </div>
+  </header>
 
-  // ── Render
-  function statusClass(s) {
-    if (!s) return 'status-available';
-    const map = { 'Available': 'status-available', 'Sold': 'status-sold', 'Off-Plan': 'status-off-plan' };
-    return map[s] || 'status-available';
-  }
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Manage</div>
+        <button class="sidebar-item active" onclick="showTab('properties')">🏠 Properties</button>
+        <button class="sidebar-item" onclick="showTab('activity')">📋 Activity Log</button>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Tools</div>
+        <a href="/" target="_blank" class="sidebar-item">🌐 View Website</a>
+      </div>
+    </aside>
 
-  function renderProperties(props) {
-    allProperties = props;
-    updateStats(props);
-    const tbody = document.getElementById('properties-tbody');
-    if (!props.length) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#6a7a70;padding:3rem;">No properties yet. Add one above.</td></tr>`;
-      return;
+    <!-- MAIN -->
+    <main>
+
+      <!-- PROPERTIES TAB -->
+      <div id="tab-properties">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Properties</h1>
+            <p class="page-sub">Manage your live listings. Changes reflect instantly on the website.</p>
+          </div>
+          <button class="btn-primary" onclick="toggleAddForm()">
+            <span id="add-btn-icon">+</span> Add Property
+          </button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-row" id="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-val" id="stat-total">—</div>
+            <div class="stat-card-label">Total Listings</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-val" id="stat-available">—</div>
+            <div class="stat-card-label">Available</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-val" id="stat-sold">—</div>
+            <div class="stat-card-label">Sold</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-val" id="stat-offplan">—</div>
+            <div class="stat-card-label">Off-Plan</div>
+          </div>
+        </div>
+
+        <!-- ADD FORM -->
+        <div id="add-form-section">
+          <div class="form-section-title" id="form-title">Add New Property</div>
+          <form id="property-form" onsubmit="handleFormSubmit(event)">
+            <input type="hidden" id="edit-id" value="">
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label class="form-label">Property Title *</label>
+                <input type="text" class="form-input" id="f-title"
+                  placeholder="e.g. 4-Bedroom Luxury Duplex, Lekki Phase 1" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Price (₦) *</label>
+                <input type="number" class="form-input" id="f-price" placeholder="185000000" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Location *</label>
+                <input type="text" class="form-input" id="f-location" placeholder="e.g. Lekki Phase 1, Lagos" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Type</label>
+                <select class="form-select" id="f-type">
+                  <option value="">Select type</option>
+                  <option value="Duplex">Duplex</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Land">Land</option>
+                  <option value="Bungalow">Bungalow</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Terrace">Terrace</option>
+                  <option value="Penthouse">Penthouse</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="f-status">
+                  <option value="Available">Available</option>
+                  <option value="Sold">Sold</option>
+                  <option value="Off-Plan">Off-Plan</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bedrooms</label>
+                <input type="number" class="form-input" id="f-bedrooms" placeholder="4" min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bathrooms</label>
+                <input type="number" class="form-input" id="f-bathrooms" placeholder="3" min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Size</label>
+                <input type="text" class="form-input" id="f-size" placeholder="e.g. 450 sqm">
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" id="f-description" placeholder="Describe the property..."></textarea>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Property Images</label>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;" id="image-preview-area">
+                </div>
+                <input type="file" id="f-img-upload" accept="image/*" multiple
+                  style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.9rem;color:var(--cream);font-size:0.85rem;width:100%;cursor:pointer;margin-bottom:0.5rem;">
+                <input type="text" class="form-input" id="f-img1" placeholder="Or paste image URL..."
+                  style="margin-bottom:0.25rem;">
+                <input type="text" class="form-input" id="f-img2" placeholder="Image URL 2 (optional)"
+                  style="margin-bottom:0.25rem;">
+                <input type="text" class="form-input" id="f-img3" placeholder="Image URL 3 (optional)">
+                <div id="uploaded-imgs-list" style="display:none;"></div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="submit-btn">Save Property</button>
+              <button type="button" class="btn-cancel" onclick="hideAddForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-section" style="margin-top:2rem;">
+          <div class="table-header">
+            <span class="table-title">All Properties</span>
+            <input type="text" class="search-input" placeholder="Search..." oninput="filterTable(this.value)"
+              id="search-input">
+          </div>
+          <div id="table-body-wrapper">
+            <table class="properties-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Property</th>
+                  <th>Price</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="properties-tbody">
+                <tr>
+                  <td colspan="6" style="text-align:center;color:#6a7a70;padding:3rem;">
+                    Loading…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY TAB -->
+      <div id="tab-activity" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Activity Log</h1>
+            <p class="page-sub">Recent changes and actions on the platform.</p>
+          </div>
+        </div>
+        <div class="table-section">
+          <ul class="activity-list" id="activity-list">
+            <li style="padding:2rem;color:#6a7a70;text-align:center;">Loading…</li>
+          </ul>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <span>Saving…</span>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let allProperties = [];
+
+    // ── UI Helpers
+    function showLoading() { document.getElementById('loading-overlay').classList.add('show'); }
+    function hideLoading() { document.getElementById('loading-overlay').classList.remove('show'); }
+
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast toast-${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3500);
     }
-    tbody.innerHTML = props.map(p => `
+
+    function showTab(tab) {
+      document.getElementById('tab-properties').style.display = tab === 'properties' ? 'block' : 'none';
+      document.getElementById('tab-activity').style.display = tab === 'activity' ? 'block' : 'none';
+      document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
+      if (tab === 'activity') loadActivity();
+    }
+
+    // ── Data API
+    async function loadData() {
+      // Try api.php → JSONBlob → direct data.json (triple fallback)
+      let res;
+      try {
+        res = await fetch('/api.php?action=getData');
+        if (!res.ok) throw new Error('API unavailable');
+      } catch {
+        try {
+          res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
+            headers: { 'Accept': 'application/json' }
+          });
+          if (!res.ok) throw new Error('JSONBlob unavailable');
+        } catch {
+          res = await fetch('data.json');
+        }
+      }
+      if (!res.ok) throw new Error('Failed to load data');
+      return res.json();
+    }
+
+    async function saveData(data) {
+      // Try local PHP API first (Namecheap hosting), fall back to JSONBlob
+      try {
+        const res = await fetch('/api.php?action=saveData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Admin-Password': 'Egonabia@2022'
+          },
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('API error');
+        return res.json();
+      } catch {
+        const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('Failed to save data');
+        return res.json();
+      }
+    }
+
+    // Image upload via api.php
+    let pendingUploadedImages = [];
+
+    document.getElementById('f-img-upload').addEventListener('change', async function (e) {
+      const files = e.target.files;
+      if (!files.length) return;
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const res = await fetch('/api.php?action=uploadImage', {
+            method: 'POST',
+            headers: { 'X-Admin-Password': 'Egonabia@2022' },
+            body: formData
+          });
+          const result = await res.json();
+          if (result.url) {
+            pendingUploadedImages.push(result.url);
+            renderImagePreviews();
+            showToast('Image uploaded: ' + file.name);
+          } else {
+            showToast('Upload failed: ' + (result.error || 'Unknown error'), 'error');
+          }
+        } catch (err) {
+          showToast('Upload error: ' + err.message, 'error');
+        }
+      }
+      e.target.value = '';
+    });
+
+    function renderImagePreviews() {
+      const area = document.getElementById('image-preview-area');
+      const allImgs = [
+        ...pendingUploadedImages,
+        document.getElementById('f-img1').value.trim(),
+        document.getElementById('f-img2').value.trim(),
+        document.getElementById('f-img3').value.trim()
+      ].filter(Boolean);
+      area.innerHTML = allImgs.map((url, i) => `
+      <div style="position:relative;">
+        <img src="${url}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
+        <button type="button" onclick="removePreviewImage(${i})" style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+      </div>
+    `).join('');
+    }
+
+    function removePreviewImage(idx) {
+      const allImgs = [
+        ...pendingUploadedImages,
+        document.getElementById('f-img1').value.trim(),
+        document.getElementById('f-img2').value.trim(),
+        document.getElementById('f-img3').value.trim()
+      ].filter(Boolean);
+      if (idx < pendingUploadedImages.length) {
+        pendingUploadedImages.splice(idx, 1);
+      } else {
+        const urlIdx = idx - pendingUploadedImages.length;
+        ['f-img1', 'f-img2', 'f-img3'][urlIdx] && (document.getElementById(['f-img1', 'f-img2', 'f-img3'][urlIdx]).value = '');
+      }
+      renderImagePreviews();
+    }
+
+    // ── Render
+    function statusClass(s) {
+      if (!s) return 'status-available';
+      const map = { 'Available': 'status-available', 'Sold': 'status-sold', 'Off-Plan': 'status-off-plan' };
+      return map[s] || 'status-available';
+    }
+
+    function renderProperties(props) {
+      allProperties = props;
+      updateStats(props);
+      const tbody = document.getElementById('properties-tbody');
+      if (!props.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#6a7a70;padding:3rem;">No properties yet. Add one above.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = props.map(p => `
       <tr data-id="${p.id}">
         <td>
           ${p.images?.[0]
-            ? `<img src="${p.images[0]}" class="prop-img-thumb" onerror="this.style.display='none'">`
-            : `<div style="width:56px;height:42px;background:#1a2a1a;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6a7a70;font-size:1.2rem;">🏠</div>`}
+          ? `<img src="${p.images[0]}" class="prop-img-thumb" onerror="this.style.display='none'">`
+          : `<div style="width:56px;height:42px;background:#1a2a1a;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6a7a70;font-size:1.2rem;">🏠</div>`}
         </td>
         <td>
           <div class="prop-name-cell">
@@ -778,164 +1099,169 @@
         </td>
       </tr>
     `).join('');
-  }
-
-  function updateStats(props) {
-    document.getElementById('stat-total').textContent = props.length;
-    document.getElementById('stat-available').textContent = props.filter(p => p.status === 'Available').length;
-    document.getElementById('stat-sold').textContent = props.filter(p => p.status === 'Sold').length;
-    document.getElementById('stat-offplan').textContent = props.filter(p => p.status === 'Off-Plan').length;
-  }
-
-  function filterTable(q) {
-    const rows = document.querySelectorAll('#properties-tbody tr[data-id]');
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(q.toLowerCase()) ? '' : 'none';
-    });
-  }
-
-  // ── Add/Edit Form
-  function toggleAddForm() {
-    const s = document.getElementById('add-form-section');
-    const isVisible = s.classList.contains('visible');
-    if (isVisible) {
-      hideAddForm();
-    } else {
-      s.classList.add('visible');
-      document.getElementById('form-title').textContent = 'Add New Property';
-      document.getElementById('edit-id').value = '';
-      document.getElementById('submit-btn').textContent = 'Save Property';
-      document.getElementById('add-btn-icon').textContent = '−';
-      document.getElementById('property-form').reset();
-      s.scrollIntoView({ behavior: 'smooth' });
     }
-  }
 
-  function hideAddForm() {
-    document.getElementById('add-form-section').classList.remove('visible');
-    document.getElementById('add-btn-icon').textContent = '+';
-  }
+    function updateStats(props) {
+      document.getElementById('stat-total').textContent = props.length;
+      document.getElementById('stat-available').textContent = props.filter(p => p.status === 'Available').length;
+      document.getElementById('stat-sold').textContent = props.filter(p => p.status === 'Sold').length;
+      document.getElementById('stat-offplan').textContent = props.filter(p => p.status === 'Off-Plan').length;
+    }
 
-  function editProperty(id) {
-    const p = allProperties.find(x => x.id === id);
-    if (!p) return;
+    function filterTable(q) {
+      const rows = document.querySelectorAll('#properties-tbody tr[data-id]');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(q.toLowerCase()) ? '' : 'none';
+      });
+    }
 
-    document.getElementById('add-form-section').classList.add('visible');
-    document.getElementById('form-title').textContent = 'Edit Property';
-    document.getElementById('edit-id').value = p.id;
-    document.getElementById('submit-btn').textContent = 'Update Property';
-    document.getElementById('add-btn-icon').textContent = '−';
-
-    document.getElementById('f-title').value = p.title || '';
-    document.getElementById('f-price').value = p.price || '';
-    document.getElementById('f-location').value = p.location || '';
-    document.getElementById('f-type').value = p.type || '';
-    document.getElementById('f-status').value = p.status || 'Available';
-    document.getElementById('f-bedrooms').value = p.bedrooms || '';
-    document.getElementById('f-bathrooms').value = p.bathrooms || '';
-    document.getElementById('f-size').value = p.size || '';
-    document.getElementById('f-description').value = p.description || '';
-    document.getElementById('f-img1').value = p.images?.[0] || '';
-    document.getElementById('f-img2').value = p.images?.[1] || '';
-    document.getElementById('f-img3').value = p.images?.[2] || '';
-
-    document.getElementById('add-form-section').scrollIntoView({ behavior: 'smooth' });
-  }
-
-  async function handleFormSubmit(e) {
-    e.preventDefault();
-    showLoading();
-
-    const images = [
-      document.getElementById('f-img1').value.trim(),
-      document.getElementById('f-img2').value.trim(),
-      document.getElementById('f-img3').value.trim()
-    ].filter(Boolean);
-
-    const formData = {
-      title: document.getElementById('f-title').value.trim(),
-      price: Number(document.getElementById('f-price').value),
-      location: document.getElementById('f-location').value.trim(),
-      type: document.getElementById('f-type').value,
-      status: document.getElementById('f-status').value,
-      bedrooms: document.getElementById('f-bedrooms').value ? Number(document.getElementById('f-bedrooms').value) : null,
-      bathrooms: document.getElementById('f-bathrooms').value ? Number(document.getElementById('f-bathrooms').value) : null,
-      size: document.getElementById('f-size').value.trim(),
-      description: document.getElementById('f-description').value.trim(),
-      images
-    };
-
-    try {
-      const data = await loadData();
-      const editId = document.getElementById('edit-id').value;
-
-      if (editId) {
-        // Update existing
-        const idx = data.properties.findIndex(p => p.id === editId);
-        if (idx > -1) {
-          data.properties[idx] = { ...data.properties[idx], ...formData };
-          data.activity.unshift({ action: 'Updated property: ' + formData.title, time: new Date().toISOString() });
-        }
+    // ── Add/Edit Form
+    function toggleAddForm() {
+      const s = document.getElementById('add-form-section');
+      const isVisible = s.classList.contains('visible');
+      if (isVisible) {
+        hideAddForm();
       } else {
-        // Add new
-        const newProp = {
-          id: 'prop_' + Date.now(),
-          ...formData,
-          createdAt: new Date().toISOString()
-        };
-        data.properties.push(newProp);
-        data.activity.unshift({ action: 'Added property: ' + formData.title, time: new Date().toISOString() });
+        s.classList.add('visible');
+        document.getElementById('form-title').textContent = 'Add New Property';
+        document.getElementById('edit-id').value = '';
+        document.getElementById('submit-btn').textContent = 'Save Property';
+        document.getElementById('add-btn-icon').textContent = '−';
+        document.getElementById('property-form').reset();
+        s.scrollIntoView({ behavior: 'smooth' });
       }
-
-      await saveData(data);
-      renderProperties(data.properties);
-      hideAddForm();
-      document.getElementById('property-form').reset();
-      showToast(editId ? 'Property updated!' : 'Property added successfully!');
-    } catch(err) {
-      showToast('Error saving property: ' + err.message, 'error');
-    } finally {
-      hideLoading();
     }
-  }
 
-  async function deleteProperty(id) {
-    const p = allProperties.find(x => x.id === id);
-    if (!confirm(`Delete "${p?.title || id}"?`)) return;
-
-    showLoading();
-    try {
-      const data = await loadData();
-      const title = data.properties.find(x => x.id === id)?.title || id;
-      data.properties = data.properties.filter(p => p.id !== id);
-      data.activity.unshift({ action: 'Deleted property: ' + title, time: new Date().toISOString() });
-      await saveData(data);
-      renderProperties(data.properties);
-      showToast('Property deleted');
-    } catch(err) {
-      showToast('Error deleting: ' + err.message, 'error');
-    } finally {
-      hideLoading();
+    function hideAddForm() {
+      document.getElementById('add-form-section').classList.remove('visible');
+      document.getElementById('add-btn-icon').textContent = '+';
     }
-  }
 
-  async function loadActivity() {
-    try {
-      const data = await loadData();
-      const list = document.getElementById('activity-list');
-      const items = data.activity || [];
-      if (!items.length) {
-        list.innerHTML = `<li style="padding:2rem;color:#6a7a70;text-align:center;">No activity yet.</li>`;
-        return;
+    function editProperty(id) {
+      const p = allProperties.find(x => x.id === id);
+      if (!p) return;
+
+      document.getElementById('add-form-section').classList.add('visible');
+      document.getElementById('form-title').textContent = 'Edit Property';
+      document.getElementById('edit-id').value = p.id;
+      document.getElementById('submit-btn').textContent = 'Update Property';
+      document.getElementById('add-btn-icon').textContent = '−';
+
+      document.getElementById('f-title').value = p.title || '';
+      document.getElementById('f-price').value = p.price || '';
+      document.getElementById('f-location').value = p.location || '';
+      document.getElementById('f-type').value = p.type || '';
+      document.getElementById('f-status').value = p.status || 'Available';
+      document.getElementById('f-bedrooms').value = p.bedrooms || '';
+      document.getElementById('f-bathrooms').value = p.bathrooms || '';
+      document.getElementById('f-size').value = p.size || '';
+      document.getElementById('f-description').value = p.description || '';
+      document.getElementById('f-img1').value = p.images?.[0] || '';
+      document.getElementById('f-img2').value = p.images?.[1] || '';
+      document.getElementById('f-img3').value = p.images?.[2] || '';
+      pendingUploadedImages = [...(p.images || []).slice(3)];
+      renderImagePreviews();
+
+      document.getElementById('add-form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      showLoading();
+
+      const urlImages = [
+        document.getElementById('f-img1').value.trim(),
+        document.getElementById('f-img2').value.trim(),
+        document.getElementById('f-img3').value.trim()
+      ].filter(Boolean);
+      const images = [...pendingUploadedImages, ...urlImages];
+
+      const formData = {
+        title: document.getElementById('f-title').value.trim(),
+        price: Number(document.getElementById('f-price').value),
+        location: document.getElementById('f-location').value.trim(),
+        type: document.getElementById('f-type').value,
+        status: document.getElementById('f-status').value,
+        bedrooms: document.getElementById('f-bedrooms').value ? Number(document.getElementById('f-bedrooms').value) : null,
+        bathrooms: document.getElementById('f-bathrooms').value ? Number(document.getElementById('f-bathrooms').value) : null,
+        size: document.getElementById('f-size').value.trim(),
+        description: document.getElementById('f-description').value.trim(),
+        images
+      };
+
+      try {
+        const data = await loadData();
+        const editId = document.getElementById('edit-id').value;
+
+        if (editId) {
+          // Update existing
+          const idx = data.properties.findIndex(p => p.id === editId);
+          if (idx > -1) {
+            data.properties[idx] = { ...data.properties[idx], ...formData };
+            data.activity.unshift({ action: 'Updated property: ' + formData.title, time: new Date().toISOString() });
+          }
+        } else {
+          // Add new
+          const newProp = {
+            id: 'prop_' + Date.now(),
+            ...formData,
+            createdAt: new Date().toISOString()
+          };
+          data.properties.push(newProp);
+          data.activity.unshift({ action: 'Added property: ' + formData.title, time: new Date().toISOString() });
+        }
+
+        await saveData(data);
+        renderProperties(data.properties);
+        hideAddForm();
+        document.getElementById('property-form').reset();
+        pendingUploadedImages = [];
+        document.getElementById('image-preview-area').innerHTML = '';
+        showToast(editId ? 'Property updated!' : 'Property added successfully!');
+      } catch (err) {
+        showToast('Error saving property: ' + err.message, 'error');
+      } finally {
+        hideLoading();
       }
-      list.innerHTML = items.slice(0, 50).map(a => {
-        const d = new Date(a.time);
-        const timeStr = isNaN(d) ? a.time : d.toLocaleString('en-GB', {
-          day: '2-digit', month: 'short', year: 'numeric',
-          hour: '2-digit', minute: '2-digit'
-        });
-        return `
+    }
+
+    async function deleteProperty(id) {
+      const p = allProperties.find(x => x.id === id);
+      if (!confirm(`Delete "${p?.title || id}"?`)) return;
+
+      showLoading();
+      try {
+        const data = await loadData();
+        const title = data.properties.find(x => x.id === id)?.title || id;
+        data.properties = data.properties.filter(p => p.id !== id);
+        data.activity.unshift({ action: 'Deleted property: ' + title, time: new Date().toISOString() });
+        await saveData(data);
+        renderProperties(data.properties);
+        showToast('Property deleted');
+      } catch (err) {
+        showToast('Error deleting: ' + err.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function loadActivity() {
+      try {
+        const data = await loadData();
+        const list = document.getElementById('activity-list');
+        const items = data.activity || [];
+        if (!items.length) {
+          list.innerHTML = `<li style="padding:2rem;color:#6a7a70;text-align:center;">No activity yet.</li>`;
+          return;
+        }
+        list.innerHTML = items.slice(0, 50).map(a => {
+          const d = new Date(a.time);
+          const timeStr = isNaN(d) ? a.time : d.toLocaleString('en-GB', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          });
+          return `
           <li class="activity-item">
             <div class="activity-dot"></div>
             <div>
@@ -944,27 +1270,28 @@
             </div>
           </li>
         `;
-      }).join('');
-    } catch(err) {
-      document.getElementById('activity-list').innerHTML =
-        `<li style="padding:2rem;color:#e05252;text-align:center;">Error loading activity.</li>`;
+        }).join('');
+      } catch (err) {
+        document.getElementById('activity-list').innerHTML =
+          `<li style="padding:2rem;color:#e05252;text-align:center;">Error loading activity.</li>`;
+      }
     }
-  }
 
-  // ── Init
-  async function init() {
-    try {
-      const data = await loadData();
-      renderProperties(data.properties || []);
-    } catch(err) {
-      document.getElementById('properties-tbody').innerHTML =
-        `<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">
+    // ── Init
+    async function init() {
+      try {
+        const data = await loadData();
+        renderProperties(data.properties || []);
+      } catch (err) {
+        document.getElementById('properties-tbody').innerHTML =
+          `<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">
           Failed to load properties. Is the API running?
         </td></tr>`;
+      }
     }
-  }
 
-  init();
-</script>
+    init();
+  </script>
 </body>
+
 </html>

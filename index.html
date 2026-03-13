@@ -1,1474 +1,887 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prism Global — Premium Nigerian Real Estate</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #0D1B2A;
-      --gold: #C9A84C;
-      --gold-light: #F0C060;
-      --cream: #F5F0E8;
-      --charcoal: #1C1C1E;
-      --muted: #8A8A8A;
-      --bg: #080E14;
-      --card: #0F1923;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--cream);
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(8, 14, 20, 0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-      padding: 0 5%;
-      height: 72px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .nav-brand {
-      display: flex; align-items: center; gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-brand svg { width: 40px; height: 40px; flex-shrink: 0; }
-
-    .nav-wordmark {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--cream);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .nav-wordmark span { color: var(--gold); }
-
-    .nav-links {
-      display: flex; align-items: center; gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-
-    .nav-cta {
-      border: 1px solid var(--gold);
-      color: var(--gold) !important;
-      padding: 0.5rem 1.25rem;
-      border-radius: 6px;
-      transition: background 0.2s, color 0.2s !important;
-    }
-    .nav-cta:hover { background: var(--gold) !important; color: #000 !important; }
-
-    .hamburger {
-      display: none;
-      flex-direction: column; gap: 5px;
-      cursor: pointer; background: none; border: none; padding: 4px;
-    }
-    .hamburger span {
-      width: 24px; height: 2px; background: var(--cream);
-      display: block; transition: 0.3s;
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed; top: 72px; left: 0; right: 0;
-      background: rgba(8, 14, 20, 0.98);
-      padding: 1.5rem 5%;
-      flex-direction: column; gap: 1rem;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
-      z-index: 999;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      color: #aaa; text-decoration: none;
-      font-size: 1rem; font-weight: 500;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: color 0.2s;
-    }
-    .mobile-menu a:hover { color: var(--gold); }
-    .mobile-menu .mob-cta {
-      border: 1px solid var(--gold); color: var(--gold);
-      text-align: center; padding: 0.75rem;
-      border-radius: 6px; margin-top: 0.5rem;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      position: relative;
-      height: 100vh; min-height: 700px;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: flex-start;
-      padding: 0 8%;
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0; z-index: 0;
-      background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80') center/cover no-repeat;
-    }
-    .hero-overlay {
-      position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(135deg, rgba(8,14,20,0.88) 40%, rgba(13,27,42,0.7) 100%);
-    }
-
-    .hero-content {
-      position: relative; z-index: 2;
-      max-width: 680px;
-    }
-
-    .hero-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .hero-label::before {
-      content: '';
-      width: 32px; height: 1px;
-      background: var(--gold);
-      display: block;
-    }
-
-    .hero-h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 900;
-      line-height: 1.05;
-      color: #fff;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.15rem);
-      color: rgba(245, 240, 232, 0.75);
-      line-height: 1.7;
-      margin-bottom: 2.5rem;
-      max-width: 520px;
-    }
-
-    .hero-ctas {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: #000;
-      padding: 0.9rem 2rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      transition: background 0.2s, transform 0.2s;
-      border: none; cursor: pointer;
-    }
-    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      color: #fff;
-      padding: 0.9rem 2rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      border: 1px solid rgba(255,255,255,0.5);
-      transition: border-color 0.2s, color 0.2s, transform 0.2s;
-    }
-    .btn-outline:hover { border-color: #fff; color: #fff; transform: translateY(-2px); }
-
-    .hero-stats {
-      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
-      background: rgba(13, 27, 42, 0.9);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(201,168,76,0.2);
-      display: flex; align-items: stretch;
-    }
-
-    .stat-item {
-      flex: 1;
-      padding: 1.5rem 2rem;
-      border-right: 1px solid rgba(201,168,76,0.15);
-      text-align: center;
-    }
-    .stat-item:last-child { border-right: none; }
-
-    .stat-val {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 0.25rem;
-    }
-    .stat-label {
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-    }
-
-    /* ── ABOUT / STORY ── */
-    #about {
-      background: linear-gradient(135deg, #0A1520 0%, #0D1B2A 100%);
-      border-top: 1px solid rgba(201,168,76,0.1);
-      border-bottom: 1px solid rgba(201,168,76,0.1);
-      padding: 5rem 8%;
-    }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-text .section-label { margin-bottom: 0.75rem; }
-    .about-text .section-title { margin-bottom: 1.25rem; }
-
-    .about-body {
-      color: rgba(245,240,232,0.75);
-      font-size: 1rem;
-      line-height: 1.85;
-      margin-bottom: 1.5rem;
-    }
-
-    .about-pillars {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .pillar {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 1rem;
-      background: rgba(201,168,76,0.05);
-      border: 1px solid rgba(201,168,76,0.12);
-      border-radius: 12px;
-    }
-
-    .pillar-icon { font-size: 1.4rem; flex-shrink: 0; }
-
-    .pillar-text strong {
-      display: block;
-      color: var(--cream);
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    .pillar-text span {
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.5;
-    }
-
-    .about-visual {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      height: 420px;
-    }
-    .about-visual img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .about-visual-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(13,27,42,0.7) 0%, transparent 60%);
-    }
-    .about-visual-badge {
-      position: absolute; bottom: 1.5rem; left: 1.5rem;
-      background: rgba(201,168,76,0.9);
-      color: #000; font-weight: 700; font-size: 0.82rem;
-      padding: 0.5rem 1rem; border-radius: 8px;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── SECTION COMMON ── */
-    section { padding: 5rem 8%; }
-
-    .section-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.75rem;
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 1rem;
-    }
-
-    .section-sub {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.7;
-      max-width: 560px;
-      margin-bottom: 3rem;
-    }
-
-    /* ── FILTER BAR ── */
-    .filter-bar {
-      background: var(--card);
-      border: 1px solid rgba(201,168,76,0.15);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 2.5rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      align-items: flex-end;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      flex: 1;
-      min-width: 160px;
-    }
-
-    .filter-group label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-
-    .filter-group select {
-      background: rgba(8,14,20,0.8);
-      border: 1px solid rgba(201,168,76,0.25);
-      border-radius: 8px;
-      color: var(--cream);
-      padding: 0.65rem 1rem;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .filter-group select:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-    .filter-group select option {
-      background: #0F1923;
-      color: var(--cream);
-    }
-
-    .filter-search-btn {
-      background: var(--gold);
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      padding: 0.65rem 1.75rem;
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-      height: 40px;
-      align-self: flex-end;
-      letter-spacing: 0.05em;
-    }
-    .filter-search-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
-
-    .filter-results-count {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-    }
-
-    /* ── PROPERTIES ── */
-    #properties { background: var(--bg); }
-
-    #properties-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .property-card {
-      background: var(--card);
-      border: 1px solid #1a2a3a;
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    }
-    .property-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--gold);
-      box-shadow: 0 8px 40px rgba(201, 168, 76, 0.15);
-    }
-    .prop-image { position: relative; height: 220px; overflow: hidden; }
-    .prop-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-    .property-card:hover .prop-image img { transform: scale(1.05); }
-    .prop-badge {
-      position: absolute; top: 12px; left: 12px;
-      padding: 4px 12px;
-      border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-    }
-    .prop-badge.sale { background: var(--gold); color: #000; }
-    .prop-badge.rent { background: #2ecc71; color: #000; }
-    .prop-type {
-      position: absolute; top: 12px; right: 12px;
-      background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px;
-      border-radius: 20px; font-size: 0.7rem;
-    }
-    .prop-body { padding: 1.25rem; }
-    .prop-price { color: var(--gold); font-size: 1.3rem; font-weight: 800; margin-bottom: 0.4rem; }
-    .prop-title { color: var(--cream); font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.4rem; }
-    .prop-location { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
-    .prop-features { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-    .prop-features span { color: #aaa; font-size: 0.75rem; }
-    .prop-cta {
-      background: transparent; border: 1px solid var(--gold); color: var(--gold);
-      padding: 0.5rem 1.2rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
-      cursor: pointer; transition: background 0.2s, color 0.2s;
-    }
-    .prop-cta:hover { background: var(--gold); color: #000; }
-
-    /* ── WHY PRISM ── */
-    #why { background: var(--navy); }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .feature-card {
-      background: rgba(8,14,20,0.6);
-      border: 1px solid rgba(201,168,76,0.15);
-      border-radius: 16px;
-      padding: 2rem;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .feature-card:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-3px); }
-
-    .feat-icon {
-      font-size: 2rem;
-      margin-bottom: 1.25rem;
-      display: block;
-    }
-    .feat-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      color: var(--cream);
-      margin-bottom: 0.75rem;
-    }
-    .feat-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
-
-    /* ── HOW IT WORKS ── */
-    #how { background: var(--bg); }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 2rem;
-      margin-top: 1rem;
-      position: relative;
-    }
-
-    .step { display: flex; flex-direction: column; }
-
-    .step-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: rgba(201,168,76,0.2);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .step-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      color: var(--cream);
-      margin-bottom: 0.75rem;
-    }
-    .step-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
-
-    /* ── TESTIMONIALS ── */
-    #testimonials { background: var(--navy); }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .testimonial {
-      background: rgba(8,14,20,0.5);
-      border: 1px solid rgba(201,168,76,0.12);
-      border-radius: 16px;
-      padding: 2rem;
-    }
-
-    .test-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 1rem; }
-
-    .test-text {
-      color: rgba(245,240,232,0.8);
-      font-size: 0.95rem;
-      line-height: 1.75;
-      margin-bottom: 1.5rem;
-      font-style: italic;
-    }
-
-    .test-author { display: flex; align-items: center; gap: 12px; }
-
-    .test-avatar {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--navy), var(--gold));
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700; color: #fff; font-size: 1rem;
-      flex-shrink: 0;
-    }
-
-    .test-name { font-weight: 600; color: var(--cream); font-size: 0.9rem; }
-    .test-loc { color: var(--muted); font-size: 0.78rem; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      border-top: 1px solid rgba(201,168,76,0.2);
-      padding: 4rem 8% 2rem;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand .nav-wordmark { font-size: 1.1rem; margin: 0.75rem 0 0.5rem; }
-    .footer-tagline { color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; line-height: 1.6; }
-
-    .footer-license {
-      display: inline-block;
-      margin-top: 1rem;
-      background: rgba(201,168,76,0.1);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 6px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.72rem;
-      color: var(--gold);
-      letter-spacing: 0.05em;
-      font-weight: 600;
-    }
-
-    .footer-col h4 {
-      color: var(--gold);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
-    }
-
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 0.75rem; }
-    .footer-col ul a {
-      color: var(--muted); text-decoration: none; font-size: 0.88rem;
-      transition: color 0.2s;
-    }
-    .footer-col ul a:hover { color: var(--gold); }
-
-    .footer-contact-item {
-      display: flex; align-items: flex-start; gap: 10px;
-      color: var(--muted); font-size: 0.88rem; margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-    .footer-contact-item a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .footer-contact-item a:hover { color: var(--gold); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 1.5rem;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
-    }
-
-    .footer-copy { color: var(--muted); font-size: 0.8rem; }
-
-    /* ── MODAL ── */
-    #property-modal {
-      display: none;
-      position: fixed; inset: 0; z-index: 2000;
-      background: rgba(0,0,0,0.9);
-      align-items: center; justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-inner {
-      background: var(--card);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 20px;
-      width: 100%; max-width: 860px;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .modal-close {
-      position: absolute; top: 1rem; right: 1rem; z-index: 10;
-      background: rgba(0,0,0,0.6); border: none; color: #fff;
-      width: 40px; height: 40px; border-radius: 50%;
-      font-size: 1.2rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .modal-close:hover { background: rgba(201,168,76,0.3); }
-
-    .modal-gallery {
-      display: flex; gap: 0;
-      overflow-x: auto; scroll-snap-type: x mandatory;
-    }
-    .modal-gallery img {
-      min-width: 100%; height: 380px; object-fit: cover;
-      scroll-snap-align: start; flex-shrink: 0;
-      border-radius: 20px 20px 0 0;
-    }
-
-    .modal-body { padding: 2rem; }
-
-    .modal-price { color: var(--gold); font-size: 1.6rem; font-weight: 800; margin-bottom: 0.4rem; }
-    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); margin-bottom: 0.5rem; }
-    .modal-location { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-
-    .modal-specs {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 0.75rem; margin-bottom: 1.75rem;
-    }
-
-    .spec-item {
-      background: rgba(13,27,42,0.6);
-      border: 1px solid rgba(201,168,76,0.15);
-      border-radius: 10px;
-      padding: 0.6rem 0.9rem;
-      font-size: 0.82rem; color: #ccc;
-      display: flex; gap: 6px; align-items: center;
-    }
-
-    .modal-description {
-      color: rgba(245,240,232,0.75);
-      font-size: 0.92rem;
-      line-height: 1.8;
-      margin-bottom: 1.75rem;
-    }
-
-    .modal-features-section { margin-bottom: 2rem; }
-
-    .modal-features-section h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      color: var(--cream);
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(201,168,76,0.15);
-    }
-
-    .modal-features-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      list-style: none;
-    }
-
-    .modal-features-list li {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 0.88rem; color: rgba(245,240,232,0.75);
-    }
-
-    .modal-features-list li::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--gold);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .modal-ctas {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-    }
-
-    .modal-whatsapp {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #25D366; color: #fff;
-      padding: 0.9rem 2rem; border-radius: 10px;
-      font-weight: 700; font-size: 0.9rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .modal-whatsapp:hover { background: #20bf5c; transform: translateY(-2px); }
-
-    .modal-viewing-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent;
-      border: 1px solid var(--gold); color: var(--gold);
-      padding: 0.9rem 2rem; border-radius: 10px;
-      font-weight: 700; font-size: 0.9rem;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, transform 0.2s;
-    }
-    .modal-viewing-btn:hover { background: var(--gold); color: #000; transform: translateY(-2px); }
-
-    /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 3000;
-      background: var(--gold); color: #000;
-      padding: 0.75rem 1.5rem; border-radius: 8px;
-      font-weight: 600; font-size: 0.9rem;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.3s, transform 0.3s;
-      pointer-events: none;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-inner { grid-template-columns: 1fr; }
-      .about-visual { height: 280px; }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-    }
-
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-
-      nav { padding: 0 5%; }
-      section { padding: 3.5rem 5%; }
-      #hero { padding: 0 5%; }
-      #about { padding: 3.5rem 5%; }
-
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-
-      .hero-stats { flex-direction: column; }
-      .stat-item { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.15); }
-      .stat-item:last-child { border-bottom: none; }
-
-      .filter-bar { flex-direction: column; }
-      .filter-group { min-width: unset; }
-
-      .modal-features-list { grid-template-columns: 1fr; }
-      .about-pillars { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prism Global Services — Luxury Real Estate, Lugbe Extension, Abuja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:       #1E3A5F;
+    --navy-light: #2B5080;
+    --navy-pale:  #EBF0F7;
+    --gold:       #C4903A;
+    --gold-light: #E0AC50;
+    --gold-pale:  #FBF4E8;
+    --cream:      #F9F7F4;
+    --white:      #FFFFFF;
+    --charcoal:   #1A2837;
+    --text:       #2C3E50;
+    --muted:      #6B82A0;
+    --border:     #DDE4EE;
+    --shadow:     0 4px 24px rgba(30,58,95,0.10);
+    --shadow-lg:  0 12px 48px rgba(30,58,95,0.14);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%; height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(30,58,95,0.07);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--navy); text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .nav-logo .dot { color: var(--gold); }
+  .nav-logo img { height: 44px; width: auto; max-width: 140px; object-fit: contain; }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--navy); color: white;
+    padding: 0.55rem 1.3rem; border-radius: 6px;
+    font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--navy-light); color: white; }
+
+  /* ── HERO ── */
+  .hero {
+    margin-top: 72px;
+    height: 88vh; min-height: 560px;
+    position: relative; overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('images/ext-aerial-01.jpg') center center / cover no-repeat;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(30,58,95,0.85) 0%, rgba(30,58,95,0.4) 50%, transparent 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 6% 5%;
+    color: white; max-width: 800px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(196,144,58,0.25); border: 1px solid rgba(196,144,58,0.6);
+    color: #F0C06A; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.35rem 0.8rem; border-radius: 20px; margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 700; line-height: 1.2;
+    margin-bottom: 0.8rem; letter-spacing: -0.01em;
+  }
+  .hero h1 em { font-style: italic; color: #F0C06A; }
+  .hero p { font-size: 1.05rem; opacity: 0.88; margin-bottom: 2rem; max-width: 560px; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: white; padding: 0.85rem 2rem;
+    border-radius: 8px; font-weight: 700; font-size: 0.9rem;
+    text-decoration: none; box-shadow: 0 4px 16px rgba(196,144,58,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,144,58,0.5); }
+  .btn-outline-white {
+    background: transparent; border: 2px solid rgba(255,255,255,0.7);
+    color: white; padding: 0.85rem 2rem;
+    border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.15); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--navy);
+    color: white;
+    padding: 1.4rem 6%;
+    display: flex; justify-content: center;
+    gap: clamp(2rem, 5vw, 5rem); flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--gold-light); line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; opacity: 0.7; margin-top: 0.2rem; letter-spacing: 0.04em; }
+
+  /* ── SECTION WRAPPER ── */
+  .section { padding: 5rem 6%; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .section-tag::before { content: ''; display: block; width: 24px; height: 2px; background: var(--gold); }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700; color: var(--navy);
+    line-height: 1.25; margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-sub { font-size: 1rem; color: var(--muted); max-width: 580px; }
+  hr.divider { border: none; border-top: 1px solid var(--border); }
+
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3rem; }
+  .about-img-wrap { position: relative; border-radius: 16px; overflow: hidden; }
+  .about-img-wrap img { width: 100%; height: 440px; object-fit: cover; display: block; }
+  .about-img-badge {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+    background: white; border-radius: 10px; padding: 0.8rem 1.2rem;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .about-img-badge .badge-icon { font-size: 1.4rem; }
+  .about-img-badge .badge-text { font-size: 0.8rem; font-weight: 600; color: var(--navy); line-height: 1.3; }
+  .about-img-badge .badge-sub { font-size: 0.7rem; color: var(--muted); }
+  .about-text h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 1rem; }
+  .about-text p { color: var(--muted); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1rem; }
+  .features-list { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.7rem; }
+  .features-list li {
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    font-size: 0.88rem; color: var(--text);
+  }
+  .features-list li::before {
+    content: '✦'; color: var(--gold); font-size: 0.7rem;
+    margin-top: 0.2rem; flex-shrink: 0;
+  }
+
+  /* ── GALLERY ── */
+  .gallery-tabs {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin: 2rem 0 1.5rem;
+  }
+  .gallery-tab {
+    padding: 0.55rem 1.2rem; border-radius: 20px;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: white; color: var(--text);
+    transition: all 0.2s;
+  }
+  .gallery-tab.active, .gallery-tab:hover {
+    background: var(--navy); color: white; border-color: var(--navy);
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .gallery-item {
+    position: relative; border-radius: 12px; overflow: hidden;
+    aspect-ratio: 4/3; cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-item .gallery-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(30,58,95,0.85), transparent);
+    color: white; padding: 1rem 0.8rem 0.7rem;
+    font-size: 0.78rem; font-weight: 600;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .gallery-item:hover .gallery-label { opacity: 1; }
+  .gallery-item.featured { grid-column: span 2; }
+
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(10,20,40,0.95);
+    justify-content: center; align-items: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 88vh; border-radius: 8px; box-shadow: 0 8px 60px rgba(0,0,0,0.5); }
+  .lightbox-close {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    color: white; font-size: 2rem; cursor: pointer;
+    background: rgba(255,255,255,0.15); width: 44px; height: 44px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: none; transition: background 0.2s;
+  }
+  .lightbox-close:hover { background: rgba(255,255,255,0.3); }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    color: white; font-size: 2rem; cursor: pointer;
+    background: rgba(255,255,255,0.15); width: 48px; height: 48px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: none; transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+  .lightbox-prev { left: 1.5rem; }
+  .lightbox-next { right: 1.5rem; }
+  .lightbox-caption {
+    position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.8); font-size: 0.85rem; white-space: nowrap;
+  }
+
+  /* ── SPECS ── */
+  .specs-section { background: var(--navy-pale); }
+  .specs-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .spec-card {
+    background: white; border-radius: 12px; padding: 1.6rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .spec-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: var(--gold-pale); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .spec-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+  .spec-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── AVAILABILITY ── */
+  .units-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .unit-card {
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .unit-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .unit-img { height: 200px; overflow: hidden; }
+  .unit-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .unit-card:hover .unit-img img { transform: scale(1.05); }
+  .unit-body { padding: 1.4rem; }
+  .unit-status {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.25rem 0.7rem; border-radius: 12px; margin-bottom: 0.8rem;
+  }
+  .status-ready { background: #DCFCE7; color: #166534; }
+  .status-soon { background: #FEF9C3; color: #854D0E; }
+  .status-plan { background: #EFF6FF; color: #1E40AF; }
+  .unit-body h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+  .unit-body .unit-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700; color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .unit-body .unit-price span { font-size: 0.78rem; font-family: 'Inter', sans-serif; color: var(--muted); }
+  .unit-features { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .unit-feat { font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; }
+  .unit-cta {
+    width: 100%; padding: 0.7rem; background: var(--navy);
+    color: white; border: none; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: background 0.2s; text-decoration: none;
+    display: block; text-align: center;
+  }
+  .unit-cta:hover { background: var(--navy-light); }
+
+  /* ── LOCATION ── */
+  .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+  .location-map {
+    background: var(--navy-pale); border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .location-map img { width: 100%; height: 320px; object-fit: cover; display: block; }
+  .location-map-label {
+    padding: 1rem 1.2rem; background: white; border-top: 1px solid var(--border);
+    font-size: 0.82rem; font-weight: 600; color: var(--navy);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .location-map-label::before { content: '📍'; }
+  .location-points { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .location-point {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1rem 1.2rem; background: white;
+    border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+  .location-point .pt-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .location-point h4 { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
+  .location-point p { font-size: 0.78rem; color: var(--muted); }
+
+  /* ── ENQUIRY ── */
+  .enquiry-section { background: var(--navy); color: white; }
+  .enquiry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .enquiry-left h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700; margin-bottom: 0.8rem; line-height: 1.3;
+  }
+  .enquiry-left h2 em { font-style: italic; color: var(--gold-light); }
+  .enquiry-left p { opacity: 0.75; font-size: 0.95rem; line-height: 1.7; margin-bottom: 2rem; }
+  .contact-methods { display: flex; flex-direction: column; gap: 0.8rem; }
+  .contact-method {
+    display: flex; align-items: center; gap: 0.8rem;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 0.9rem 1.1rem;
+    text-decoration: none; color: white; transition: background 0.2s;
+  }
+  .contact-method:hover { background: rgba(255,255,255,0.12); }
+  .contact-method .cm-icon { font-size: 1.2rem; }
+  .contact-method .cm-label { font-size: 0.7rem; opacity: 0.6; margin-bottom: 0.1rem; }
+  .contact-method .cm-value { font-size: 0.88rem; font-weight: 600; }
+  .enquiry-form { background: white; border-radius: 16px; padding: 2rem; }
+  .enquiry-form h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 1.5rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.75rem 0.9rem;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 0.88rem; font-family: 'Inter', sans-serif;
+    color: var(--text); background: var(--cream);
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--navy); background: white;
+  }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-submit {
+    width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: white; border: none; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(196,144,58,0.35);
+  }
+  .form-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(196,144,58,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal); color: rgba(255,255,255,0.7);
+    padding: 2.5rem 6%;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: white;
+  }
+  .footer-brand span { color: var(--gold-light); }
+  footer p { font-size: 0.78rem; }
+  .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-links a { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-decoration: none; }
+  .footer-links a:hover { color: var(--gold-light); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .about-grid, .location-grid, .enquiry-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .gallery-item.featured { grid-column: span 1; }
+    .nav-links { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .section { padding: 3rem 5%; }
+    .hero { height: 78vh; }
+    .stats-bar { gap: 1.5rem; }
+  }
+</style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
+<!-- NAV -->
 <nav>
-  <a href="#" class="nav-brand">
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#0D1B2A"/>
-          <stop offset="100%" stop-color="#C9A84C"/>
-        </linearGradient>
-      </defs>
-      <polygon points="4,36 4,4 24,4 36,12 36,22 24,28 4,36" fill="url(#pg)" opacity="0.15"/>
-      <polygon points="4,4 24,4 36,12 20,16" fill="#C9A84C" opacity="0.9"/>
-      <polygon points="4,4 20,16 4,28" fill="#0D1B2A" stroke="#C9A84C" stroke-width="0.5"/>
-      <polygon points="24,4 36,12 20,16" fill="#F0C060" opacity="0.8"/>
-      <polygon points="36,12 36,22 24,28 20,16" fill="#C9A84C" opacity="0.6"/>
-      <polygon points="4,28 20,16 24,28 4,36" fill="#0D1B2A" stroke="#C9A84C" stroke-width="0.3" opacity="0.8"/>
-      <text x="9" y="26" font-family="Playfair Display, serif" font-size="14" font-weight="900" fill="#fff" opacity="0.95">P</text>
-    </svg>
-    <span class="nav-wordmark">PR<span>I</span>SM GLOBAL</span>
+  <a href="#" class="nav-logo">
+    <img src="images/logo.jpg" alt="Prism Global Services">
   </a>
-
-  <ul class="nav-links">
-    <li><a href="#properties">Properties</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#why">Why Us</a></li>
-    <li><a href="#footer">Contact</a></li>
-    <li><a href="https://wa.me/2348165160797?text=Hello%2C%20I%20would%20like%20to%20book%20a%20consultation" target="_blank" class="nav-cta">Book Consultation</a></li>
-  </ul>
-
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#availability">Availability</a>
+    <a href="#location">Location</a>
+    <a href="#enquiry">Contact</a>
+  </div>
+  <a href="https://wa.me/2348165160797?text=Hi!%20I%20am%20interested%20in%20the%20Lugbe%20Extension%20flats.%20Please%20send%20me%20more%20details." class="nav-cta">📲 Enquire Now</a>
 </nav>
 
-<div class="mobile-menu" id="mobile-menu">
-  <a href="#properties" onclick="toggleMenu()">Properties</a>
-  <a href="#about" onclick="toggleMenu()">About</a>
-  <a href="#why" onclick="toggleMenu()">Why Us</a>
-  <a href="#footer" onclick="toggleMenu()">Contact</a>
-  <a href="https://wa.me/2348165160797?text=Hello%2C%20I%20would%20like%20to%20book%20a%20consultation" target="_blank" class="mob-cta">Book Consultation</a>
-</div>
-
 <!-- HERO -->
-<section id="hero">
+<section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-label">Verified Nigerian Real Estate</div>
-    <h1 class="hero-h1">Own a piece<br>of Nigeria.</h1>
-    <p class="hero-sub">Premium properties in Lagos, Abuja &amp; Port Harcourt — fully verified, stress-free acquisition for home buyers and diaspora investors.</p>
-    <div class="hero-ctas">
-      <a href="#properties" class="btn-gold">Browse Properties</a>
-      <a href="https://wa.me/2348165160797?text=Hello%2C%20I%20would%20like%20to%20book%20a%20free%20consultation" target="_blank" class="btn-outline">Book Free Consultation</a>
-    </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-val">₦28M — ₦850M</div>
-      <div class="stat-label">Price Range</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">Lagos · Abuja · PH</div>
-      <div class="stat-label">Locations</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">C of O Verified</div>
-      <div class="stat-label">All Titles</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">6 Active Listings</div>
-      <div class="stat-label">Available Now</div>
+    <div class="hero-badge">🏙️ Lugbe Extension, Abuja · Now Listing</div>
+    <h1>Modern <em>2-Bedroom</em> Flats<br>in the Heart of Abuja</h1>
+    <p>Eight beautifully finished apartments in a secured, landscaped estate — with Aso Rock views, tarred roads, and premium interiors. Built to a standard you can see.</p>
+    <div class="hero-actions">
+      <a href="#availability" class="btn-gold">View Available Units</a>
+      <a href="#gallery" class="btn-outline-white">Browse Gallery</a>
     </div>
   </div>
 </section>
 
-<!-- ABOUT / STORY SECTION -->
-<div id="about">
-  <div class="about-inner">
-    <div class="about-text">
-      <div class="section-label">Our Story</div>
-      <h2 class="section-title">Connecting Premium Nigerian Real Estate to Serious Buyers</h2>
-      <p class="about-body">
-        Prism Global Services exists for one reason: to make owning Nigerian property completely stress-free — whether you're buying your first home in Lagos, securing a retirement residence in Abuja, or investing from the diaspora in Port Harcourt.
-      </p>
-      <p class="about-body">
-        We specialise in Lagos, Abuja and Port Harcourt's finest residential and commercial properties. Every listing on our platform is personally visited, title-verified, and matched only to buyers who are genuinely ready. No time-wasters. No land disputes. No surprises.
-      </p>
-
-      <div class="about-pillars">
-        <div class="pillar">
-          <span class="pillar-icon">🏆</span>
-          <div class="pillar-text">
-            <strong>Premium Only</strong>
-            <span>Hand-picked, title-confirmed properties in prime locations</span>
-          </div>
-        </div>
-        <div class="pillar">
-          <span class="pillar-icon">🌍</span>
-          <div class="pillar-text">
-            <strong>Diaspora Ready</strong>
-            <span>Full remote process — UK, US, Canada welcome</span>
-          </div>
-        </div>
-        <div class="pillar">
-          <span class="pillar-icon">⚖️</span>
-          <div class="pillar-text">
-            <strong>Legal Verified</strong>
-            <span>C of O, Governor's Consent, Deed of Assignment</span>
-          </div>
-        </div>
-        <div class="pillar">
-          <span class="pillar-icon">🤝</span>
-          <div class="pillar-text">
-            <strong>End-to-End</strong>
-            <span>Inspection to key handover — we handle everything</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="about-visual">
-      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80" alt="Lagos Premium Real Estate" loading="lazy">
-      <div class="about-visual-overlay"></div>
-      <div class="about-visual-badge">Licensed Real Estate Consultants · Nigeria</div>
-    </div>
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">8</div>
+    <div class="stat-label">Total Units</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Bedrooms per Flat</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Bathrooms per Flat</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">FCT</div>
+    <div class="stat-label">Abuja, Nigeria</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Fenced & Secured</div>
   </div>
 </div>
 
-<!-- PROPERTIES -->
-<section id="properties">
-  <div class="section-label">Curated Listings</div>
-  <h2 class="section-title">Featured Properties</h2>
-  <p class="section-sub">Hand-picked, thoroughly vetted properties across Lagos, Abuja and Port Harcourt. Every listing is title-confirmed before it reaches you.</p>
-
-  <!-- FILTER BAR -->
-  <!-- VR Filter Chips -->
-  <div id="filter-chips" style="display:flex;gap:10px;flex-wrap:wrap;padding:0 5%;margin-bottom:-8px;margin-top:12px;">
-    <button id="chip-vr" onclick="toggleVRFilter()"
-      style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.4);color:#10b981;padding:6px 14px;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;">
-      🥽 VR Tours Available
-    </button>
-  </div>
-
-  <div class="filter-bar">
-    <div class="filter-group">
-      <label for="filter-location">Location</label>
-      <select id="filter-location">
-        <option value="">All Locations</option>
-        <option value="Lagos">Lagos</option>
-        <option value="Abuja">Abuja</option>
-        <option value="Port Harcourt">Port Harcourt</option>
-        <option value="Lekki">Lekki</option>
-        <option value="Victoria Island">Victoria Island</option>
-        <option value="Ikoyi">Ikoyi</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="filter-type">Property Type</label>
-      <select id="filter-type">
-        <option value="">All Types</option>
-        <option value="Apartment">Apartment</option>
-        <option value="Duplex">Duplex</option>
-        <option value="Land">Land</option>
-        <option value="Commercial">Commercial</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="filter-price">Price Range</label>
-      <select id="filter-price">
-        <option value="">All Prices</option>
-        <option value="under50">Under ₦50M</option>
-        <option value="50to200">₦50M – ₦200M</option>
-        <option value="above200">Above ₦200M</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="filter-status">Status</label>
-      <select id="filter-status">
-        <option value="">For Sale &amp; Rent</option>
-        <option value="For Sale">For Sale</option>
-        <option value="For Rent">For Rent</option>
-      </select>
-    </div>
-    <button class="filter-search-btn" onclick="applyFilters()">🔍 Search</button>
-  </div>
-
-  <div class="filter-results-count" id="filter-results-count"></div>
-
-  <div id="properties-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:4rem;color:#8A8A8A;">
-      <div style="font-size:2rem;margin-bottom:1rem;">⏳</div>
-      <p>Loading properties…</p>
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="section-tag">The Property</div>
+    <div class="section-title">Built for Comfort.<br>Designed to <em>Impress</em>.</div>
+    <div class="about-grid">
+      <div class="about-img-wrap">
+        <img src="images/ext-aerial-02.jpg" alt="Lugbe Extension Development">
+        <div class="about-img-badge">
+          <div class="badge-icon">🏆</div>
+          <div>
+            <div class="badge-text">Prism Global Property</div>
+            <div class="badge-sub">Lugbe Extension, Abuja</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <h3>A New Standard of Living in Lugbe Extension</h3>
+        <p>These eight 2-bedroom apartments represent a rare combination of quality finishing, strategic location, and modern estate living — all within one of Abuja's fastest-growing residential corridors.</p>
+        <p>Each flat is thoughtfully designed with high-gloss porcelain floors, POP ceilings with recessed LED lighting, marble-effect bathroom tiles, and modern rain shower systems. Security is built in — steel entrance doors, burglar-proof window grilles, and a perimeter-fenced compound.</p>
+        <p>The estate sits on tarred, landscaped grounds with dedicated parking and the dramatic backdrop of Abuja's iconic rocky hills.</p>
+        <ul class="features-list">
+          <li>Stone-coated roofing tiles — durable, weather-resistant, premium look</li>
+          <li>High-gloss large-format porcelain floor tiles throughout</li>
+          <li>POP suspended ceilings with recessed LED downlights</li>
+          <li>Marble-effect bathroom tiles with modern rain shower + water heater</li>
+          <li>Steel security entrance doors + burglar-proof window grilles</li>
+          <li>En-suite bathrooms with WC, wash-hand basin, bidet spray</li>
+          <li>Overhead water storage tanks — constant water supply</li>
+          <li>Perimeter fencing with gated compound + parking</li>
+          <li>Tarred estate roads with landscaped green areas</li>
+          <li>Aso Rock views from the estate</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- WHY PRISM -->
-<section id="why">
-  <div class="section-label">Why Choose Us</div>
-  <h2 class="section-title">The Prism Difference</h2>
-  <p class="section-sub">We exist to make Nigerian property ownership truly stress-free — for residents and diaspora alike.</p>
-  <div class="features-grid">
-    <div class="feature-card">
-      <span class="feat-icon">🔍</span>
-      <h3 class="feat-title">Fully Verified</h3>
-      <p class="feat-desc">Every property has confirmed title — C of O, Deed of Assignment, Governor's Consent. We check so you don't have to.</p>
+<!-- GALLERY -->
+<hr class="divider">
+<section class="section" id="gallery">
+  <div class="section-inner">
+    <div class="section-tag">Photo Gallery</div>
+    <div class="section-title">See Every Detail<br>Up <em>Close</em></div>
+    <p class="section-sub">Real photos taken on-site. No renders, no stock images — what you see is exactly what you get.</p>
+
+    <div class="gallery-tabs">
+      <div class="gallery-tab active" onclick="filterGallery('all', this)">All Photos</div>
+      <div class="gallery-tab" onclick="filterGallery('exterior', this)">Exterior</div>
+      <div class="gallery-tab" onclick="filterGallery('interior', this)">Interior</div>
+      <div class="gallery-tab" onclick="filterGallery('bathroom', this)">Bathrooms</div>
+      <div class="gallery-tab" onclick="filterGallery('aerial', this)">Aerial Views</div>
     </div>
-    <div class="feature-card">
-      <span class="feat-icon">🌍</span>
-      <h3 class="feat-title">Built for Diaspora</h3>
-      <p class="feat-desc">UK, US, Canada — wherever you are, we handle everything on the ground in Nigeria. Virtual tours, escrow-friendly.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feat-icon">🤝</span>
-      <h3 class="feat-title">Zero Wahala</h3>
-      <p class="feat-desc">From inspection to key handover. We manage the full acquisition process so you never have a single stressful moment.</p>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Aerial / Exterior -->
+      <div class="gallery-item featured" data-cat="aerial exterior" onclick="openLightbox(0)">
+        <img src="images/ext-aerial-01.jpg" alt="Aerial view — completed block with Aso Rock backdrop">
+        <div class="gallery-label">🛩 Aerial View — Completed Block</div>
+      </div>
+      <div class="gallery-item" data-cat="aerial exterior" onclick="openLightbox(1)">
+        <img src="images/ext-aerial-02.jpg" alt="Estate aerial overview">
+        <div class="gallery-label">🛩 Estate Aerial Overview</div>
+      </div>
+      <div class="gallery-item" data-cat="aerial" onclick="openLightbox(12)">
+        <img src="images/ext-block-c-01.jpg" alt="Aerial — rear compound view">
+        <div class="gallery-label">🛩 Rear Compound Aerial</div>
+      </div>
+      <div class="gallery-item" data-cat="aerial" onclick="openLightbox(18)">
+        <img src="images/ext-block-e-01.jpg" alt="Aerial — painted building with Abuja hills">
+        <div class="gallery-label">🛩 Abuja Hills View</div>
+      </div>
+
+      <!-- Exterior ground level -->
+      <div class="gallery-item" data-cat="exterior" onclick="openLightbox(5)">
+        <img src="images/ext-block-b-01.jpg" alt="Block B — plastered exterior">
+        <div class="gallery-label">🏢 Block B — Exterior</div>
+      </div>
+      <div class="gallery-item" data-cat="exterior" onclick="openLightbox(6)">
+        <img src="images/ext-block-b-02.jpg" alt="Block B second angle">
+        <div class="gallery-label">🏢 Block B — Second Angle</div>
+      </div>
+      <div class="gallery-item" data-cat="exterior" onclick="openLightbox(13)">
+        <img src="images/ext-block-c-02.jpg" alt="Building with balcony railings">
+        <div class="gallery-label">🏢 Balcony & Front Elevation</div>
+      </div>
+      <div class="gallery-item" data-cat="exterior" onclick="openLightbox(15)">
+        <img src="images/ext-block-d-01.jpg" alt="Block D — shell stage">
+        <div class="gallery-label">🏗 Block D — Construction Stage</div>
+      </div>
+      <div class="gallery-item" data-cat="exterior" onclick="openLightbox(17)">
+        <img src="images/ext-block-d-03.jpg" alt="Block E — partially finished">
+        <div class="gallery-label">🏗 Block E — Partially Finished</div>
+      </div>
+
+      <!-- Interior / Living Room -->
+      <div class="gallery-item featured" data-cat="interior" onclick="openLightbox(8)">
+        <img src="images/living-01.jpg" alt="Spacious living room with POP ceiling and LED lighting">
+        <div class="gallery-label">🛋 Living Room — POP Ceiling & LED Lighting</div>
+      </div>
+      <div class="gallery-item" data-cat="interior" onclick="openLightbox(9)">
+        <img src="images/living-02.jpg" alt="Living room second angle">
+        <div class="gallery-label">🛋 Living Room — Second Angle</div>
+      </div>
+      <div class="gallery-item" data-cat="interior" onclick="openLightbox(10)">
+        <img src="images/living-03.jpg" alt="Living room — floor tiles detail">
+        <div class="gallery-label">🛋 Living Room — High-Gloss Tiles</div>
+      </div>
+      <div class="gallery-item" data-cat="interior" onclick="openLightbox(11)">
+        <img src="images/living-04.jpg" alt="Living room — full view">
+        <div class="gallery-label">🛋 Living Room — Full View</div>
+      </div>
+      <div class="gallery-item" data-cat="interior" onclick="openLightbox(14)">
+        <img src="images/ext-block-c-03.jpg" alt="Bedroom interior">
+        <div class="gallery-label">🛏 Bedroom — Ready to Furnish</div>
+      </div>
+
+      <!-- Bathrooms -->
+      <div class="gallery-item" data-cat="bathroom" onclick="openLightbox(2)">
+        <img src="images/bathroom-01.jpg" alt="Modern rain shower with marble tiles">
+        <div class="gallery-label">🚿 Rain Shower — Marble Tiles</div>
+      </div>
+      <div class="gallery-item" data-cat="bathroom" onclick="openLightbox(3)">
+        <img src="images/bathroom-02.jpg" alt="Bathroom with WC and wash basin">
+        <div class="gallery-label">🚿 Bathroom — WC & WHB</div>
+      </div>
+      <div class="gallery-item" data-cat="bathroom" onclick="openLightbox(4)">
+        <img src="images/bathroom-03.jpg" alt="Bathroom overhead view">
+        <div class="gallery-label">🚿 Bathroom — Overhead View</div>
+      </div>
+      <div class="gallery-item" data-cat="bathroom" onclick="openLightbox(16)">
+        <img src="images/ext-block-d-02.jpg" alt="WC with bidet sprayer">
+        <div class="gallery-label">🚿 WC with Bidet Sprayer</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how">
-  <div class="section-label">The Process</div>
-  <h2 class="section-title">How It Works</h2>
-  <p class="section-sub">Three simple steps from browsing to owning your dream property in Nigeria.</p>
-  <div class="steps-grid">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3 class="step-title">Browse &amp; Shortlist</h3>
-      <p class="step-desc">Filter properties by location, type, and budget. Each listing includes full documentation status so you know exactly what you're buying.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3 class="step-title">Book a Consultation</h3>
-      <p class="step-desc">Free 30-minute call with our team. We understand your needs, budget, and timeline — then guide you to the right property.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3 class="step-title">We Handle Everything</h3>
-      <p class="step-desc">Legal checks, price negotiation, documentation, survey, inspection — we coordinate every step until the keys are in your hand.</p>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); changeLightbox(-1)">‹</button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); changeLightbox(1)">›</button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- SPECS -->
+<hr class="divider">
+<section class="section specs-section" id="specs">
+  <div class="section-inner">
+    <div class="section-tag">Specifications</div>
+    <div class="section-title">Every Flat Comes<br>Fully <em>Fitted</em></div>
+    <p class="section-sub">No compromises. Each unit is built and finished to the same high standard across the entire development.</p>
+    <div class="specs-grid">
+      <div class="spec-card"><div class="spec-icon">🏠</div><div><h3>2 Bedrooms</h3><p>Well-proportioned bedrooms with large burglar-proof windows, polished tile floors, and built-in wardrobe provisions.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">🚿</div><div><h3>2 Bathrooms</h3><p>En-suite + guest WC. Marble-effect tiles, rain shower with instant water heater, wash-hand basin, bidet spray.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">🛋</div><div><h3>Spacious Living Room</h3><p>Open-plan sitting/dining area with high-gloss large-format porcelain tiles and abundant natural light.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">✨</div><div><h3>POP Ceilings</h3><p>Stepped false ceilings with recessed LED downlights throughout living areas. Clean, modern aesthetic.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">🔒</div><div><h3>Steel Security Door</h3><p>Heavy-duty steel entrance door + burglar-proof window grilles on every opening. Your safety is built in.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">🏗</div><div><h3>Stone-Coated Roof</h3><p>Premium stone-coated roofing tiles — durable, heat-resistant, and aesthetically superior to long-span aluminium.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">🚰</div><div><h3>Water Supply</h3><p>Overhead storage tanks ensure constant water supply. Instant water heaters in all bathrooms.</p></div></div>
+      <div class="spec-card"><div class="spec-icon">🌿</div><div><h3>Estate Infrastructure</h3><p>Tarred roads, landscaped gardens, perimeter fencing, gated entry, and dedicated compound parking.</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="section-label">Client Stories</div>
-  <h2 class="section-title">What Our Clients Say</h2>
-  <p class="section-sub">From Manchester to Houston, we've helped Nigerians in the diaspora secure their piece of home.</p>
-  <div class="testimonials-grid">
-    <div class="testimonial">
-      <div class="test-stars">★★★★★</div>
-      <p class="test-text">"I'd been searching for property in Lagos for two years — always worried about scams and land disputes. Prism Global handled everything. I flew in for two days, saw three verified properties, and signed papers. Couldn't have been smoother."</p>
-      <div class="test-author">
-        <div class="test-avatar">A</div>
-        <div>
-          <div class="test-name">Adaeze O.</div>
-          <div class="test-loc">Manchester, UK</div>
+<!-- AVAILABILITY -->
+<hr class="divider">
+<section class="section" id="availability">
+  <div class="section-inner">
+    <div class="section-tag">Available Units</div>
+    <div class="section-title">Choose Your <em>Perfect</em> Flat</div>
+    <p class="section-sub">Units at various stages of completion — some ready to move in, others available off-plan at preferred pricing.</p>
+    <div class="units-grid">
+      <div class="unit-card">
+        <div class="unit-img"><img src="images/living-01.jpg" alt="Unit A1 — Move-in Ready"></div>
+        <div class="unit-body">
+          <span class="unit-status status-ready">✅ Move-in Ready</span>
+          <h3>Block A — Unit 1 & 2 (Ground Floor)</h3>
+          <div class="unit-price">₦35M <span>/ Outright Sale</span></div>
+          <div class="unit-features">
+            <span class="unit-feat">🛏 2 Bed</span>
+            <span class="unit-feat">🚿 2 Bath</span>
+            <span class="unit-feat">🔑 Fully Fitted</span>
+          </div>
+          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20A%20Unit%201/2%20(ground%20floor)%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Enquire About This Unit</a>
+        </div>
+      </div>
+      <div class="unit-card">
+        <div class="unit-img"><img src="images/living-02.jpg" alt="Unit A3 & A4 — Upper Floor"></div>
+        <div class="unit-body">
+          <span class="unit-status status-ready">✅ Move-in Ready</span>
+          <h3>Block A — Unit 3 & 4 (Upper Floor)</h3>
+          <div class="unit-price">₦37M <span>/ Outright Sale</span></div>
+          <div class="unit-features">
+            <span class="unit-feat">🛏 2 Bed</span>
+            <span class="unit-feat">🚿 2 Bath</span>
+            <span class="unit-feat">🏔 Hill Views</span>
+          </div>
+          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20A%20Unit%203/4%20(upper%20floor)%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Enquire About This Unit</a>
+        </div>
+      </div>
+      <div class="unit-card">
+        <div class="unit-img"><img src="images/ext-block-b-01.jpg" alt="Block B — Finishing Soon"></div>
+        <div class="unit-body">
+          <span class="unit-status status-soon">⚡ Finishing Stage</span>
+          <h3>Block B — Units 5 & 6</h3>
+          <div class="unit-price">₦32M <span>/ Off-Plan Price</span></div>
+          <div class="unit-features">
+            <span class="unit-feat">🛏 2 Bed</span>
+            <span class="unit-feat">🚿 2 Bath</span>
+            <span class="unit-feat">🏗 Q2 2026</span>
+          </div>
+          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20B%20Units%205/6%20(off-plan)%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Reserve at Off-Plan Price</a>
+        </div>
+      </div>
+      <div class="unit-card">
+        <div class="unit-img"><img src="images/ext-block-d-01.jpg" alt="Block C & D — Under Construction"></div>
+        <div class="unit-body">
+          <span class="unit-status status-plan">📐 Under Construction</span>
+          <h3>Block C/D — Units 7 & 8</h3>
+          <div class="unit-price">₦28M <span>/ Early Bird</span></div>
+          <div class="unit-features">
+            <span class="unit-feat">🛏 2 Bed</span>
+            <span class="unit-feat">🚿 2 Bath</span>
+            <span class="unit-feat">🏗 Q3 2026</span>
+          </div>
+          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20C/D%20early%20bird%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Get Early Bird Discount</a>
         </div>
       </div>
     </div>
-    <div class="testimonial">
-      <div class="test-stars">★★★★★</div>
-      <p class="test-text">"As someone in Houston with zero contacts in Nigeria, I was nervous about buying land. Prism Global did the verification, sent me video walkthroughs, and handled the legal paperwork remotely. The process was completely transparent."</p>
-      <div class="test-author">
-        <div class="test-avatar">E</div>
-        <div>
-          <div class="test-name">Emeka T.</div>
-          <div class="test-loc">Houston, Texas</div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<hr class="divider">
+<section class="section" id="location">
+  <div class="section-inner">
+    <div class="section-tag">Location</div>
+    <div class="section-title">Lugbe Extension —<br><em>Connected</em> to Everything</div>
+    <div class="location-grid">
+      <div>
+        <div class="location-map">
+          <img src="images/ext-aerial-01.jpg" alt="Estate aerial showing location context">
+          <div class="location-map-label">Lugbe Extension, FCT Abuja, Nigeria</div>
         </div>
       </div>
+      <div>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.75;margin-bottom:1.5rem;">
+          Lugbe Extension sits within Abuja's rapidly expanding residential belt — an area that has seen consistent infrastructure investment, rising property values, and strong rental demand from civil servants, embassy workers, and young professionals.
+        </p>
+        <ul class="location-points">
+          <li class="location-point">
+            <div class="pt-icon">✈️</div>
+            <div><h4>Nnamdi Azikiwe International Airport</h4><p>Approximately 15 minutes drive</p></div>
+          </li>
+          <li class="location-point">
+            <div class="pt-icon">🏛️</div>
+            <div><h4>Abuja City Centre / CBD</h4><p>Approximately 25 minutes drive</p></div>
+          </li>
+          <li class="location-point">
+            <div class="pt-icon">🛣️</div>
+            <div><h4>Airport Road & Ring Road Access</h4><p>Direct arterial road connection</p></div>
+          </li>
+          <li class="location-point">
+            <div class="pt-icon">🏫</div>
+            <div><h4>Schools, Markets & Hospitals</h4><p>Multiple amenities within 5–10 minutes</p></div>
+          </li>
+          <li class="location-point">
+            <div class="pt-icon">🏔️</div>
+            <div><h4>Aso Rock Views</h4><p>Abuja's iconic landmark visible from the estate</p></div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="testimonial">
-      <div class="test-stars">★★★★★</div>
-      <p class="test-text">"My parents needed a retirement home in Abuja. I'm based in Toronto and couldn't be there. Prism Global became our eyes on the ground — they negotiated the price down by ₦8M and made sure the C of O was genuine. Absolute professionals."</p>
-      <div class="test-author">
-        <div class="test-avatar">C</div>
-        <div>
-          <div class="test-name">Chioma A.</div>
-          <div class="test-loc">Toronto, Canada</div>
+  </div>
+</section>
+
+<!-- ENQUIRY -->
+<section class="section enquiry-section" id="enquiry">
+  <div class="section-inner">
+    <div class="enquiry-grid">
+      <div class="enquiry-left">
+        <div class="section-tag" style="color:var(--gold-light);">Get In Touch</div>
+        <h2>Interested? Let's<br>Talk <em>Details</em>.</h2>
+        <p>Whether you're buying to live, investing for rental income, or buying off-plan — we'll walk you through every option. No pressure, just honest conversation.</p>
+        <div class="contact-methods">
+          <a href="https://wa.me/2348165160797?text=Hi!%20I%20am%20interested%20in%20the%20Lugbe%20Extension%20property%20listing." class="contact-method">
+            <div class="cm-icon">💬</div>
+            <div><div class="cm-label">WhatsApp (Fastest)</div><div class="cm-value">+234 816 516 0797</div></div>
+          </a>
+          <a href="tel:+2348165160797" class="contact-method">
+            <div class="cm-icon">📞</div>
+            <div><div class="cm-label">Call Us</div><div class="cm-value">+234 816 516 0797</div></div>
+          </a>
+          <a href="mailto:mediseenhms@gmail.com" class="contact-method">
+            <div class="cm-icon">✉️</div>
+            <div><div class="cm-label">Email</div><div class="cm-value">mediseenhms@gmail.com</div></div>
+          </a>
         </div>
+      </div>
+      <div class="enquiry-form">
+        <h3>Send an Enquiry</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Full Name *</label><input type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>Phone / WhatsApp *</label><input type="tel" placeholder="+234 ..."></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+        <div class="form-group">
+          <label>Unit of Interest</label>
+          <select>
+            <option>Block A — Units 1 & 2 (Move-in Ready, ₦35M)</option>
+            <option>Block A — Units 3 & 4 (Move-in Ready, ₦37M)</option>
+            <option>Block B — Units 5 & 6 (Off-Plan, ₦32M)</option>
+            <option>Block C/D — Units 7 & 8 (Early Bird, ₦28M)</option>
+            <option>General Enquiry / All Units</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Your Message</label><textarea placeholder="I'm interested in... (buying, renting, investment enquiry, site visit request...)"></textarea></div>
+        <button class="form-submit" onclick="submitEnquiry()">Send Enquiry →</button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer id="footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="nav-brand" style="text-decoration:none;">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:36px;">
-          <defs>
-            <linearGradient id="pg2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#0D1B2A"/>
-              <stop offset="100%" stop-color="#C9A84C"/>
-            </linearGradient>
-          </defs>
-          <polygon points="4,36 4,4 24,4 36,12 36,22 24,28 4,36" fill="url(#pg2)" opacity="0.15"/>
-          <polygon points="4,4 24,4 36,12 20,16" fill="#C9A84C" opacity="0.9"/>
-          <polygon points="4,4 20,16 4,28" fill="#0D1B2A" stroke="#C9A84C" stroke-width="0.5"/>
-          <polygon points="24,4 36,12 20,16" fill="#F0C060" opacity="0.8"/>
-          <polygon points="36,12 36,22 24,28 20,16" fill="#C9A84C" opacity="0.6"/>
-          <polygon points="4,28 20,16 24,28 4,36" fill="#0D1B2A" stroke="#C9A84C" stroke-width="0.3" opacity="0.8"/>
-          <text x="9" y="26" font-family="Playfair Display, serif" font-size="14" font-weight="900" fill="#fff" opacity="0.95">P</text>
-        </svg>
-        <span class="nav-wordmark" style="font-size:1rem;">PR<span>I</span>SM GLOBAL</span>
-      </a>
-      <p class="footer-tagline">Premium Nigerian Real Estate<br>Verified. Trusted. Stress-Free.</p>
-      <span class="footer-license">🏛 Licensed Real Estate Consultants · Nigeria</span>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div><img src="images/logo.jpg" alt="Prism Global" style="height:40px;width:auto;object-fit:contain;filter:brightness(1.1);"></div>
+      <p style="margin-top:0.5rem;">Trading as Mpaukwu Trading · CAC RC 7294223 · Abuja & Abia State, Nigeria</p>
     </div>
-
-    <div class="footer-col">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="#properties">Properties</a></li>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#why">Why Prism</a></li>
-        <li><a href="#how">How It Works</a></li>
-        <li><a href="#testimonials">Testimonials</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <h4>Locations</h4>
-      <ul>
-        <li><a href="#properties">Lagos — Lekki / VI / Ikoyi</a></li>
-        <li><a href="#properties">Abuja — Maitama / Asokoro</a></li>
-        <li><a href="#properties">Port Harcourt — GRA</a></li>
-        <li><a href="#properties">Ibeju-Lekki (Investment)</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <h4>Contact Us</h4>
-      <div class="footer-contact-item">
-        <span>💬</span>
-        <div>
-          <a href="https://wa.me/2348165160797" target="_blank">+234 816 516 0797</a><br>
-          <small style="color:#666;">WhatsApp preferred</small>
-        </div>
-      </div>
-      <div class="footer-contact-item">
-        <span>📧</span>
-        <a href="mailto:kalu.sidman@gmail.com">kalu.sidman@gmail.com</a>
-      </div>
-      <div class="footer-contact-item">
-        <span>📍</span>
-        <span>Lagos, Abuja &amp; Port Harcourt,<br>Nigeria</span>
-      </div>
-      <div style="margin-top:1rem;">
-        <a href="https://wa.me/2348165160797?text=Hello%2C%20I%20would%20like%20to%20book%20a%20free%20consultation" target="_blank" class="btn-gold" style="font-size:0.82rem;padding:0.65rem 1.25rem;display:inline-flex;align-items:center;gap:6px;">
-          💬 WhatsApp Us
-        </a>
-      </div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#availability">Availability</a>
+      <a href="#location">Location</a>
+      <a href="#enquiry">Contact</a>
     </div>
   </div>
-
-  <div class="footer-bottom">
-    <p class="footer-copy">© 2026 Prism Global Services Ltd. All rights reserved.</p>
-    <p class="footer-copy">Licensed Real Estate Consultants · Nigeria</p>
+  <div style="text-align:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);">
+    <p>© 2026 Prism Global Services · All rights reserved · Built by <strong style="color:rgba(255,255,255,0.8)">Mpaukwu Tech</strong></p>
   </div>
 </footer>
 
-<!-- PROPERTY MODAL -->
-<div id="property-modal" onclick="closeModalOutside(event)">
-  <div class="modal-inner">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="modal-content"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
 <script>
-  // State
-  let allProperties = [];
+// ── GALLERY FILTER ──
+function filterGallery(cat, btn) {
+  document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const cats = item.dataset.cat || '';
+    item.style.display = (cat === 'all' || cats.includes(cat)) ? '' : 'none';
+  });
+}
 
-  // ── Mobile menu
-  function toggleMenu() {
-    document.getElementById('mobile-menu').classList.toggle('open');
-  }
+// ── LIGHTBOX ──
+const images = [
+  { src: 'images/ext-aerial-01.jpg', cap: 'Aerial View — Completed Block' },
+  { src: 'images/ext-aerial-02.jpg', cap: 'Estate Aerial Overview' },
+  { src: 'images/bathroom-01.jpg', cap: 'Rain Shower System — Marble Tiles' },
+  { src: 'images/bathroom-02.jpg', cap: 'Bathroom — WC & Wash-Hand Basin' },
+  { src: 'images/bathroom-03.jpg', cap: 'Bathroom — Overhead View' },
+  { src: 'images/ext-block-b-01.jpg', cap: 'Block B — Plastered Exterior' },
+  { src: 'images/ext-block-b-02.jpg', cap: 'Block B — Second Angle' },
+  { src: 'images/ext-block-b-03.jpg', cap: 'Block B — Third Angle' },
+  { src: 'images/living-01.jpg', cap: 'Living Room — POP Ceiling & LED Lighting' },
+  { src: 'images/living-02.jpg', cap: 'Living Room — Second Angle' },
+  { src: 'images/living-03.jpg', cap: 'Living Room — High-Gloss Tiles' },
+  { src: 'images/living-04.jpg', cap: 'Living Room — Full View' },
+  { src: 'images/ext-block-c-01.jpg', cap: 'Aerial — Rear Compound' },
+  { src: 'images/ext-block-c-02.jpg', cap: 'Front Elevation with Balcony' },
+  { src: 'images/ext-block-c-03.jpg', cap: 'Bedroom Interior' },
+  { src: 'images/ext-block-d-01.jpg', cap: 'Block D — Shell Stage' },
+  { src: 'images/ext-block-d-02.jpg', cap: 'WC with Bidet Sprayer' },
+  { src: 'images/ext-block-d-03.jpg', cap: 'Block E — Partially Finished' },
+  { src: 'images/ext-block-e-01.jpg', cap: 'Aerial — Painted Building + Abuja Hills' },
+  { src: 'images/ext-block-e-02.jpg', cap: 'Final Aerial View' },
+];
+let currentIdx = 0;
 
-  // ── Toast
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+function openLightbox(idx) {
+  currentIdx = idx;
+  document.getElementById('lightboxImg').src = images[idx].src;
+  document.getElementById('lightboxCaption').textContent = (idx+1) + ' / ' + images.length + '  ·  ' + images[idx].cap;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeLightboxOutside(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+function changeLightbox(dir) {
+  currentIdx = (currentIdx + dir + images.length) % images.length;
+  openLightbox(currentIdx);
+}
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowRight') changeLightbox(1);
+  if (e.key === 'ArrowLeft') changeLightbox(-1);
+});
 
-  // ── Modal
-  function closeModal() {
-    document.getElementById('property-modal').style.display = 'none';
-  }
-  function closeModalOutside(e) {
-    if (e.target === document.getElementById('property-modal')) closeModal();
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  // ── Filter logic
-  function applyFilters() {
-    const loc = document.getElementById('filter-location').value;
-    const type = document.getElementById('filter-type').value;
-    const price = document.getElementById('filter-price').value;
-    const status = document.getElementById('filter-status').value;
-
-    let filtered = allProperties.filter(p => {
-      // Location filter
-      if (loc && !p.location.toLowerCase().includes(loc.toLowerCase())) return false;
-      // Type filter
-      if (type && p.type !== type) return false;
-      // Status filter
-      if (status && p.status !== status) return false;
-      // Price filter
-      if (price === 'under50' && p.price >= 50000000) return false;
-      if (price === '50to200' && (p.price < 50000000 || p.price > 200000000)) return false;
-      if (price === 'above200' && p.price <= 200000000) return false;
-      return true;
-    });
-
-    renderProperties(filtered, true);
-  }
-
-  // ── Format price
-  function formatPrice(p) {
-    // Properties with price >= 1M use ₦ shorthand
-    if (p.price >= 1000000000) return `₦${(p.price / 1000000000).toFixed(1)}B`;
-    if (p.price >= 1000000) return `₦${(p.price / 1000000).toFixed(0)}M`;
-    return `₦${Number(p.price).toLocaleString('en-NG')}`;
-  }
-
-  // ── Render properties
-  function renderProperties(properties, isFiltered = false) {
-    const grid = document.getElementById('properties-grid');
-    const countEl = document.getElementById('filter-results-count');
-
-    if (isFiltered) {
-      countEl.textContent = properties.length
-        ? `Showing ${properties.length} propert${properties.length === 1 ? 'y' : 'ies'}`
-        : '';
-    } else {
-      countEl.textContent = '';
-    }
-
-    if (!properties.length) {
-      grid.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:4rem;color:#8A8A8A;">
-          <div style="font-size:3rem;margin-bottom:1rem;">🏠</div>
-          <p style="font-size:1.1rem;">${isFiltered ? 'No properties match your filters. Try adjusting your search.' : 'Properties coming soon. Check back shortly.'}</p>
-          ${isFiltered ? `<button onclick="clearFilters()" style="margin-top:1.5rem;background:transparent;border:1px solid var(--gold);color:var(--gold);padding:0.6rem 1.5rem;border-radius:8px;cursor:pointer;font-size:0.88rem;">Clear Filters</button>` : ''}
-        </div>
-      `;
-      return;
-    }
-
-    grid.innerHTML = properties.map(p => {
-      const badgeClass = p.status === 'For Rent' ? 'rent' : 'sale';
-      return `
-        <div class="property-card" onclick="openProperty('${p.id}')">
-          <div class="prop-image">
-            <img src="${p.images?.[0] || 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=80'}"
-                 alt="${p.title}" loading="lazy">
-            <div class="prop-badge ${badgeClass}">${p.status || 'Available'}</div>
-            <div class="prop-type">${p.type || 'Property'}</div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">${formatPrice(p)}</div>
-            <h3 class="prop-title">${p.title}</h3>
-            <div class="prop-location">📍 ${p.location}</div>
-            <div class="prop-features">
-              ${p.bedrooms ? `<span>🛏 ${p.bedrooms} bed</span>` : ''}
-              ${p.bathrooms ? `<span>🚿 ${p.bathrooms} bath</span>` : ''}
-              ${p.size ? `<span>📐 ${p.size}</span>` : ''}
-            </div>
-            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-              <button class="prop-cta" style="flex:1;" onclick="event.stopPropagation();openProperty('${p.id}')">View Details →</button>
-              <button
-                onclick="event.stopPropagation();takeVRTour('${p.id}', '${p.title.replace(/'/g, "\\'")}', '${p.vrTourUrl || ''}')"
-                style="flex:1;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:8px;padding:0.65rem 1rem;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity 0.2s;"
-                onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-                🥽 Take VR Tour
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function clearFilters() {
-    document.getElementById('filter-location').value = '';
-    document.getElementById('filter-type').value = '';
-    document.getElementById('filter-price').value = '';
-    document.getElementById('filter-status').value = '';
-    document.getElementById('filter-results-count').textContent = '';
-    renderProperties(allProperties);
-  }
-
-  // ── Open property modal
-  function openProperty(id) {
-    const p = allProperties.find(x => x.id === id);
-    if (!p) return;
-    showPropertyModal(p);
-  }
-
-  // ── Show modal
-  function showPropertyModal(p) {
-    const modal = document.getElementById('property-modal');
-    const priceFormatted = formatPrice(p);
-    const waText = encodeURIComponent(`Hi, I'm interested in: ${p.title} (${priceFormatted}). Please can you share more details?`);
-
-    const featuresHTML = (p.features && p.features.length)
-      ? `<div class="modal-features-section">
-          <h4>Property Features</h4>
-          <ul class="modal-features-list">
-            ${p.features.map(f => `<li>${f}</li>`).join('')}
-          </ul>
-        </div>`
-      : '';
-
-    document.getElementById('modal-content').innerHTML = `
-      <div class="modal-gallery">
-        ${(p.images && p.images.length)
-          ? p.images.map(img => `<img src="${img}" alt="${p.title}">`).join('')
-          : `<img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80" alt="${p.title}">`}
-      </div>
-      <div class="modal-body">
-        <div class="modal-price">${priceFormatted}</div>
-        <h2 class="modal-title">${p.title}</h2>
-        <div class="modal-location">📍 ${p.location} &nbsp;·&nbsp; ${p.status || 'Available'}</div>
-        <div class="modal-specs">
-          ${p.bedrooms ? `<div class="spec-item">🛏 <span>${p.bedrooms} Bedrooms</span></div>` : ''}
-          ${p.bathrooms ? `<div class="spec-item">🚿 <span>${p.bathrooms} Bathrooms</span></div>` : ''}
-          ${p.size ? `<div class="spec-item">📐 <span>${p.size}</span></div>` : ''}
-          ${p.type ? `<div class="spec-item">🏠 <span>${p.type}</span></div>` : ''}
-        </div>
-        <div class="modal-description">${p.description || ''}</div>
-        ${featuresHTML}
-        <div class="modal-ctas">
-          <a href="https://wa.me/2348165160797?text=${waText}" target="_blank" class="modal-whatsapp">
-            💬 Contact Agent on WhatsApp
-          </a>
-          <button class="modal-viewing-btn" onclick="requestViewing('${p.id}', '${p.title.replace(/'/g, "\\'")}')">
-            📅 Request Viewing
-          </button>
-        </div>
-      </div>
-    `;
-    modal.style.display = 'flex';
-  }
-
-  // ── Enquiry Modal
-  function requestViewing(id, title) {
-    // Build/show enquiry modal
-    let modal = document.getElementById('enquiry-modal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'enquiry-modal';
-      modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:1rem;';
-      modal.innerHTML = `
-        <div style="background:#0D1F2D;border:1px solid #1B3A2F;border-radius:16px;max-width:480px;width:100%;padding:2rem;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
-          <button onclick="document.getElementById('enquiry-modal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:#8A8A8A;font-size:1.4rem;cursor:pointer;line-height:1;">×</button>
-          <h3 style="margin:0 0 0.25rem;color:#C9A84C;font-size:1.1rem;">📅 Book a Viewing</h3>
-          <p id="enq-property-label" style="margin:0 0 1.25rem;color:#8A8A8A;font-size:0.85rem;"></p>
-          <input id="enq-name" type="text" placeholder="Your Name *" style="width:100%;box-sizing:border-box;background:#0A1628;border:1px solid #1B3A2F;border-radius:8px;padding:0.75rem 1rem;color:#fff;font-size:0.9rem;margin-bottom:0.75rem;outline:none;">
-          <input id="enq-email" type="email" placeholder="Email Address *" style="width:100%;box-sizing:border-box;background:#0A1628;border:1px solid #1B3A2F;border-radius:8px;padding:0.75rem 1rem;color:#fff;font-size:0.9rem;margin-bottom:0.75rem;outline:none;">
-          <input id="enq-phone" type="tel" placeholder="Phone Number *" style="width:100%;box-sizing:border-box;background:#0A1628;border:1px solid #1B3A2F;border-radius:8px;padding:0.75rem 1rem;color:#fff;font-size:0.9rem;margin-bottom:0.75rem;outline:none;">
-          <textarea id="enq-message" rows="4" style="width:100%;box-sizing:border-box;background:#0A1628;border:1px solid #1B3A2F;border-radius:8px;padding:0.75rem 1rem;color:#fff;font-size:0.9rem;resize:vertical;margin-bottom:1rem;outline:none;font-family:inherit;"></textarea>
-          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-            <button id="enq-wa-btn" style="flex:1;min-width:140px;background:#C9A84C;color:#0A1628;border:none;border-radius:8px;padding:0.8rem 1rem;font-size:0.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-              💬 Send via WhatsApp
-            </button>
-            <button id="enq-copy-btn" style="flex:1;min-width:140px;background:transparent;color:#C9A84C;border:1px solid #C9A84C;border-radius:8px;padding:0.8rem 1rem;font-size:0.9rem;font-weight:600;cursor:pointer;">
-              📋 Copy to Clipboard
-            </button>
-          </div>
-          <p id="enq-copied-msg" style="color:#4CAF50;font-size:0.8rem;margin:0.5rem 0 0;display:none;">✅ Copied to clipboard!</p>
-        </div>
-      `;
-      document.body.appendChild(modal);
-    }
-
-    // Set property label & pre-fill message
-    document.getElementById('enq-property-label').textContent = title;
-    document.getElementById('enq-message').value = `I'm interested in ${title}. Please contact me to arrange a viewing.`;
-    document.getElementById('enq-name').value = '';
-    document.getElementById('enq-email').value = '';
-    document.getElementById('enq-phone').value = '';
-    document.getElementById('enq-copied-msg').style.display = 'none';
-
-    function buildMessage() {
-      const name = document.getElementById('enq-name').value.trim() || '—';
-      const email = document.getElementById('enq-email').value.trim() || '—';
-      const phone = document.getElementById('enq-phone').value.trim() || '—';
-      const msg = document.getElementById('enq-message').value.trim();
-      return `🏠 PROPERTY ENQUIRY — Prism Global\n\nProperty: ${title}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage: ${msg}`;
-    }
-
-    document.getElementById('enq-wa-btn').onclick = () => {
-      window.open('https://wa.me/2348165160797?text=' + encodeURIComponent(buildMessage()), '_blank');
-    };
-
-    document.getElementById('enq-copy-btn').onclick = () => {
-      navigator.clipboard.writeText(buildMessage()).then(() => {
-        const msg = document.getElementById('enq-copied-msg');
-        msg.style.display = 'block';
-        setTimeout(() => { msg.style.display = 'none'; }, 3000);
-      });
-    };
-
-    modal.style.display = 'flex';
-    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-  }
-
-  // ── Load properties from API
-  async function loadProperties() {
-    try {
-      // Try serverless API first, fall back to JSONBlob directly
-      let res;
-      try {
-        res = await fetch('/api.php?action=getData');
-        if (!res.ok) throw new Error('API unavailable');
-      } catch {
-        res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
-          headers: { 'Accept': 'application/json' }
-        });
-      }
-      const data = await res.json();
-      allProperties = data.properties || [];
-      renderProperties(allProperties);
-
-      // Update stats count
-      const countEl = document.querySelector('.stat-val:last-of-type');
-    } catch(err) {
-      document.getElementById('properties-grid').innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:4rem;color:#8A8A8A;">
-          <div style="font-size:3rem;margin-bottom:1rem;">🏠</div>
-          <p style="font-size:1.1rem;">Properties coming soon. Check back shortly.</p>
-        </div>
-      `;
-    }
-  }
-
-  loadProperties();
-
-  function takeVRTour(id, title, vrTourUrl) {
-    if (vrTourUrl) {
-      window.open(vrTourUrl, '_blank');
-    } else {
-      const msg = encodeURIComponent(`Hi, I'd like to book a VR tour for ${title}`);
-      window.open(`https://wa.me/2348165160797?text=${msg}`, '_blank');
-    }
-  }
-
-  let vrFilterActive = false;
-  function toggleVRFilter() {
-    vrFilterActive = !vrFilterActive;
-    const chip = document.getElementById('chip-vr');
-    if (vrFilterActive) {
-      chip.style.background = 'rgba(16,185,129,0.35)';
-      chip.style.borderColor = '#10b981';
-      const vrProps = allProperties.filter(p => p.vrTourUrl);
-      renderProperties(vrProps.length ? vrProps : allProperties, true);
-    } else {
-      chip.style.background = 'rgba(16,185,129,0.12)';
-      chip.style.borderColor = 'rgba(16,185,129,0.4)';
-      renderProperties(allProperties);
-    }
-  }
+// ── ENQUIRY FORM ──
+function submitEnquiry() {
+  const name = document.querySelector('.enquiry-form input[type="text"]').value.trim();
+  const phone = document.querySelector('.enquiry-form input[type="tel"]').value.trim();
+  const unit = document.querySelector('.enquiry-form select').value;
+  const msg = document.querySelector('.enquiry-form textarea').value.trim();
+  if (!name || !phone) { alert('Please fill in your name and phone number.'); return; }
+  const wa = `Hi! My name is ${name}. I'm enquiring about: ${unit}. ${msg ? 'Message: ' + msg : ''} Phone: ${phone}`;
+  window.open(`https://wa.me/2348165160797?text=${encodeURIComponent(wa)}`, '_blank');
+}
 </script>
 </body>
 </html>

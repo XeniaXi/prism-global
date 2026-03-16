@@ -34,7 +34,7 @@
     },
     {
       "id": "prop_002",
-      "title": "Block of 6 Flats — Multi-Unit Investment Property",
+      "title": "Block of 6 Flats \u2014 Multi-Unit Investment Property",
       "price": 95000000,
       "location": "Kubwa, Abuja",
       "type": "Apartment",
@@ -66,7 +66,7 @@
     },
     {
       "id": "prop_003",
-      "title": "Carcass Duplex — Build to Your Taste",
+      "title": "Carcass Duplex \u2014 Build to Your Taste",
       "price": 45000000,
       "location": "Kurudu, Abuja",
       "type": "Duplex",
@@ -74,7 +74,7 @@
       "bathrooms": null,
       "size": "400 sqm",
       "status": "Available",
-      "description": "4-bedroom carcass duplex at roofing level — perfect for buyers who want to customise finishes to their exact taste. Stone coated roof already installed. Located in a rapidly developing area with excellent road access. Ideal opportunity to build your dream home at below market value. Deed of Assignment available.",
+      "description": "4-bedroom carcass duplex at roofing level \u2014 perfect for buyers who want to customise finishes to their exact taste. Stone coated roof already installed. Located in a rapidly developing area with excellent road access. Ideal opportunity to build your dream home at below market value. Deed of Assignment available.",
       "features": [
         "Roofing Complete",
         "Stone Coated Roof",
@@ -93,6 +93,34 @@
         "uploads/prop3-detail.jpeg"
       ],
       "createdAt": "2026-03-01T00:00:00.000Z"
+    },
+    {
+      "id": "prop_004",
+      "title": "Morris Towne Estate \u2014 8-Flat Block, Airport Road",
+      "price": 45000000,
+      "location": "4 Ali Ghanem Alhajri Str., Cadastral Zone E30, Lugbe West, Airport Road Abuja",
+      "type": "Apartment",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "size": "8 units",
+      "status": "Available",
+      "description": "Positioned in Cadastral Zone E30, Lugbe West, this exceptional residential opportunity sits within one of Abuja's fastest-growing districts. Strategically located along the airport corridor near the Umaru Musa Yar'Adua Expressway, offering seamless connectivity \u2014 approximately 5-9 miles from Nnamdi Azikiwe International Airport. Features an exclusive block of 8 well-designed 2-bedroom flats, each with fully ensuite bedrooms and guest toilet. Located within a secure gated estate with high-profile residents. Individual purchases, multiple-unit acquisitions, wholesale purchase of entire block, or lease options available.",
+      "features": [
+        "Prime Airport Road Corridor",
+        "5-9 Miles from International Airport",
+        "Secure Gated Estate",
+        "High-Profile Residents",
+        "Fully Ensuite Bedrooms",
+        "Guest Toilet",
+        "8 Units Available",
+        "Lease Options Available",
+        "Strong Rental Demand",
+        "Capital Appreciation Potential"
+      ],
+      "images": [
+        "images/ext-aerial-01.jpg"
+      ],
+      "createdAt": "2026-03-16T00:00:00.000Z"
     }
   ],
   "activity": [

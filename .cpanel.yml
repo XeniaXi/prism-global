@@ -1,0 +1,12 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/priseghy/public_html/
+    - /bin/cp -r index.html $DEPLOYPATH
+    - /bin/cp -r admin.html $DEPLOYPATH
+    - /bin/cp -r api.php $DEPLOYPATH
+    - /bin/cp -r data.json $DEPLOYPATH
+    - /bin/cp -r favicon.svg $DEPLOYPATH
+    - /bin/cp -r images $DEPLOYPATH
+    - /bin/cp -r api $DEPLOYPATH
+    - /bin/cp -r uploads $DEPLOYPATH

@@ -740,15 +740,24 @@
   const grid = document.getElementById('units-grid');
 
   try {
-    let data;
+    let data = null;
+
+    // Try api.php first (same server — no CORS issues)
     try {
-      const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
-        headers: { 'Accept': 'application/json' }
-      });
-      if (!res.ok) throw new Error('JSONBlob unavailable');
-      data = await res.json();
-    } catch {
-      data = null;
+      const res = await fetch('/api.php?action=getData');
+      if (res.ok) {
+        data = await res.json();
+      }
+    } catch { /* api.php not available */ }
+
+    // Fallback: try JSONBlob directly
+    if (!data) {
+      try {
+        const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) data = await res.json();
+      } catch { /* JSONBlob also failed */ }
     }
 
     const props = data?.properties?.length ? data.properties : FALLBACK;

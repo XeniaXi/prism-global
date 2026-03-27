@@ -47,7 +47,7 @@
     letter-spacing: -0.01em;
   }
   .nav-logo .dot { color: var(--gold); }
-  .nav-logo img { height: 44px; width: auto; max-width: 140px; object-fit: contain; }
+  .nav-logo img { height: 72px; width: auto; max-width: 200px; object-fit: contain; }
   .nav-links { display: flex; gap: 2rem; align-items: center; }
   .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover { color: var(--gold); }
@@ -640,80 +640,127 @@
     <div class="section-tag">Available Units</div>
     <div class="section-title">Choose Your <em>Perfect</em> Flat</div>
     <p class="section-sub">Units at various stages of completion — some ready to move in, others available off-plan at preferred pricing.</p>
-    <div class="units-grid">
-      <div class="unit-card">
-        <div class="unit-img"><img src="images/living-01.jpg" alt="Unit A1 — Move-in Ready"></div>
-        <div class="unit-body">
-          <span class="unit-status status-ready">✅ Move-in Ready</span>
-          <h3>Block A — Unit 1 & 2 (Ground Floor)</h3>
-          <div class="unit-price">₦35M <span>/ Outright Sale</span></div>
-          <div class="unit-features">
-            <span class="unit-feat">🛏 2 Bed</span>
-            <span class="unit-feat">🚿 2 Bath</span>
-            <span class="unit-feat">🔑 Fully Fitted</span>
-          </div>
-          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20A%20Unit%201/2%20(ground%20floor)%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Enquire About This Unit</a>
-        </div>
-      </div>
-      <div class="unit-card">
-        <div class="unit-img"><img src="images/living-02.jpg" alt="Unit A3 & A4 — Upper Floor"></div>
-        <div class="unit-body">
-          <span class="unit-status status-ready">✅ Move-in Ready</span>
-          <h3>Block A — Unit 3 & 4 (Upper Floor)</h3>
-          <div class="unit-price">₦37M <span>/ Outright Sale</span></div>
-          <div class="unit-features">
-            <span class="unit-feat">🛏 2 Bed</span>
-            <span class="unit-feat">🚿 2 Bath</span>
-            <span class="unit-feat">🏔 Hill Views</span>
-          </div>
-          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20A%20Unit%203/4%20(upper%20floor)%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Enquire About This Unit</a>
-        </div>
-      </div>
-      <div class="unit-card">
-        <div class="unit-img"><img src="images/ext-block-b-01.jpg" alt="Block B — Finishing Soon"></div>
-        <div class="unit-body">
-          <span class="unit-status status-soon">⚡ Finishing Stage</span>
-          <h3>Block B — Units 5 & 6</h3>
-          <div class="unit-price">₦32M <span>/ Off-Plan Price</span></div>
-          <div class="unit-features">
-            <span class="unit-feat">🛏 2 Bed</span>
-            <span class="unit-feat">🚿 2 Bath</span>
-            <span class="unit-feat">🏗 Q2 2026</span>
-          </div>
-          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20B%20Units%205/6%20(off-plan)%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Reserve at Off-Plan Price</a>
-        </div>
-      </div>
-      <div class="unit-card">
-        <div class="unit-img"><img src="images/ext-block-d-01.jpg" alt="Block C & D — Under Construction"></div>
-        <div class="unit-body">
-          <span class="unit-status status-plan">📐 Under Construction</span>
-          <h3>Block C/D — Units 7 & 8</h3>
-          <div class="unit-price">₦28M <span>/ Early Bird</span></div>
-          <div class="unit-features">
-            <span class="unit-feat">🛏 2 Bed</span>
-            <span class="unit-feat">🚿 2 Bath</span>
-            <span class="unit-feat">🏗 Q3 2026</span>
-          </div>
-          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Block%20C/D%20early%20bird%20—%20Lugbe%20Extension%20Abuja" class="unit-cta">Get Early Bird Discount</a>
-        </div>
-      </div>
-      <div class="unit-card">
-        <div class="unit-img"><img src="images/ext-aerial-01.jpg" alt="Morris Towne Estate — Airport Road Abuja"></div>
-        <div class="unit-body">
-          <span class="unit-status status-ready">✅ Available Now</span>
-          <h3>Morris Towne Estate — 8-Flat Block</h3>
-          <div class="unit-price">₦45M <span>/ Unit</span></div>
-          <div class="unit-features">
-            <span class="unit-feat">🛏 2 Bed</span>
-            <span class="unit-feat">🚿 2 Bath</span>
-            <span class="unit-feat">✈️ 5–9 mi from Airport</span>
-          </div>
-          <a href="https://wa.me/2348165160797?text=I'm%20interested%20in%20Morris%20Towne%20Estate%20(8-flat%20block)%20—%20Airport%20Road%20Abuja" class="unit-cta">Enquire About Morris Towne</a>
-        </div>
-      </div>
+    <div class="units-grid" id="units-grid">
+      <!-- Loaded dynamically from admin -->
+      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);">Loading listings…</div>
     </div>
   </div>
 </section>
+
+<script>
+(async function loadListings() {
+  // Static fallback listings (shown if admin has no data yet)
+  const FALLBACK = [
+    {
+      id: 'fallback-1',
+      title: 'Block A — Unit 1 & 2 (Ground Floor)',
+      price: 35000000,
+      status: 'Available',
+      type: 'Apartment',
+      bedrooms: 2, bathrooms: 2,
+      images: ['images/living-01.jpg'],
+      description: 'Move-in Ready · Fully Fitted'
+    },
+    {
+      id: 'fallback-2',
+      title: 'Block A — Unit 3 & 4 (Upper Floor)',
+      price: 37000000,
+      status: 'Available',
+      type: 'Apartment',
+      bedrooms: 2, bathrooms: 2,
+      images: ['images/living-02.jpg'],
+      description: 'Move-in Ready · Hill Views'
+    },
+    {
+      id: 'fallback-3',
+      title: 'Block B — Units 5 & 6',
+      price: 32000000,
+      status: 'Off-Plan',
+      type: 'Apartment',
+      bedrooms: 2, bathrooms: 2,
+      images: ['images/ext-block-b-01.jpg'],
+      description: 'Finishing Stage · Q2 2026'
+    },
+    {
+      id: 'fallback-4',
+      title: 'Block C/D — Units 7 & 8',
+      price: 28000000,
+      status: 'Off-Plan',
+      type: 'Apartment',
+      bedrooms: 2, bathrooms: 2,
+      images: ['images/ext-block-d-01.jpg'],
+      description: 'Under Construction · Early Bird · Q3 2026'
+    },
+    {
+      id: 'fallback-5',
+      title: 'Morris Towne Estate — 8-Flat Block',
+      price: 45000000,
+      status: 'Available',
+      type: 'Apartment',
+      bedrooms: 2, bathrooms: 2,
+      images: ['images/ext-aerial-01.jpg'],
+      description: '5–9 mi from Airport Road, Abuja'
+    }
+  ];
+
+  function statusBadge(s) {
+    if (!s || s === 'Available') return `<span class="unit-status status-ready">✅ Available</span>`;
+    if (s === 'Sold') return `<span class="unit-status status-plan">🔴 Sold</span>`;
+    if (s === 'Off-Plan') return `<span class="unit-status status-soon">⚡ Off-Plan</span>`;
+    return `<span class="unit-status status-ready">${s}</span>`;
+  }
+
+  function renderCard(p) {
+    const img = p.images?.[0] || 'images/ext-aerial-01.jpg';
+    const price = p.price ? `₦${Number(p.price).toLocaleString('en-NG')}` : 'POA';
+    const waText = encodeURIComponent(`Hi! I'm interested in: ${p.title} — prismglobalservicesltd.com`);
+    const features = [
+      p.bedrooms ? `🛏 ${p.bedrooms} Bed` : null,
+      p.bathrooms ? `🚿 ${p.bathrooms} Bath` : null,
+      p.size ? `📐 ${p.size}` : null,
+      p.description ? p.description.split('·')[0].trim() : null
+    ].filter(Boolean).slice(0, 3);
+
+    return `
+      <div class="unit-card">
+        <div class="unit-img"><img src="${img}" alt="${p.title}" onerror="this.src='images/ext-aerial-01.jpg'"></div>
+        <div class="unit-body">
+          ${statusBadge(p.status)}
+          <h3>${p.title}</h3>
+          <div class="unit-price">${price} <span>/ Outright Sale</span></div>
+          <div class="unit-features">
+            ${features.map(f => `<span class="unit-feat">${f}</span>`).join('')}
+          </div>
+          <a href="https://wa.me/2348165160797?text=${waText}" class="unit-cta">Enquire About This Unit</a>
+        </div>
+      </div>
+    `;
+  }
+
+  const grid = document.getElementById('units-grid');
+
+  try {
+    let data;
+    try {
+      const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error('JSONBlob unavailable');
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+
+    const props = data?.properties?.length ? data.properties : FALLBACK;
+    const visible = props.filter(p => p.status !== 'Sold' || props.length <= 3);
+    grid.innerHTML = visible.length
+      ? visible.map(renderCard).join('')
+      : FALLBACK.map(renderCard).join('');
+  } catch (e) {
+    grid.innerHTML = FALLBACK.map(renderCard).join('');
+  }
+})();
+</script>
 
 <!-- LOCATION -->
 <hr class="divider">
@@ -871,9 +918,9 @@
             <div class="cm-icon">📞</div>
             <div><div class="cm-label">Call Us</div><div class="cm-value">+234 816 516 0797</div></div>
           </a>
-          <a href="mailto:mediseenhms@gmail.com" class="contact-method">
+          <a href="mailto:sales@prismglobalservicesltd.com" class="contact-method">
             <div class="cm-icon">✉️</div>
-            <div><div class="cm-label">Email</div><div class="cm-value">mediseenhms@gmail.com</div></div>
+            <div><div class="cm-label">Email</div><div class="cm-value">sales@prismglobalservicesltd.com</div></div>
           </a>
         </div>
       </div>
@@ -905,7 +952,7 @@
 <footer>
   <div class="footer-inner">
     <div>
-      <div><img src="images/logo.jpg" alt="Prism Global" style="height:40px;width:auto;object-fit:contain;filter:brightness(1.1);"></div>
+      <div><img src="images/logo.jpg" alt="Prism Global" style="height:64px;width:auto;object-fit:contain;filter:brightness(1.1);"></div>
       <p style="margin-top:0.5rem;">Trading as Mpaukwu Trading · CAC RC 7294223 · Abuja & Abia State, Nigeria</p>
     </div>
     <div class="footer-links">

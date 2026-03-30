@@ -51,6 +51,19 @@
   .nav-links { display: flex; gap: 2rem; align-items: center; }
   .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover { color: var(--gold); }
+
+  /* ── STICKY WA BUTTON ── */
+  .wa-sticky {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    z-index: 500;
+    background: #25D366; color: white;
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .wa-sticky:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37,211,102,0.55); color: white; }
   .nav-cta {
     background: var(--navy); color: white;
     padding: 0.55rem 1.3rem; border-radius: 6px;
@@ -411,6 +424,9 @@
 </head>
 <body>
 
+<!-- STICKY WA BUTTON -->
+<a href="https://wa.me/2348165160797?text=Hi%20Prism%20Global!%20I%20saw%20your%20Lugbe%20Extension%20listing%20and%20I%27m%20interested." class="wa-sticky" title="Chat on WhatsApp" target="_blank" rel="noopener">💬</a>
+
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
@@ -420,6 +436,7 @@
     <a href="#about">About</a>
     <a href="#gallery">Gallery</a>
     <a href="#availability">Availability</a>
+    <a href="#why-prism">Why Us</a>
     <a href="#investors">For Investors</a>
     <a href="#location">Location</a>
     <a href="#enquiry">Contact</a>
@@ -815,6 +832,60 @@
   </div>
 </section>
 
+<!-- TRUST SIGNALS / WHY PRISM -->
+<hr class="divider">
+<section class="section" id="why-prism" style="background:var(--gold-pale);">
+  <div class="section-inner">
+    <div class="section-tag">Why Choose Us</div>
+    <div class="section-title">The Prism <em>Promise</em></div>
+    <p class="section-sub">We don't just sell properties. We deliver accountability, transparency, and peace of mind.</p>
+    <div class="specs-grid" style="margin-top:2.5rem;">
+      <div class="spec-card">
+        <div class="spec-icon">🔐</div>
+        <div>
+          <h3>Verified Titles</h3>
+          <p>Every property we list undergoes rigorous documentation and title verification before we present it to you. No surprises, no disputes.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">📸</div>
+        <div>
+          <h3>Real Photos Only</h3>
+          <p>Every image on this site is taken on-site by our team. No renders, no stock photos. What you see is exactly what you get.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">📞</div>
+        <div>
+          <h3>Always Reachable</h3>
+          <p>Our WhatsApp line is monitored throughout the week. Expect a response within hours — not days. Diaspora investors especially welcome.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">📋</div>
+        <div>
+          <h3>CAC Registered</h3>
+          <p>Prism Global Services Ltd is incorporated with the Corporate Affairs Commission (RC 7294223). You are dealing with a formal, accountable entity.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">🌍</div>
+        <div>
+          <h3>Diaspora Specialists</h3>
+          <p>We understand the unique challenges of investing in Nigeria from abroad. Remote purchase, documentation by courier, proxy arrangements — we handle it all.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">🏦</div>
+        <div>
+          <h3>Instalment Plans Available</h3>
+          <p>Not ready for outright purchase? We offer structured payment plans for qualifying buyers — making property investment accessible without the full upfront burden.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- INVESTORS -->
 <hr class="divider">
 <section class="section" id="investors">
@@ -1041,13 +1112,55 @@ document.addEventListener('keydown', e => {
 
 // ── ENQUIRY FORM ──
 function submitEnquiry() {
+  const btn = document.querySelector('.form-submit');
   const name = document.querySelector('.enquiry-form input[type="text"]').value.trim();
   const phone = document.querySelector('.enquiry-form input[type="tel"]').value.trim();
+  const email = document.querySelector('.enquiry-form input[type="email"]').value.trim();
   const unit = document.querySelector('.enquiry-form select').value;
   const msg = document.querySelector('.enquiry-form textarea').value.trim();
-  if (!name || !phone) { alert('Please fill in your name and phone number.'); return; }
-  const wa = `Hi! My name is ${name}. I'm enquiring about: ${unit}. ${msg ? 'Message: ' + msg : ''} Phone: ${phone}`;
-  window.open(`https://wa.me/2348165160797?text=${encodeURIComponent(wa)}`, '_blank');
+
+  // Validation
+  if (!name) { showFormError('Please enter your full name.'); return; }
+  if (!phone) { showFormError('Please enter your phone/WhatsApp number.'); return; }
+  if (phone.replace(/\D/g, '').length < 8) { showFormError('Please enter a valid phone number.'); return; }
+
+  // Loading state
+  if (btn) { btn.textContent = 'Opening WhatsApp…'; btn.disabled = true; }
+
+  const wa = `Hi Prism Global! My name is ${name}.\n\nI am enquiring about: ${unit}.\n${msg ? 'Message: ' + msg + '\n' : ''}${email ? 'Email: ' + email + '\n' : ''}Phone: ${phone}`;
+
+  // Try WhatsApp app first (mobile), fallback to web
+  const waUrl = `https://wa.me/2348165160797?text=${encodeURIComponent(wa)}`;
+  window.open(waUrl, '_blank');
+
+  // Show success + reset
+  setTimeout(() => {
+    showFormSuccess();
+    document.querySelectorAll('.enquiry-form input, .enquiry-form textarea').forEach(el => el.value = '');
+    if (btn) { btn.textContent = 'Send Enquiry →'; btn.disabled = false; }
+  }, 800);
+}
+
+function showFormError(msg) {
+  const existing = document.getElementById('form-feedback');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.id = 'form-feedback';
+  el.style.cssText = 'background:#fee2e2;color:#991b1b;border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;font-weight:600;margin-top:0.5rem;';
+  el.textContent = '⚠️ ' + msg;
+  document.querySelector('.form-submit').before(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function showFormSuccess() {
+  const existing = document.getElementById('form-feedback');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.id = 'form-feedback';
+  el.style.cssText = 'background:#dcfce7;color:#166534;border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;font-weight:600;margin-top:0.5rem;';
+  el.textContent = '✅ WhatsApp opened! We will reply within the hour during business hours.';
+  document.querySelector('.enquiry-form').appendChild(el);
+  setTimeout(() => el.remove(), 6000);
 }
 </script>
 </body>

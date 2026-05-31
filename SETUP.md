@@ -13,7 +13,7 @@ Reply to Agba with your choice and it goes live same day.
 
 ### Step 2 — Add Real Properties
 Go to: https://prismglobalservicesltd.com/admin  
-Password: `Egonabia@2022`  
+Use the private admin password provided separately.  
 Add your real property listings with photos, prices in ₦ and £.
 
 ### Step 3 — RealVR360 Integration (when Cloudinary ready)
@@ -34,4 +34,4 @@ Need: Cloudinary credentials added to Vercel env vars.
 
 ## 📦 Storage
 JSONBlob ID: `019ca8b7-fa29-7eaf-b00e-f909b00ffc62`  
-Admin password: `Egonabia@2022`
+Admin password is intentionally not published in this guide.

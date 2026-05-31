@@ -716,12 +716,19 @@
   </div>
 
   <script>
-    function checkLogin() {
+    async function checkLogin() {
       const pass = document.getElementById('admin-pass').value;
-      if (pass === 'Egonabia@2022') {
+      try {
+        const res = await fetch('/api.php?action=login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ password: pass })
+        });
+        if (!res.ok) throw new Error('Unauthorized');
         document.getElementById('login-gate').style.display = 'none';
         sessionStorage.setItem('prism-admin', '1');
-      } else {
+      } catch {
         document.getElementById('login-error').style.display = 'block';
         document.getElementById('admin-pass').value = '';
       }
@@ -980,9 +987,9 @@
         const res = await fetch('/api.php?action=saveData', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'X-Admin-Password': 'Egonabia@2022'
+            'Content-Type': 'application/json'
           },
+          credentials: 'same-origin',
           body: JSON.stringify(data)
         });
         if (!res.ok) throw new Error('API error');
@@ -1010,7 +1017,7 @@
         try {
           const res = await fetch('/api.php?action=uploadImage', {
             method: 'POST',
-            headers: { 'X-Admin-Password': 'Egonabia@2022' },
+            credentials: 'same-origin',
             body: formData
           });
           const result = await res.json();

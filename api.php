@@ -1,4 +1,5 @@
 <?php
+session_start();
 header('Content-Type: application/json');
 
 // Paths
@@ -21,10 +22,26 @@ if (!file_exists($dataFile)) {
 $action = $_GET['action'] ?? '';
 
 // Authentication check for sensitive actions
-$adminPassword = 'Egonabia@2022';
+$adminPasswordHash = '7b449ef509eb63fc0dbccf41c88b79d1307004c453bbd5fff97fd53f1b066ad4';
+
+if ($action === 'login') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $providedPassword = $input['password'] ?? '';
+    $providedHash = hash('sha256', $providedPassword);
+
+    if (!hash_equals($adminPasswordHash, $providedHash)) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Unauthorized']);
+        exit;
+    }
+
+    $_SESSION['prism_admin'] = true;
+    echo json_encode(['success' => true]);
+    exit;
+}
+
 if (in_array($action, ['saveData', 'uploadImage'])) {
-    $providedPassword = $_SERVER['HTTP_X_ADMIN_PASSWORD'] ?? '';
-    if ($providedPassword !== $adminPassword) {
+    if (empty($_SESSION['prism_admin'])) {
         http_response_code(401);
         echo json_encode(['error' => 'Unauthorized']);
         exit;

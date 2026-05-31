@@ -123,6 +123,134 @@
       "createdAt": "2026-03-16T00:00:00.000Z"
     }
   ],
+  "gallery": [
+    {
+      "id": "gal_001",
+      "src": "images/ext-aerial-01.jpg",
+      "caption": "Aerial View — Completed Block",
+      "category": "aerial exterior",
+      "featured": true
+    },
+    {
+      "id": "gal_002",
+      "src": "images/ext-aerial-02.jpg",
+      "caption": "Estate Aerial Overview",
+      "category": "aerial exterior",
+      "featured": false
+    },
+    {
+      "id": "gal_003",
+      "src": "images/ext-block-c-01.jpg",
+      "caption": "Rear Compound Aerial",
+      "category": "aerial",
+      "featured": false
+    },
+    {
+      "id": "gal_004",
+      "src": "images/ext-block-e-01.jpg",
+      "caption": "Abuja Hills View",
+      "category": "aerial",
+      "featured": false
+    },
+    {
+      "id": "gal_005",
+      "src": "images/ext-block-b-01.jpg",
+      "caption": "Block B — Exterior",
+      "category": "exterior",
+      "featured": false
+    },
+    {
+      "id": "gal_006",
+      "src": "images/ext-block-b-02.jpg",
+      "caption": "Block B — Second Angle",
+      "category": "exterior",
+      "featured": false
+    },
+    {
+      "id": "gal_007",
+      "src": "images/ext-block-c-02.jpg",
+      "caption": "Balcony & Front Elevation",
+      "category": "exterior",
+      "featured": false
+    },
+    {
+      "id": "gal_008",
+      "src": "images/ext-block-d-01.jpg",
+      "caption": "Block D — Construction Stage",
+      "category": "exterior",
+      "featured": false
+    },
+    {
+      "id": "gal_009",
+      "src": "images/ext-block-d-03.jpg",
+      "caption": "Block E — Partially Finished",
+      "category": "exterior",
+      "featured": false
+    },
+    {
+      "id": "gal_010",
+      "src": "images/living-01.jpg",
+      "caption": "Living Room — POP Ceiling & LED Lighting",
+      "category": "interior",
+      "featured": true
+    },
+    {
+      "id": "gal_011",
+      "src": "images/living-02.jpg",
+      "caption": "Living Room — Second Angle",
+      "category": "interior",
+      "featured": false
+    },
+    {
+      "id": "gal_012",
+      "src": "images/living-03.jpg",
+      "caption": "Living Room — High-Gloss Tiles",
+      "category": "interior",
+      "featured": false
+    },
+    {
+      "id": "gal_013",
+      "src": "images/living-04.jpg",
+      "caption": "Living Room — Full View",
+      "category": "interior",
+      "featured": false
+    },
+    {
+      "id": "gal_014",
+      "src": "images/ext-block-c-03.jpg",
+      "caption": "Bedroom — Ready to Furnish",
+      "category": "interior",
+      "featured": false
+    },
+    {
+      "id": "gal_015",
+      "src": "images/bathroom-01.jpg",
+      "caption": "Rain Shower — Marble Tiles",
+      "category": "bathroom",
+      "featured": false
+    },
+    {
+      "id": "gal_016",
+      "src": "images/bathroom-02.jpg",
+      "caption": "Bathroom — WC & WHB",
+      "category": "bathroom",
+      "featured": false
+    },
+    {
+      "id": "gal_017",
+      "src": "images/bathroom-03.jpg",
+      "caption": "Bathroom — Overhead View",
+      "category": "bathroom",
+      "featured": false
+    },
+    {
+      "id": "gal_018",
+      "src": "images/ext-block-d-02.jpg",
+      "caption": "WC with Bidet Sprayer",
+      "category": "bathroom",
+      "featured": false
+    }
+  ],
   "activity": [
     {
       "action": "Website launched",

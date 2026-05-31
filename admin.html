@@ -416,7 +416,8 @@
     }
 
     /* ── ADD PROPERTY FORM ── */
-    #add-form-section {
+    #add-form-section,
+    #gallery-form-section {
       display: none;
       background: var(--card);
       border: 1px solid var(--border);
@@ -425,7 +426,8 @@
       margin-top: 2rem;
     }
 
-    #add-form-section.visible {
+    #add-form-section.visible,
+    #gallery-form-section.visible {
       display: block;
     }
 
@@ -758,8 +760,9 @@
     <aside>
       <div class="sidebar-section">
         <div class="sidebar-label">Manage</div>
-        <button class="sidebar-item active" onclick="showTab('properties')">🏠 Properties</button>
-        <button class="sidebar-item" onclick="showTab('activity')">📋 Activity Log</button>
+        <button class="sidebar-item active" onclick="showTab('properties', this)">🏠 Properties</button>
+        <button class="sidebar-item" onclick="showTab('gallery', this)">🖼️ Gallery</button>
+        <button class="sidebar-item" onclick="showTab('activity', this)">📋 Activity Log</button>
       </div>
       <div class="sidebar-divider"></div>
       <div class="sidebar-section">
@@ -911,6 +914,84 @@
         </div>
       </div>
 
+      <!-- GALLERY TAB -->
+      <div id="tab-gallery" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Photo Gallery</h1>
+            <p class="page-sub">Manage the homepage gallery images, captions, categories, and featured layout.</p>
+          </div>
+          <button class="btn-primary" onclick="toggleGalleryForm()">
+            <span id="gallery-add-btn-icon">+</span> Add Gallery Photo
+          </button>
+        </div>
+
+        <div id="gallery-form-section">
+          <div class="form-section-title" id="gallery-form-title">Add Gallery Photo</div>
+          <form id="gallery-form" onsubmit="handleGallerySubmit(event)">
+            <input type="hidden" id="gallery-edit-id" value="">
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label class="form-label">Caption *</label>
+                <input type="text" class="form-input" id="g-caption" placeholder="e.g. Living Room — POP Ceiling & LED Lighting" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="g-category">
+                  <option value="exterior">Exterior</option>
+                  <option value="interior">Interior</option>
+                  <option value="bathroom">Bathrooms</option>
+                  <option value="aerial">Aerial Views</option>
+                  <option value="aerial exterior">Aerial + Exterior</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Featured Tile</label>
+                <select class="form-select" id="g-featured">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Gallery Image *</label>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;" id="gallery-preview-area"></div>
+                <input type="file" id="g-img-upload" accept="image/*"
+                  style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.9rem;color:var(--cream);font-size:0.85rem;width:100%;cursor:pointer;margin-bottom:0.5rem;">
+                <input type="text" class="form-input" id="g-src" placeholder="Or paste image URL / path..." required>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="gallery-submit-btn">Save Gallery Photo</button>
+              <button type="button" class="btn-cancel" onclick="hideGalleryForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-section" style="margin-top:2rem;">
+          <div class="table-header">
+            <span class="table-title">Homepage Gallery</span>
+          </div>
+          <div>
+            <table class="properties-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Caption</th>
+                  <th>Category</th>
+                  <th>Featured</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="gallery-tbody">
+                <tr>
+                  <td colspan="5" style="text-align:center;color:#6a7a70;padding:3rem;">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ACTIVITY TAB -->
       <div id="tab-activity" style="display:none;">
         <div class="page-header">
@@ -940,6 +1021,8 @@
 
   <script>
     let allProperties = [];
+    let allGallery = [];
+    let pendingGalleryImage = '';
 
     // ── UI Helpers
     function showLoading() { document.getElementById('loading-overlay').classList.add('show'); }
@@ -952,11 +1035,13 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    function showTab(tab) {
+    function showTab(tab, target) {
       document.getElementById('tab-properties').style.display = tab === 'properties' ? 'block' : 'none';
+      document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
       document.getElementById('tab-activity').style.display = tab === 'activity' ? 'block' : 'none';
       document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-      event.target.classList.add('active');
+      if (target) target.classList.add('active');
+      if (tab === 'gallery') loadGallery();
       if (tab === 'activity') loadActivity();
     }
 
@@ -1008,26 +1093,28 @@
     // Image upload via api.php
     let pendingUploadedImages = [];
 
+    async function uploadImageFile(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api.php?action=uploadImage', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: formData
+      });
+      const result = await res.json();
+      if (!res.ok || !result.url) throw new Error(result.error || 'Upload failed');
+      return result.url;
+    }
+
     document.getElementById('f-img-upload').addEventListener('change', async function (e) {
       const files = e.target.files;
       if (!files.length) return;
       for (const file of files) {
-        const formData = new FormData();
-        formData.append('file', file);
         try {
-          const res = await fetch('/api.php?action=uploadImage', {
-            method: 'POST',
-            credentials: 'same-origin',
-            body: formData
-          });
-          const result = await res.json();
-          if (result.url) {
-            pendingUploadedImages.push(result.url);
-            renderImagePreviews();
-            showToast('Image uploaded: ' + file.name);
-          } else {
-            showToast('Upload failed: ' + (result.error || 'Unknown error'), 'error');
-          }
+          const url = await uploadImageFile(file);
+          pendingUploadedImages.push(url);
+          renderImagePreviews();
+          showToast('Image uploaded: ' + file.name);
         } catch (err) {
           showToast('Upload error: ' + err.message, 'error');
         }
@@ -1066,6 +1153,23 @@
       }
       renderImagePreviews();
     }
+
+    document.getElementById('g-img-upload').addEventListener('change', async function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadImageFile(file);
+        pendingGalleryImage = url;
+        document.getElementById('g-src').value = url;
+        renderGalleryPreview();
+        showToast('Gallery image uploaded: ' + file.name);
+      } catch (err) {
+        showToast('Upload error: ' + err.message, 'error');
+      }
+      e.target.value = '';
+    });
+
+    document.getElementById('g-src').addEventListener('input', renderGalleryPreview);
 
     // ── Render
     function statusClass(s) {
@@ -1108,6 +1212,66 @@
     `).join('');
     }
 
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch]));
+    }
+
+    function renderGallery(items) {
+      allGallery = items || [];
+      const tbody = document.getElementById('gallery-tbody');
+      if (!allGallery.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#6a7a70;padding:3rem;">No gallery photos yet. Add one above.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = allGallery.map(item => `
+      <tr data-id="${item.id}">
+        <td>
+          <img src="${escapeHtml(item.src)}" class="prop-img-thumb" onerror="this.style.display='none'">
+        </td>
+        <td>
+          <div class="prop-name-cell">
+            <strong>${escapeHtml(item.caption)}</strong>
+            <small>${escapeHtml(item.src)}</small>
+          </div>
+        </td>
+        <td style="color:#aaa;font-size:0.8rem;">${escapeHtml(item.category || 'exterior')}</td>
+        <td><span class="status-badge ${item.featured ? 'status-available' : 'status-off-plan'}">${item.featured ? 'Featured' : 'Standard'}</span></td>
+        <td>
+          <div class="row-actions">
+            <button class="btn-sm btn-edit" onclick="editGalleryItem('${item.id}')">✏️ Edit</button>
+            <button class="btn-sm btn-delete" onclick="deleteGalleryItem('${item.id}')">🗑 Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+    }
+
+    function renderGalleryPreview() {
+      const area = document.getElementById('gallery-preview-area');
+      const url = document.getElementById('g-src').value.trim();
+      area.innerHTML = url ? `
+        <div style="position:relative;">
+          <img src="${escapeHtml(url)}" style="width:120px;height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
+        </div>
+      ` : '';
+    }
+
+    async function loadGallery() {
+      try {
+        const data = await loadData();
+        renderGallery(data.gallery || []);
+      } catch (err) {
+        document.getElementById('gallery-tbody').innerHTML =
+          `<tr><td colspan="5" style="text-align:center;color:#e05252;padding:2rem;">Error loading gallery.</td></tr>`;
+      }
+    }
+
     function updateStats(props) {
       document.getElementById('stat-total').textContent = props.length;
       document.getElementById('stat-available').textContent = props.filter(p => p.status === 'Available').length;
@@ -1145,6 +1309,29 @@
       document.getElementById('add-btn-icon').textContent = '+';
     }
 
+    function toggleGalleryForm() {
+      const s = document.getElementById('gallery-form-section');
+      const isVisible = s.classList.contains('visible');
+      if (isVisible) {
+        hideGalleryForm();
+      } else {
+        s.classList.add('visible');
+        document.getElementById('gallery-form-title').textContent = 'Add Gallery Photo';
+        document.getElementById('gallery-edit-id').value = '';
+        document.getElementById('gallery-submit-btn').textContent = 'Save Gallery Photo';
+        document.getElementById('gallery-add-btn-icon').textContent = '−';
+        document.getElementById('gallery-form').reset();
+        pendingGalleryImage = '';
+        renderGalleryPreview();
+        s.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function hideGalleryForm() {
+      document.getElementById('gallery-form-section').classList.remove('visible');
+      document.getElementById('gallery-add-btn-icon').textContent = '+';
+    }
+
     function editProperty(id) {
       const p = allProperties.find(x => x.id === id);
       if (!p) return;
@@ -1171,6 +1358,89 @@
       renderImagePreviews();
 
       document.getElementById('add-form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function editGalleryItem(id) {
+      const item = allGallery.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('gallery-form-section').classList.add('visible');
+      document.getElementById('gallery-form-title').textContent = 'Edit Gallery Photo';
+      document.getElementById('gallery-edit-id').value = item.id;
+      document.getElementById('gallery-submit-btn').textContent = 'Update Gallery Photo';
+      document.getElementById('gallery-add-btn-icon').textContent = '−';
+      document.getElementById('g-caption').value = item.caption || '';
+      document.getElementById('g-category').value = item.category || 'exterior';
+      document.getElementById('g-featured').value = item.featured ? 'true' : 'false';
+      document.getElementById('g-src').value = item.src || '';
+      pendingGalleryImage = item.src || '';
+      renderGalleryPreview();
+      document.getElementById('gallery-form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function handleGallerySubmit(e) {
+      e.preventDefault();
+      showLoading();
+
+      const galleryItem = {
+        src: document.getElementById('g-src').value.trim(),
+        caption: document.getElementById('g-caption').value.trim(),
+        category: document.getElementById('g-category').value,
+        featured: document.getElementById('g-featured').value === 'true'
+      };
+
+      try {
+        const data = await loadData();
+        data.gallery = data.gallery || [];
+        data.activity = data.activity || [];
+        const editId = document.getElementById('gallery-edit-id').value;
+
+        if (editId) {
+          const idx = data.gallery.findIndex(item => item.id === editId);
+          if (idx > -1) {
+            data.gallery[idx] = { ...data.gallery[idx], ...galleryItem };
+            data.activity.unshift({ action: 'Updated gallery photo: ' + galleryItem.caption, time: new Date().toISOString() });
+          }
+        } else {
+          data.gallery.push({
+            id: 'gal_' + Date.now(),
+            ...galleryItem
+          });
+          data.activity.unshift({ action: 'Added gallery photo: ' + galleryItem.caption, time: new Date().toISOString() });
+        }
+
+        await saveData(data);
+        renderGallery(data.gallery);
+        hideGalleryForm();
+        document.getElementById('gallery-form').reset();
+        pendingGalleryImage = '';
+        renderGalleryPreview();
+        showToast(editId ? 'Gallery photo updated!' : 'Gallery photo added!');
+      } catch (err) {
+        showToast('Error saving gallery photo: ' + err.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function deleteGalleryItem(id) {
+      const item = allGallery.find(x => x.id === id);
+      if (!confirm(`Delete "${item?.caption || id}" from the homepage gallery?`)) return;
+
+      showLoading();
+      try {
+        const data = await loadData();
+        data.gallery = (data.gallery || []).filter(item => item.id !== id);
+        data.activity = data.activity || [];
+        data.activity.unshift({ action: 'Deleted gallery photo: ' + (item?.caption || id), time: new Date().toISOString() });
+        await saveData(data);
+        renderGallery(data.gallery);
+        showToast('Gallery photo deleted');
+      } catch (err) {
+        showToast('Error deleting gallery photo: ' + err.message, 'error');
+      } finally {
+        hideLoading();
+      }
     }
 
     async function handleFormSubmit(e) {
@@ -1289,6 +1559,7 @@
       try {
         const data = await loadData();
         renderProperties(data.properties || []);
+        renderGallery(data.gallery || []);
       } catch (err) {
         document.getElementById('properties-tbody').innerHTML =
           `<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">

@@ -838,7 +838,7 @@
   <div class="section-inner">
     <div class="section-tag">Why Choose Us</div>
     <div class="section-title">The Prism <em>Promise</em></div>
-    <p class="section-sub">We don't just sell properties. We deliver accountability, transparency, and peace of mind.</p>
+    <p class="section-sub">We don't just sell properties. We are the trusted team for diaspora clients who need someone reliable on ground to build, verify, manage, and report back with accountability.</p>
     <div class="specs-grid" style="margin-top:2.5rem;">
       <div class="spec-card">
         <div class="spec-icon">🔐</div>
@@ -872,7 +872,21 @@
         <div class="spec-icon">🌍</div>
         <div>
           <h3>Diaspora Specialists</h3>
-          <p>We understand the unique challenges of investing in Nigeria from abroad. Remote purchase, documentation by courier, proxy arrangements — we handle it all.</p>
+          <p>We understand the unique challenges of building or investing in Nigeria from abroad. Remote purchase, project supervision, documentation by courier, proxy arrangements — we handle it all.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">🏗</div>
+        <div>
+          <h3>Build From Abroad</h3>
+          <p>Need trusted people to build your house while you are in the diaspora? We coordinate land, contractors, materials, inspections, and progress reporting so you are never left guessing.</p>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">✅</div>
+        <div>
+          <h3>Verifiable Completed Contracts</h3>
+          <p>Our record includes completed contracts for private individuals and government clients, with work that can be verified before you commit.</p>
         </div>
       </div>
       <div class="spec-card">
@@ -897,7 +911,7 @@
     <!-- ABOUT PRISM -->
     <div style="margin-top: 3rem; padding: 2rem 1.5rem; background: var(--navy-pale); border-radius: 12px; border-left: 4px solid var(--gold);">
       <h3 style="font-size:1.05rem; font-weight:700; color:var(--navy); margin-bottom:0.8rem;">Who We Are</h3>
-      <p style="color:var(--muted); font-size:0.95rem; line-height:1.75;">Prism Global Services Ltd is a Nigeria-based real estate and property services company headquartered in Abuja, incorporated May 2012. We serve Nigerians in the diaspora and individuals who want to invest, build, or return home — without the usual risks.</p>
+      <p style="color:var(--muted); font-size:0.95rem; line-height:1.75;">Prism Global Services Ltd is a Nigeria-based real estate and property services company headquartered in Abuja, incorporated May 2012. We serve Nigerians in the diaspora and individuals who want to invest, build, or return home — without the usual risks. Our completed work includes verifiable contracts with private individuals and government clients.</p>
     </div>
 
     <!-- THE PROBLEM -->
@@ -1033,7 +1047,7 @@
   <div class="footer-inner">
     <div>
       <div><img src="images/logo.jpg" alt="Prism Global" style="height:64px;width:auto;object-fit:contain;filter:brightness(1.1);"></div>
-      <p style="margin-top:0.5rem;">Prism Global Services Ltd · CAC RC 7294223 · Abuja & Abia State, Nigeria</p>
+      <p style="margin-top:0.5rem;">Prism Global Services Ltd · CAC RC 7294223 · Abuja, Nigeria</p>
     </div>
     <div class="footer-links">
       <a href="#about">About</a>
@@ -1061,7 +1075,7 @@ function filterGallery(cat, btn) {
 }
 
 // ── LIGHTBOX ──
-const images = [
+let images = [
   { src: 'images/ext-aerial-01.jpg', cap: 'Aerial View — Completed Block' },
   { src: 'images/ext-aerial-02.jpg', cap: 'Estate Aerial Overview' },
   { src: 'images/bathroom-01.jpg', cap: 'Rain Shower System — Marble Tiles' },
@@ -1084,6 +1098,68 @@ const images = [
   { src: 'images/ext-block-e-02.jpg', cap: 'Final Aerial View' },
 ];
 let currentIdx = 0;
+
+function escapeHtml(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[ch]));
+}
+
+function galleryIcon(category) {
+  if (category.includes('bathroom')) return '🚿';
+  if (category.includes('interior')) return '🛋';
+  if (category.includes('aerial')) return '🛩';
+  return '🏢';
+}
+
+function normalizeGalleryItem(item) {
+  return {
+    src: item.src || item.url || item.image || '',
+    cap: item.caption || item.cap || item.title || 'Gallery photo',
+    category: item.category || item.categories || 'exterior',
+    featured: Boolean(item.featured)
+  };
+}
+
+function renderGallery(items) {
+  const galleryGrid = document.getElementById('galleryGrid');
+  const normalized = (items || []).map(normalizeGalleryItem).filter(item => item.src);
+  if (!galleryGrid || !normalized.length) return;
+
+  images = normalized.map(item => ({ src: item.src, cap: item.cap }));
+  galleryGrid.innerHTML = normalized.map((item, index) => {
+    const category = Array.isArray(item.category) ? item.category.join(' ') : item.category;
+    const caption = escapeHtml(item.cap);
+    return `
+      <div class="gallery-item${item.featured ? ' featured' : ''}" data-cat="${escapeHtml(category)}" onclick="openLightbox(${index})">
+        <img src="${escapeHtml(item.src)}" alt="${caption}" onerror="this.closest('.gallery-item').style.display='none'">
+        <div class="gallery-label">${galleryIcon(category)} ${caption}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function loadGalleryData() {
+  try {
+    let res;
+    try {
+      res = await fetch('/api.php?action=getData');
+      if (!res.ok) throw new Error('API unavailable');
+    } catch {
+      res = await fetch('data.json');
+    }
+    const data = await res.json();
+    if (Array.isArray(data.gallery)) renderGallery(data.gallery);
+  } catch (err) {
+    console.warn('Gallery data unavailable; using built-in gallery.', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadGalleryData);
 
 function openLightbox(idx) {
   currentIdx = idx;

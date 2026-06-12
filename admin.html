@@ -1167,7 +1167,8 @@
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.className = `toast toast-${type} show`;
-      setTimeout(() => t.classList.remove('show'), 3500);
+      const duration = type === 'error' ? Math.max(6000, Math.min(14000, msg.length * 70)) : 3500;
+      setTimeout(() => t.classList.remove('show'), duration);
     }
 
     function showTab(tab, target) {
@@ -1230,6 +1231,14 @@
     // Image upload via api.php
     let pendingUploadedImages = [];
 
+    function explainUploadStatus(status, kind) {
+      if (status === 404) return `Upload endpoint not available (404). The PHP backend isn't running in this preview. Open this admin on the live site, or paste a ${kind === 'video' ? 'YouTube / Vimeo / direct .mp4' : 'direct image'} URL in the field below instead.`;
+      if (status === 401) return 'Not authorized — log in to the admin (top-right) before uploading.';
+      if (status === 413) return 'File too large for server upload limit. Compress it, or for video use YouTube/Vimeo URL instead.';
+      if (status === 0)   return 'Network error — could not reach the server. Check your connection.';
+      return null;
+    }
+
     async function uploadImageFile(file) {
       const formData = new FormData();
       formData.append('file', file);
@@ -1238,7 +1247,10 @@
         credentials: 'same-origin',
         body: formData
       });
-      const result = await res.json();
+      const explained = explainUploadStatus(res.status, 'image');
+      if (explained) throw new Error(explained);
+      let result = {};
+      try { result = await res.json(); } catch { throw new Error('Invalid server response from upload endpoint (not JSON).'); }
       if (!res.ok || !result.url) throw new Error(result.error || 'Upload failed');
       return result.url;
     }
@@ -1732,15 +1744,17 @@
           if (e.lengthComputable && onProgress) onProgress((e.loaded / e.total) * 100);
         };
         xhr.onload = () => {
+          const explained = explainUploadStatus(xhr.status, 'video');
+          if (explained) return reject(new Error(explained));
           try {
             const result = JSON.parse(xhr.responseText);
             if (xhr.status >= 200 && xhr.status < 300 && result.url) resolve(result.url);
-            else reject(new Error(result.error || 'Upload failed'));
+            else reject(new Error(result.error || 'Upload failed (HTTP ' + xhr.status + ')'));
           } catch {
-            reject(new Error('Invalid server response'));
+            reject(new Error('Invalid server response from upload endpoint (not JSON). HTTP ' + xhr.status));
           }
         };
-        xhr.onerror = () => reject(new Error('Network error during upload'));
+        xhr.onerror = () => reject(new Error(explainUploadStatus(0, 'video')));
         xhr.send(formData);
       });
     }

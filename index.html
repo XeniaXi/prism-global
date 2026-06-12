@@ -224,6 +224,176 @@
   .gallery-item:hover .gallery-label { opacity: 1; }
   .gallery-item.featured { grid-column: span 2; }
 
+  /* ── CINEMATIC / VIDEO SECTION ── */
+  .video-section {
+    background: linear-gradient(180deg, #0E1F33 0%, #1E3A5F 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(196,144,58,0.18), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(43,80,128,0.45), transparent 50%);
+    pointer-events: none;
+  }
+  .video-section .section-inner { position: relative; z-index: 1; }
+  .video-section .section-tag { color: var(--gold-light); }
+  .video-section .section-tag::before { background: var(--gold-light); }
+  .video-section .section-title { color: white; }
+  .video-section .section-title em { color: var(--gold-light); }
+  .video-section .section-sub { color: rgba(255,255,255,0.7); }
+
+  .video-tabs {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin: 2rem 0 1.5rem;
+  }
+  .video-tab {
+    padding: 0.55rem 1.2rem; border-radius: 20px;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.85);
+    transition: all 0.2s;
+  }
+  .video-tab.active, .video-tab:hover {
+    background: var(--gold); color: white; border-color: var(--gold);
+  }
+
+  .video-hero {
+    position: relative; border-radius: 16px; overflow: hidden;
+    aspect-ratio: 21/9;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+    background: #000;
+    margin-bottom: 1.5rem;
+  }
+  .video-hero video, .video-hero iframe {
+    width: 100%; height: 100%; object-fit: cover; display: block; border: 0;
+  }
+  .video-hero-overlay {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 2rem 1.8rem 1.5rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.78), transparent);
+    pointer-events: none;
+  }
+  .video-hero-overlay .vh-label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 0.4rem;
+  }
+  .video-hero-overlay .vh-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.4vw, 1.8rem);
+    font-weight: 700; color: white; line-height: 1.25;
+  }
+  .video-hero .vh-play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 86px; height: 86px; border-radius: 50%;
+    background: rgba(196,144,58,0.95);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 2rem;
+    box-shadow: 0 12px 36px rgba(196,144,58,0.55);
+    cursor: pointer; transition: transform 0.25s;
+    border: 4px solid rgba(255,255,255,0.85);
+  }
+  .video-hero .vh-play:hover { transform: translate(-50%, -50%) scale(1.08); }
+  .video-hero .vh-play.hidden { display: none; }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .video-card {
+    position: relative; border-radius: 14px; overflow: hidden;
+    aspect-ratio: 16/9; cursor: pointer;
+    background: #0a1525 center/cover no-repeat;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .video-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.6); }
+  .video-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,21,37,0.85) 0%, rgba(10,21,37,0.1) 50%, transparent 100%);
+    pointer-events: none;
+  }
+  .video-card .vc-play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(196,144,58,0.92);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.3rem;
+    border: 3px solid rgba(255,255,255,0.85);
+    z-index: 2;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .video-card:hover .vc-play { transform: translate(-50%, -50%) scale(1.12); background: var(--gold-light); }
+  .video-card .vc-meta {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 1.1rem 1rem 0.9rem;
+    z-index: 2;
+    color: white;
+  }
+  .video-card .vc-cat {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 0.3rem;
+  }
+  .video-card .vc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.98rem; font-weight: 600; line-height: 1.3;
+  }
+  .video-card .vc-duration {
+    position: absolute; top: 0.8rem; right: 0.8rem;
+    background: rgba(0,0,0,0.7); color: white;
+    font-size: 0.7rem; font-weight: 600;
+    padding: 0.18rem 0.55rem; border-radius: 4px;
+    z-index: 2;
+  }
+  .video-card.featured { grid-column: span 2; aspect-ratio: 16/9; }
+  .video-empty {
+    grid-column: 1 / -1;
+    text-align: center; padding: 3rem 1rem;
+    color: rgba(255,255,255,0.55); font-size: 0.9rem;
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: 12px;
+  }
+
+  /* ── VIDEO LIGHTBOX ── */
+  .video-lightbox {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(5,12,22,0.96);
+    justify-content: center; align-items: center;
+    padding: 2rem;
+  }
+  .video-lightbox.open { display: flex; }
+  .video-lightbox .vl-content {
+    width: min(1100px, 96vw);
+    max-height: 88vh;
+    aspect-ratio: 16/9;
+    background: #000; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    position: relative;
+  }
+  .video-lightbox video, .video-lightbox iframe {
+    width: 100%; height: 100%; display: block; border: 0;
+  }
+  .video-lightbox .vl-close {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    color: white; font-size: 1.5rem; cursor: pointer;
+    background: rgba(255,255,255,0.15); width: 44px; height: 44px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: none; transition: background 0.2s; z-index: 10;
+  }
+  .video-lightbox .vl-close:hover { background: rgba(255,255,255,0.3); }
+  .video-lightbox .vl-caption {
+    position: absolute; bottom: -2.5rem; left: 0; right: 0;
+    text-align: center; color: rgba(255,255,255,0.85);
+    font-size: 0.9rem;
+  }
+
   /* ── LIGHTBOX ── */
   .lightbox {
     display: none; position: fixed; inset: 0; z-index: 9999;
@@ -412,6 +582,8 @@
   @media (max-width: 900px) {
     .about-grid, .location-grid, .enquiry-grid { grid-template-columns: 1fr; gap: 2rem; }
     .gallery-item.featured { grid-column: span 1; }
+    .video-card.featured { grid-column: span 1; }
+    .video-hero { aspect-ratio: 16/9; }
     .nav-links { display: none; }
     .form-row { grid-template-columns: 1fr; }
   }
@@ -435,6 +607,7 @@
   <div class="nav-links">
     <a href="#about">About</a>
     <a href="#gallery">Gallery</a>
+    <a href="#cinematic">Drone Tour</a>
     <a href="#availability">Availability</a>
     <a href="#why-prism">Why Us</a>
     <a href="#investors">For Investors</a>
@@ -628,6 +801,36 @@
   <img id="lightboxImg" src="" alt="">
   <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); changeLightbox(1)">›</button>
   <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- CINEMATIC / DRONE FOOTAGE -->
+<hr class="divider">
+<section class="section video-section" id="cinematic">
+  <div class="section-inner">
+    <div class="section-tag">Cinematic Tour</div>
+    <div class="section-title">See It <em>From Above</em>.<br>Walk It From Within.</div>
+    <p class="section-sub">Aerial drone footage and on-the-ground walkthroughs of the Lugbe Extension development — captured at golden hour, in 4K.</p>
+
+    <div class="video-tabs" id="videoTabs">
+      <div class="video-tab active" data-cat="all" onclick="filterVideos('all', this)">All Videos</div>
+      <div class="video-tab" data-cat="aerial" onclick="filterVideos('aerial', this)">🛩 Drone / Aerial</div>
+      <div class="video-tab" data-cat="walkthrough" onclick="filterVideos('walkthrough', this)">🚶 Walkthrough</div>
+      <div class="video-tab" data-cat="interior" onclick="filterVideos('interior', this)">🛋 Interior</div>
+      <div class="video-tab" data-cat="exterior" onclick="filterVideos('exterior', this)">🏢 Exterior</div>
+    </div>
+
+    <div id="videoHeroWrap"></div>
+    <div class="video-grid" id="videoGrid">
+      <div class="video-empty">No videos uploaded yet — check back soon for drone footage and walkthroughs.</div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO LIGHTBOX -->
+<div class="video-lightbox" id="videoLightbox" onclick="closeVideoLightboxOutside(event)">
+  <div class="vl-content" id="videoLightboxContent" onclick="event.stopPropagation()"></div>
+  <button class="vl-close" onclick="closeVideoLightbox()">✕</button>
+  <div class="vl-caption" id="videoLightboxCaption"></div>
 </div>
 
 <!-- SPECS -->
@@ -1154,12 +1357,188 @@ async function loadGalleryData() {
     }
     const data = await res.json();
     if (Array.isArray(data.gallery)) renderGallery(data.gallery);
+    if (Array.isArray(data.videos)) renderVideoSection(data.videos);
   } catch (err) {
-    console.warn('Gallery data unavailable; using built-in gallery.', err);
+    console.warn('Gallery/video data unavailable; using built-in content.', err);
   }
 }
 
 document.addEventListener('DOMContentLoaded', loadGalleryData);
+
+// ── CINEMATIC / VIDEO RENDERING ──
+let allVideos = [];
+
+function detectVideoType(src) {
+  if (!src) return 'file';
+  const s = src.toLowerCase();
+  if (s.includes('youtube.com/watch') || s.includes('youtu.be/') || s.includes('youtube.com/embed')) return 'youtube';
+  if (s.includes('vimeo.com/')) return 'vimeo';
+  if (s.match(/\.(mp4|webm|mov|mkv|ogg)(\?|$)/)) return 'file';
+  if (s.startsWith('uploads/') || s.startsWith('/uploads/')) return 'file';
+  return 'external';
+}
+function extractYouTubeId(url) {
+  const m = (url || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+  return m ? m[1] : '';
+}
+function extractVimeoId(url) {
+  const m = (url || '').match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return m ? m[1] : '';
+}
+function autoPoster(src) {
+  const type = detectVideoType(src);
+  if (type === 'youtube') {
+    const id = extractYouTubeId(src);
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+  }
+  return '';
+}
+
+function categoryLabel(cat) {
+  const map = {
+    aerial: '🛩 Drone Aerial',
+    walkthrough: '🚶 Walkthrough',
+    interior: '🛋 Interior',
+    exterior: '🏢 Exterior',
+    testimonial: '💬 Testimonial'
+  };
+  return map[cat] || '🎬 Video';
+}
+
+function renderVideoSection(videos) {
+  allVideos = (videos || []).filter(v => v && v.src);
+  const heroWrap = document.getElementById('videoHeroWrap');
+  const grid = document.getElementById('videoGrid');
+  if (!grid) return;
+
+  if (!allVideos.length) {
+    heroWrap.innerHTML = '';
+    grid.innerHTML = `<div class="video-empty">No videos uploaded yet — check back soon for drone footage and walkthroughs.</div>`;
+    return;
+  }
+
+  // Featured hero: first featured video, or first video overall.
+  const hero = allVideos.find(v => v.featured) || allVideos[0];
+  const heroPoster = hero.poster || autoPoster(hero.src);
+  const heroType = detectVideoType(hero.src);
+
+  let heroMedia;
+  if (heroType === 'file') {
+    heroMedia = `<video id="videoHeroPlayer" ${heroPoster ? `poster="${escapeHtml(heroPoster)}"` : ''}
+                  src="${escapeHtml(hero.src)}" preload="metadata" playsinline></video>`;
+  } else if (heroType === 'youtube') {
+    const id = extractYouTubeId(hero.src);
+    heroMedia = `<div id="videoHeroPlayer" style="position:relative;cursor:pointer;height:100%;"
+                  data-yt="${escapeHtml(id)}"
+                  ${heroPoster ? `style="background:url('${escapeHtml(heroPoster)}') center/cover #000;height:100%;"` : ''}></div>`;
+  } else if (heroType === 'vimeo') {
+    const id = extractVimeoId(hero.src);
+    heroMedia = `<div id="videoHeroPlayer" style="position:relative;cursor:pointer;height:100%;background:#000;"
+                  data-vimeo="${escapeHtml(id)}"></div>`;
+  } else {
+    heroMedia = `<div id="videoHeroPlayer" style="display:flex;align-items:center;justify-content:center;color:#fff;background:#000;height:100%;">External link</div>`;
+  }
+
+  heroWrap.innerHTML = `
+    <div class="video-hero" data-id="${escapeHtml(hero.id || '')}"
+         ${heroType !== 'file' && heroPoster ? `style="background:url('${escapeHtml(heroPoster)}') center/cover #000;"` : ''}>
+      ${heroType === 'file' ? heroMedia : ''}
+      <button class="vh-play" id="videoHeroPlay" aria-label="Play video">▶</button>
+      <div class="video-hero-overlay">
+        <div class="vh-label">${escapeHtml(categoryLabel(hero.category))} ${hero.featured ? '· Featured' : ''}</div>
+        <div class="vh-title">${escapeHtml(hero.caption || 'Cinematic Tour')}</div>
+      </div>
+    </div>
+  `;
+
+  const heroEl = heroWrap.querySelector('.video-hero');
+  const playBtn = heroWrap.querySelector('#videoHeroPlay');
+  if (heroEl && playBtn) {
+    const playHandler = (e) => {
+      e.stopPropagation();
+      openVideoLightbox(hero);
+    };
+    playBtn.addEventListener('click', playHandler);
+    heroEl.addEventListener('click', playHandler);
+  }
+
+  // Grid — show remaining videos (skip the hero itself)
+  const rest = allVideos.filter(v => v !== hero);
+  if (!rest.length) {
+    grid.innerHTML = `<div class="video-empty" style="border:none;padding:1rem;">Featured cinematic tour above. More clips coming soon.</div>`;
+    return;
+  }
+  grid.innerHTML = rest.map((v, i) => {
+    const poster = v.poster || autoPoster(v.src);
+    return `
+      <div class="video-card${v.featured ? ' featured' : ''}" data-cat="${escapeHtml(v.category || 'aerial')}"
+           ${poster ? `style="background-image:url('${escapeHtml(poster)}');"` : ''}
+           onclick="openVideoLightboxById('${escapeHtml(v.id || '')}', ${allVideos.indexOf(v)})">
+        <div class="vc-play">▶</div>
+        <div class="vc-meta">
+          <div class="vc-cat">${escapeHtml(categoryLabel(v.category))}</div>
+          <div class="vc-title">${escapeHtml(v.caption || 'Untitled')}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterVideos(cat, btn) {
+  document.querySelectorAll('.video-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.video-card').forEach(card => {
+    const c = card.dataset.cat || '';
+    card.style.display = (cat === 'all' || c === cat) ? '' : 'none';
+  });
+}
+
+function openVideoLightboxById(id, idx) {
+  const v = (id && allVideos.find(x => x.id === id)) || allVideos[idx] || null;
+  if (v) openVideoLightbox(v);
+}
+
+function openVideoLightbox(v) {
+  const lb = document.getElementById('videoLightbox');
+  const content = document.getElementById('videoLightboxContent');
+  const caption = document.getElementById('videoLightboxCaption');
+  const type = detectVideoType(v.src);
+
+  if (type === 'file') {
+    content.innerHTML = `<video src="${escapeHtml(v.src)}" controls autoplay playsinline ${v.poster ? `poster="${escapeHtml(v.poster)}"` : ''}></video>`;
+  } else if (type === 'youtube') {
+    const id = extractYouTubeId(v.src);
+    content.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>`;
+  } else if (type === 'vimeo') {
+    const id = extractVimeoId(v.src);
+    content.innerHTML = `<iframe src="https://player.vimeo.com/video/${id}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else {
+    window.open(v.src, '_blank', 'noopener');
+    return;
+  }
+
+  caption.textContent = (v.caption || '') + (v.description ? ' · ' + v.description : '');
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVideoLightbox() {
+  const lb = document.getElementById('videoLightbox');
+  const content = document.getElementById('videoLightboxContent');
+  lb.classList.remove('open');
+  // Stop playback by clearing the embed
+  content.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function closeVideoLightboxOutside(e) {
+  if (e.target === document.getElementById('videoLightbox')) closeVideoLightbox();
+}
+
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('videoLightbox');
+  if (lb && lb.classList.contains('open') && e.key === 'Escape') closeVideoLightbox();
+});
 
 function openLightbox(idx) {
   currentIdx = idx;

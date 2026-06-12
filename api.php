@@ -40,7 +40,7 @@ if ($action === 'login') {
     exit;
 }
 
-if (in_array($action, ['saveData', 'uploadImage'])) {
+if (in_array($action, ['saveData', 'uploadImage', 'uploadVideo'])) {
     if (empty($_SESSION['prism_admin'])) {
         http_response_code(401);
         echo json_encode(['error' => 'Unauthorized']);
@@ -102,6 +102,51 @@ switch ($action) {
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to save file']);
+        }
+        break;
+
+    case 'uploadVideo':
+        if (!isset($_FILES['file'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'No file uploaded']);
+            exit;
+        }
+
+        $file = $_FILES['file'];
+
+        if (!empty($file['error']) && $file['error'] !== UPLOAD_ERR_OK) {
+            $errMap = [
+                UPLOAD_ERR_INI_SIZE => 'File exceeds server upload_max_filesize. Compress the video or split into shorter clips.',
+                UPLOAD_ERR_FORM_SIZE => 'File exceeds the form size limit.',
+                UPLOAD_ERR_PARTIAL => 'File was only partially uploaded. Try again.',
+                UPLOAD_ERR_NO_TMP_DIR => 'Server tmp directory missing.',
+                UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.'
+            ];
+            http_response_code(400);
+            echo json_encode(['error' => $errMap[$file['error']] ?? 'Upload error']);
+            exit;
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        $validTypes = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-matroska', 'video/ogg'];
+        if (!in_array($mime_type, $validTypes)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid video type. Allowed: MP4, WebM, MOV, MKV, OGG. Detected: ' . $mime_type]);
+            exit;
+        }
+
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)) ?: 'mp4';
+        $newName = uniqid('vid_') . '.' . $ext;
+        $destPath = $uploadDir . $newName;
+
+        if (move_uploaded_file($file['tmp_name'], $destPath)) {
+            echo json_encode(['url' => 'uploads/' . $newName]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to save video file']);
         }
         break;
 

@@ -18,8 +18,15 @@ const mimeTypes = {
     '.jpg': 'image/jpeg',
     '.jpeg': 'image/jpeg',
     '.webp': 'image/webp',
-    '.svg': 'image/svg+xml'
+    '.svg': 'image/svg+xml',
+    '.mp4': 'video/mp4',
+    '.webm': 'video/webm',
+    '.mov': 'video/quicktime',
+    '.mkv': 'video/x-matroska',
+    '.ogg': 'video/ogg'
 };
+
+const VIDEO_EXTS = ['.mp4', '.webm', '.mov', '.mkv', '.ogg'];
 
 const server = http.createServer((req, res) => {
     // 1. API ROUTES (Simulating api.php)
@@ -46,8 +53,8 @@ const server = http.createServer((req, res) => {
             return;
         }
 
-        // UPLOAD IMAGE (Simple multipart simulation)
-        if (action === 'uploadImage' && req.method === 'POST') {
+        // UPLOAD IMAGE / VIDEO (Simple multipart simulation)
+        if ((action === 'uploadImage' || action === 'uploadVideo') && req.method === 'POST') {
             let body = Buffer.alloc(0);
             req.on('data', chunk => body = Buffer.concat([body, chunk]));
             req.on('end', () => {
@@ -55,13 +62,15 @@ const server = http.createServer((req, res) => {
                 const boundary = req.headers['content-type'].split('boundary=')[1];
                 const parts = body.toString('binary').split(boundary);
                 let savedUrl = '';
+                const isVideo = action === 'uploadVideo';
 
                 for (let part of parts) {
                     if (part.includes('filename="')) {
                         const fileMatch = part.match(/filename="(.*?)"/);
                         if (fileMatch) {
-                            const ext = path.extname(fileMatch[1]) || '.png';
-                            const newName = 'img_' + Date.now() + ext;
+                            const ext = (path.extname(fileMatch[1]) || (isVideo ? '.mp4' : '.png')).toLowerCase();
+                            const prefix = isVideo ? 'vid_' : 'img_';
+                            const newName = prefix + Date.now() + ext;
 
                             // Extract just the actual file data (strip headers)
                             const headerEnd = part.indexOf('\r\n\r\n') + 4;
@@ -82,8 +91,32 @@ const server = http.createServer((req, res) => {
     }
 
     // 2. STATIC FILE SERVER
-    let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+    let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : decodeURIComponent(req.url.split('?')[0]));
     const ext = path.extname(filePath).toLowerCase();
+    const contentType = mimeTypes[ext] || 'application/octet-stream';
+
+    // Range request support — needed for HTML5 <video> seeking / streaming
+    if (VIDEO_EXTS.includes(ext) && req.headers.range) {
+        fs.stat(filePath, (err, stat) => {
+            if (err) {
+                res.writeHead(err.code === 'ENOENT' ? 404 : 500);
+                return res.end(err.code === 'ENOENT' ? 'File Not Found' : 'Server Error');
+            }
+            const range = req.headers.range;
+            const parts = range.replace(/bytes=/, '').split('-');
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1;
+            const chunkSize = (end - start) + 1;
+            res.writeHead(206, {
+                'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunkSize,
+                'Content-Type': contentType
+            });
+            fs.createReadStream(filePath, { start, end }).pipe(res);
+        });
+        return;
+    }
 
     fs.readFile(filePath, (err, content) => {
         if (err) {
@@ -95,7 +128,7 @@ const server = http.createServer((req, res) => {
                 res.end('Server Error');
             }
         } else {
-            res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
+            res.writeHead(200, { 'Content-Type': contentType });
             res.end(content, ext === '.json' ? 'utf8' : 'binary');
         }
     });

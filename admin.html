@@ -417,7 +417,8 @@
 
     /* ── ADD PROPERTY FORM ── */
     #add-form-section,
-    #gallery-form-section {
+    #gallery-form-section,
+    #video-form-section {
       display: none;
       background: var(--card);
       border: 1px solid var(--border);
@@ -427,8 +428,37 @@
     }
 
     #add-form-section.visible,
-    #gallery-form-section.visible {
+    #gallery-form-section.visible,
+    #video-form-section.visible {
       display: block;
+    }
+
+    .video-thumb {
+      width: 96px; height: 56px; border-radius: 6px;
+      background: #000 center/cover no-repeat;
+      border: 1px solid var(--border);
+      position: relative;
+      display: inline-block;
+    }
+    .video-thumb::after {
+      content: '▶'; position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.9); font-size: 1.1rem;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+    .upload-hint {
+      font-size: 0.72rem; color: var(--muted);
+      margin-top: 0.3rem; line-height: 1.4;
+    }
+    .video-progress-bar {
+      height: 6px; background: rgba(0,0,0,0.4); border-radius: 4px;
+      overflow: hidden; margin-top: 0.5rem; display: none;
+    }
+    .video-progress-bar.show { display: block; }
+    .video-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      transition: width 0.2s;
     }
 
     .form-section-title {
@@ -762,6 +792,7 @@
         <div class="sidebar-label">Manage</div>
         <button class="sidebar-item active" onclick="showTab('properties', this)">🏠 Properties</button>
         <button class="sidebar-item" onclick="showTab('gallery', this)">🖼️ Gallery</button>
+        <button class="sidebar-item" onclick="showTab('videos', this)">🎬 Videos</button>
         <button class="sidebar-item" onclick="showTab('activity', this)">📋 Activity Log</button>
       </div>
       <div class="sidebar-divider"></div>
@@ -992,6 +1023,107 @@
         </div>
       </div>
 
+      <!-- VIDEOS TAB -->
+      <div id="tab-videos" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Cinematic & Drone Videos</h1>
+            <p class="page-sub">Upload drone footage, walkthroughs, and aerial tours. Direct file upload or paste a YouTube / Vimeo / direct video URL.</p>
+          </div>
+          <button class="btn-primary" onclick="toggleVideoForm()">
+            <span id="video-add-btn-icon">+</span> Add Video
+          </button>
+        </div>
+
+        <div id="video-form-section">
+          <div class="form-section-title" id="video-form-title">Add Video</div>
+          <form id="video-form" onsubmit="handleVideoSubmit(event)">
+            <input type="hidden" id="video-edit-id" value="">
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label class="form-label">Title / Caption *</label>
+                <input type="text" class="form-input" id="v-caption" placeholder="e.g. Estate Aerial Flythrough — Lugbe Extension" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="v-category">
+                  <option value="aerial">🛩 Drone / Aerial</option>
+                  <option value="walkthrough">🚶 Walkthrough</option>
+                  <option value="interior">🛋 Interior Tour</option>
+                  <option value="exterior">🏢 Exterior</option>
+                  <option value="testimonial">💬 Testimonial</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Featured (large tile)</label>
+                <select class="form-select" id="v-featured">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Video File (upload)</label>
+                <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;margin-bottom:0.5rem;" id="video-preview-area"></div>
+                <input type="file" id="v-file-upload" accept="video/mp4,video/webm,video/quicktime,video/x-matroska,video/ogg"
+                  style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.9rem;color:var(--cream);font-size:0.85rem;width:100%;cursor:pointer;">
+                <div class="video-progress-bar" id="v-progress"><div class="video-progress-fill" id="v-progress-fill"></div></div>
+                <div class="upload-hint">
+                  Supported: MP4, WebM, MOV, MKV, OGG.
+                  Drone footage from DJI/Autel is typically MP4.
+                  For files larger than your hosting upload limit (often 32–64 MB on shared hosting),
+                  upload to YouTube/Vimeo and paste the URL below instead.
+                </div>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Or paste Video URL (YouTube, Vimeo, or direct .mp4)</label>
+                <input type="text" class="form-input" id="v-src" placeholder="https://youtube.com/watch?v=…  ·  https://vimeo.com/…  ·  https://cdn.../drone.mp4">
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Poster / Thumbnail Image (optional but recommended)</label>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;" id="video-poster-preview"></div>
+                <input type="file" id="v-poster-upload" accept="image/*"
+                  style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.9rem;color:var(--cream);font-size:0.85rem;width:100%;cursor:pointer;margin-bottom:0.5rem;">
+                <input type="text" class="form-input" id="v-poster" placeholder="Or paste poster image URL...">
+                <div class="upload-hint">YouTube/Vimeo videos auto-generate a poster — skip this field for those.</div>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Description (optional)</label>
+                <textarea class="form-textarea" id="v-description" placeholder="Shot at golden hour. Shows the full block, perimeter wall, and Aso Rock backdrop."></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="video-submit-btn">Save Video</button>
+              <button type="button" class="btn-cancel" onclick="hideVideoForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-section" style="margin-top:2rem;">
+          <div class="table-header">
+            <span class="table-title">All Videos</span>
+          </div>
+          <div>
+            <table class="properties-table">
+              <thead>
+                <tr>
+                  <th>Preview</th>
+                  <th>Title</th>
+                  <th>Source</th>
+                  <th>Category</th>
+                  <th>Featured</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="videos-tbody">
+                <tr>
+                  <td colspan="6" style="text-align:center;color:#6a7a70;padding:3rem;">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ACTIVITY TAB -->
       <div id="tab-activity" style="display:none;">
         <div class="page-header">
@@ -1022,7 +1154,10 @@
   <script>
     let allProperties = [];
     let allGallery = [];
+    let allVideos = [];
     let pendingGalleryImage = '';
+    let pendingVideoSrc = '';
+    let pendingVideoPoster = '';
 
     // ── UI Helpers
     function showLoading() { document.getElementById('loading-overlay').classList.add('show'); }
@@ -1038,10 +1173,12 @@
     function showTab(tab, target) {
       document.getElementById('tab-properties').style.display = tab === 'properties' ? 'block' : 'none';
       document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
+      document.getElementById('tab-videos').style.display = tab === 'videos' ? 'block' : 'none';
       document.getElementById('tab-activity').style.display = tab === 'activity' ? 'block' : 'none';
       document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
       if (target) target.classList.add('active');
       if (tab === 'gallery') loadGallery();
+      if (tab === 'videos') loadVideos();
       if (tab === 'activity') loadActivity();
     }
 
@@ -1554,12 +1691,325 @@
       }
     }
 
+    // ─────────── VIDEOS ───────────
+    function detectVideoType(src) {
+      if (!src) return 'file';
+      const s = src.toLowerCase();
+      if (s.includes('youtube.com/watch') || s.includes('youtu.be/') || s.includes('youtube.com/embed')) return 'youtube';
+      if (s.includes('vimeo.com/')) return 'vimeo';
+      if (s.match(/\.(mp4|webm|mov|mkv|ogg)(\?|$)/)) return 'file';
+      if (s.startsWith('uploads/') || s.startsWith('/uploads/')) return 'file';
+      return 'external';
+    }
+
+    function extractYouTubeId(url) {
+      const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+      return m ? m[1] : '';
+    }
+
+    function extractVimeoId(url) {
+      const m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      return m ? m[1] : '';
+    }
+
+    function autoPoster(src) {
+      const type = detectVideoType(src);
+      if (type === 'youtube') {
+        const id = extractYouTubeId(src);
+        return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+      }
+      return '';
+    }
+
+    async function uploadVideoFile(file, onProgress) {
+      return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api.php?action=uploadVideo');
+        xhr.withCredentials = true;
+        xhr.upload.onprogress = e => {
+          if (e.lengthComputable && onProgress) onProgress((e.loaded / e.total) * 100);
+        };
+        xhr.onload = () => {
+          try {
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status >= 200 && xhr.status < 300 && result.url) resolve(result.url);
+            else reject(new Error(result.error || 'Upload failed'));
+          } catch {
+            reject(new Error('Invalid server response'));
+          }
+        };
+        xhr.onerror = () => reject(new Error('Network error during upload'));
+        xhr.send(formData);
+      });
+    }
+
+    document.getElementById('v-file-upload').addEventListener('change', async function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const progressBar = document.getElementById('v-progress');
+      const progressFill = document.getElementById('v-progress-fill');
+      progressBar.classList.add('show');
+      progressFill.style.width = '0%';
+      try {
+        const url = await uploadVideoFile(file, pct => { progressFill.style.width = pct.toFixed(0) + '%'; });
+        pendingVideoSrc = url;
+        document.getElementById('v-src').value = url;
+        renderVideoPreview();
+        showToast('Video uploaded: ' + file.name);
+      } catch (err) {
+        showToast('Upload error: ' + err.message, 'error');
+      } finally {
+        setTimeout(() => progressBar.classList.remove('show'), 800);
+        e.target.value = '';
+      }
+    });
+
+    document.getElementById('v-poster-upload').addEventListener('change', async function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadImageFile(file);
+        pendingVideoPoster = url;
+        document.getElementById('v-poster').value = url;
+        renderVideoPreview();
+        showToast('Poster uploaded: ' + file.name);
+      } catch (err) {
+        showToast('Upload error: ' + err.message, 'error');
+      }
+      e.target.value = '';
+    });
+
+    document.getElementById('v-src').addEventListener('input', renderVideoPreview);
+    document.getElementById('v-poster').addEventListener('input', renderVideoPreview);
+
+    function renderVideoPreview() {
+      const area = document.getElementById('video-preview-area');
+      const posterArea = document.getElementById('video-poster-preview');
+      const src = document.getElementById('v-src').value.trim();
+      const posterField = document.getElementById('v-poster').value.trim();
+      const type = detectVideoType(src);
+      const poster = posterField || autoPoster(src);
+
+      if (src) {
+        if (type === 'file') {
+          area.innerHTML = `
+            <video src="${escapeHtml(src)}" ${poster ? `poster="${escapeHtml(poster)}"` : ''} controls
+              style="width:240px;height:135px;border-radius:8px;background:#000;border:1px solid var(--border);"></video>
+            <div style="font-size:0.75rem;color:var(--muted);">
+              <div><strong style="color:var(--cream);">Type:</strong> Direct file</div>
+              <div style="word-break:break-all;max-width:300px;">${escapeHtml(src)}</div>
+            </div>`;
+        } else if (type === 'youtube') {
+          const id = extractYouTubeId(src);
+          area.innerHTML = `
+            <div style="width:240px;height:135px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000;">
+              <iframe src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen
+                style="width:100%;height:100%;"></iframe>
+            </div>
+            <div style="font-size:0.75rem;color:var(--muted);">
+              <div><strong style="color:var(--cream);">Type:</strong> YouTube</div>
+              <div>Video ID: ${escapeHtml(id)}</div>
+            </div>`;
+        } else if (type === 'vimeo') {
+          const id = extractVimeoId(src);
+          area.innerHTML = `
+            <div style="width:240px;height:135px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000;">
+              <iframe src="https://player.vimeo.com/video/${id}" frameborder="0" allowfullscreen
+                style="width:100%;height:100%;"></iframe>
+            </div>
+            <div style="font-size:0.75rem;color:var(--muted);">
+              <div><strong style="color:var(--cream);">Type:</strong> Vimeo</div>
+              <div>Video ID: ${escapeHtml(id)}</div>
+            </div>`;
+        } else {
+          area.innerHTML = `<div style="padding:0.8rem 1rem;background:rgba(255,193,7,0.1);border-radius:8px;color:var(--gold);font-size:0.8rem;">External URL — will open in new tab on the site.</div>`;
+        }
+      } else {
+        area.innerHTML = '';
+      }
+
+      posterArea.innerHTML = poster ? `
+        <div style="position:relative;">
+          <img src="${escapeHtml(poster)}" style="width:120px;height:68px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
+        </div>` : '';
+    }
+
+    function videoTypeBadge(src) {
+      const type = detectVideoType(src);
+      const map = {
+        file: { label: '📁 File', color: '#1B6B2A' },
+        youtube: { label: '▶ YouTube', color: '#cc0000' },
+        vimeo: { label: '▶ Vimeo', color: '#1ab7ea' },
+        external: { label: '🔗 External', color: '#888' }
+      };
+      const t = map[type] || map.external;
+      return `<span style="background:${t.color}33;color:${t.color};font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:600;">${t.label}</span>`;
+    }
+
+    function renderVideos(items) {
+      allVideos = items || [];
+      const tbody = document.getElementById('videos-tbody');
+      if (!allVideos.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#6a7a70;padding:3rem;">No videos yet. Add your first drone footage above.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = allVideos.map(item => {
+        const poster = item.poster || autoPoster(item.src);
+        const thumb = poster
+          ? `<div class="video-thumb" style="background-image:url('${escapeHtml(poster)}');"></div>`
+          : `<div class="video-thumb"></div>`;
+        return `
+        <tr data-id="${item.id}">
+          <td>${thumb}</td>
+          <td>
+            <div class="prop-name-cell">
+              <strong>${escapeHtml(item.caption || 'Untitled')}</strong>
+              <small style="word-break:break-all;">${escapeHtml((item.src || '').slice(0, 60))}${item.src && item.src.length > 60 ? '…' : ''}</small>
+            </div>
+          </td>
+          <td>${videoTypeBadge(item.src)}</td>
+          <td style="color:#aaa;font-size:0.8rem;">${escapeHtml(item.category || 'aerial')}</td>
+          <td><span class="status-badge ${item.featured ? 'status-available' : 'status-off-plan'}">${item.featured ? 'Featured' : 'Standard'}</span></td>
+          <td>
+            <div class="row-actions">
+              <button class="btn-sm btn-edit" onclick="editVideo('${item.id}')">✏️ Edit</button>
+              <button class="btn-sm btn-delete" onclick="deleteVideo('${item.id}')">🗑 Delete</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function loadVideos() {
+      try {
+        const data = await loadData();
+        renderVideos(data.videos || []);
+      } catch (err) {
+        document.getElementById('videos-tbody').innerHTML =
+          `<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">Error loading videos.</td></tr>`;
+      }
+    }
+
+    function toggleVideoForm() {
+      const s = document.getElementById('video-form-section');
+      if (s.classList.contains('visible')) { hideVideoForm(); return; }
+      s.classList.add('visible');
+      document.getElementById('video-form-title').textContent = 'Add Video';
+      document.getElementById('video-edit-id').value = '';
+      document.getElementById('video-submit-btn').textContent = 'Save Video';
+      document.getElementById('video-add-btn-icon').textContent = '−';
+      document.getElementById('video-form').reset();
+      pendingVideoSrc = '';
+      pendingVideoPoster = '';
+      renderVideoPreview();
+      s.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideVideoForm() {
+      document.getElementById('video-form-section').classList.remove('visible');
+      document.getElementById('video-add-btn-icon').textContent = '+';
+    }
+
+    function editVideo(id) {
+      const item = allVideos.find(x => x.id === id);
+      if (!item) return;
+      document.getElementById('video-form-section').classList.add('visible');
+      document.getElementById('video-form-title').textContent = 'Edit Video';
+      document.getElementById('video-edit-id').value = item.id;
+      document.getElementById('video-submit-btn').textContent = 'Update Video';
+      document.getElementById('video-add-btn-icon').textContent = '−';
+      document.getElementById('v-caption').value = item.caption || '';
+      document.getElementById('v-category').value = item.category || 'aerial';
+      document.getElementById('v-featured').value = item.featured ? 'true' : 'false';
+      document.getElementById('v-src').value = item.src || '';
+      document.getElementById('v-poster').value = item.poster || '';
+      document.getElementById('v-description').value = item.description || '';
+      pendingVideoSrc = item.src || '';
+      pendingVideoPoster = item.poster || '';
+      renderVideoPreview();
+      document.getElementById('video-form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function handleVideoSubmit(e) {
+      e.preventDefault();
+      const src = document.getElementById('v-src').value.trim();
+      if (!src) { showToast('Please upload a video file or paste a video URL.', 'error'); return; }
+      showLoading();
+
+      const videoItem = {
+        src,
+        caption: document.getElementById('v-caption').value.trim(),
+        category: document.getElementById('v-category').value,
+        featured: document.getElementById('v-featured').value === 'true',
+        poster: document.getElementById('v-poster').value.trim(),
+        description: document.getElementById('v-description').value.trim(),
+        videoType: detectVideoType(src)
+      };
+
+      try {
+        const data = await loadData();
+        data.videos = data.videos || [];
+        data.activity = data.activity || [];
+        const editId = document.getElementById('video-edit-id').value;
+
+        if (editId) {
+          const idx = data.videos.findIndex(v => v.id === editId);
+          if (idx > -1) {
+            data.videos[idx] = { ...data.videos[idx], ...videoItem };
+            data.activity.unshift({ action: 'Updated video: ' + videoItem.caption, time: new Date().toISOString() });
+          }
+        } else {
+          data.videos.push({
+            id: 'vid_' + Date.now(),
+            createdAt: new Date().toISOString(),
+            ...videoItem
+          });
+          data.activity.unshift({ action: 'Added video: ' + videoItem.caption, time: new Date().toISOString() });
+        }
+
+        await saveData(data);
+        renderVideos(data.videos);
+        hideVideoForm();
+        document.getElementById('video-form').reset();
+        pendingVideoSrc = '';
+        pendingVideoPoster = '';
+        renderVideoPreview();
+        showToast(editId ? 'Video updated!' : 'Video added!');
+      } catch (err) {
+        showToast('Error saving video: ' + err.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function deleteVideo(id) {
+      const item = allVideos.find(x => x.id === id);
+      if (!confirm(`Delete "${item?.caption || id}" video?`)) return;
+      showLoading();
+      try {
+        const data = await loadData();
+        data.videos = (data.videos || []).filter(v => v.id !== id);
+        data.activity = data.activity || [];
+        data.activity.unshift({ action: 'Deleted video: ' + (item?.caption || id), time: new Date().toISOString() });
+        await saveData(data);
+        renderVideos(data.videos);
+        showToast('Video deleted');
+      } catch (err) {
+        showToast('Error deleting video: ' + err.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    }
+
     // ── Init
     async function init() {
       try {
         const data = await loadData();
         renderProperties(data.properties || []);
         renderGallery(data.gallery || []);
+        renderVideos(data.videos || []);
       } catch (err) {
         document.getElementById('properties-tbody').innerHTML =
           `<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">

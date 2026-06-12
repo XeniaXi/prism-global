@@ -440,6 +440,38 @@
       position: relative;
       display: inline-block;
     }
+
+    /* Smooth rearrangement when items are deleted in admin */
+    .properties-table tbody tr {
+      animation: row-in 0.35s ease both;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .properties-table tbody tr.removing {
+      opacity: 0; transform: translateX(-12px);
+      pointer-events: none;
+    }
+    @keyframes row-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* Image-preview thumbnails dynamically reflow when one is removed */
+    #image-preview-area, #gallery-preview-area, #video-preview-area, #video-poster-preview {
+      transition: min-height 0.25s ease;
+    }
+    #image-preview-area > div, #gallery-preview-area > div,
+    #video-preview-area > div, #video-poster-preview > div {
+      animation: tile-in 0.3s ease both;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    #image-preview-area > div.removing, #gallery-preview-area > div.removing,
+    #video-preview-area > div.removing, #video-poster-preview > div.removing {
+      opacity: 0; transform: scale(0.85); pointer-events: none;
+    }
+    @keyframes tile-in {
+      from { opacity: 0; transform: translateY(4px) scale(0.95); }
+      to   { opacity: 1; transform: none; }
+    }
     .video-thumb::after {
       content: '▶'; position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
@@ -1288,19 +1320,24 @@
     }
 
     function removePreviewImage(idx) {
-      const allImgs = [
-        ...pendingUploadedImages,
-        document.getElementById('f-img1').value.trim(),
-        document.getElementById('f-img2').value.trim(),
-        document.getElementById('f-img3').value.trim()
-      ].filter(Boolean);
-      if (idx < pendingUploadedImages.length) {
-        pendingUploadedImages.splice(idx, 1);
+      const area = document.getElementById('image-preview-area');
+      const tile = area.children[idx];
+      const apply = () => {
+        if (idx < pendingUploadedImages.length) {
+          pendingUploadedImages.splice(idx, 1);
+        } else {
+          const urlIdx = idx - pendingUploadedImages.length;
+          const ids = ['f-img1', 'f-img2', 'f-img3'];
+          if (ids[urlIdx]) document.getElementById(ids[urlIdx]).value = '';
+        }
+        renderImagePreviews();
+      };
+      if (tile) {
+        tile.classList.add('removing');
+        setTimeout(apply, 200);
       } else {
-        const urlIdx = idx - pendingUploadedImages.length;
-        ['f-img1', 'f-img2', 'f-img3'][urlIdx] && (document.getElementById(['f-img1', 'f-img2', 'f-img3'][urlIdx]).value = '');
+        apply();
       }
-      renderImagePreviews();
     }
 
     document.getElementById('g-img-upload').addEventListener('change', async function (e) {
@@ -1572,11 +1609,18 @@
       }
     }
 
+    function fadeRowOut(tbodyId, id) {
+      const row = document.querySelector(`#${tbodyId} tr[data-id="${id}"]`);
+      if (row) row.classList.add('removing');
+      return new Promise(r => setTimeout(r, row ? 220 : 0));
+    }
+
     async function deleteGalleryItem(id) {
       const item = allGallery.find(x => x.id === id);
       if (!confirm(`Delete "${item?.caption || id}" from the homepage gallery?`)) return;
 
       showLoading();
+      await fadeRowOut('gallery-tbody', id);
       try {
         const data = await loadData();
         data.gallery = (data.gallery || []).filter(item => item.id !== id);
@@ -1657,6 +1701,7 @@
       if (!confirm(`Delete "${p?.title || id}"?`)) return;
 
       showLoading();
+      await fadeRowOut('properties-tbody', id);
       try {
         const data = await loadData();
         const title = data.properties.find(x => x.id === id)?.title || id;
@@ -2002,6 +2047,7 @@
       const item = allVideos.find(x => x.id === id);
       if (!confirm(`Delete "${item?.caption || id}" video?`)) return;
       showLoading();
+      await fadeRowOut('videos-tbody', id);
       try {
         const data = await loadData();
         data.videos = (data.videos || []).filter(v => v.id !== id);

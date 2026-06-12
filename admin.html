@@ -482,6 +482,20 @@
       font-size: 0.72rem; color: var(--muted);
       margin-top: 0.3rem; line-height: 1.4;
     }
+    .upload-status {
+      margin-top: 0.5rem; padding: 0.6rem 0.9rem;
+      border-radius: 8px; font-size: 0.82rem; line-height: 1.5;
+      border: 1px solid;
+      word-break: break-word;
+    }
+    .upload-status.pending { background: rgba(255,193,7,0.08); border-color: rgba(255,193,7,0.4); color: var(--gold); }
+    .upload-status.success { background: rgba(27,107,42,0.12); border-color: rgba(27,107,42,0.5); color: #5fc973; }
+    .upload-status.error { background: rgba(224,82,82,0.10); border-color: rgba(224,82,82,0.5); color: #ff8585; }
+    .upload-status strong { color: var(--cream); }
+    .upload-status code {
+      background: rgba(0,0,0,0.35); padding: 1px 6px; border-radius: 4px;
+      font-family: monospace; font-size: 0.78rem; color: var(--cream);
+    }
     .video-progress-bar {
       height: 6px; background: rgba(0,0,0,0.4); border-radius: 4px;
       overflow: hidden; margin-top: 0.5rem; display: none;
@@ -1099,6 +1113,7 @@
                 <input type="file" id="v-file-upload" accept="video/mp4,video/webm,video/quicktime,video/x-matroska,video/ogg"
                   style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.9rem;color:var(--cream);font-size:0.85rem;width:100%;cursor:pointer;">
                 <div class="video-progress-bar" id="v-progress"><div class="video-progress-fill" id="v-progress-fill"></div></div>
+                <div id="v-upload-status" class="upload-status" style="display:none;"></div>
                 <div class="upload-hint">
                   Supported: MP4, WebM, MOV, MKV, OGG.
                   Drone footage from DJI/Autel is typically MP4.
@@ -1109,6 +1124,7 @@
               <div class="form-group form-full">
                 <label class="form-label">Or paste Video URL (YouTube, Vimeo, or direct .mp4)</label>
                 <input type="text" class="form-input" id="v-src" placeholder="https://youtube.com/watch?v=…  ·  https://vimeo.com/…  ·  https://cdn.../drone.mp4">
+                <div class="upload-hint">After a successful upload the file path appears here automatically — you don't have to type anything.</div>
               </div>
               <div class="form-group form-full">
                 <label class="form-label">Poster / Thumbnail Image (optional but recommended)</label>
@@ -1804,6 +1820,26 @@
       });
     }
 
+    function formatBytes(b) {
+      if (b < 1024) return b + ' B';
+      if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+      if (b < 1024 * 1024 * 1024) return (b / 1024 / 1024).toFixed(1) + ' MB';
+      return (b / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+    }
+
+    function setVideoUploadStatus(state, html) {
+      const el = document.getElementById('v-upload-status');
+      el.style.display = 'block';
+      el.className = 'upload-status ' + state;
+      el.innerHTML = html;
+    }
+
+    function clearVideoUploadStatus() {
+      const el = document.getElementById('v-upload-status');
+      el.style.display = 'none';
+      el.innerHTML = '';
+    }
+
     document.getElementById('v-file-upload').addEventListener('change', async function (e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -1811,13 +1847,24 @@
       const progressFill = document.getElementById('v-progress-fill');
       progressBar.classList.add('show');
       progressFill.style.width = '0%';
+      const safeName = escapeHtml(file.name);
+      const size = formatBytes(file.size);
+      setVideoUploadStatus('pending', `⏳ Uploading <strong>${safeName}</strong> (${size})… <span id="v-pct">0%</span>`);
       try {
-        const url = await uploadVideoFile(file, pct => { progressFill.style.width = pct.toFixed(0) + '%'; });
+        const url = await uploadVideoFile(file, pct => {
+          progressFill.style.width = pct.toFixed(0) + '%';
+          const pctEl = document.getElementById('v-pct');
+          if (pctEl) pctEl.textContent = pct.toFixed(0) + '%';
+        });
         pendingVideoSrc = url;
         document.getElementById('v-src').value = url;
         renderVideoPreview();
+        setVideoUploadStatus('success',
+          `✓ <strong>${safeName}</strong> uploaded successfully.<br>Saved as <code>${escapeHtml(url)}</code> — this will be used when you click <strong>Save Video</strong>.`);
         showToast('Video uploaded: ' + file.name);
       } catch (err) {
+        setVideoUploadStatus('error',
+          `✗ <strong>${safeName}</strong> failed to upload.<br>${escapeHtml(err.message)}<br><br>You can still add this video by uploading it to <strong>YouTube</strong> or <strong>Vimeo</strong> and pasting the URL in the field below.`);
         showToast('Upload error: ' + err.message, 'error');
       } finally {
         setTimeout(() => progressBar.classList.remove('show'), 800);
@@ -1962,6 +2009,7 @@
       document.getElementById('video-form').reset();
       pendingVideoSrc = '';
       pendingVideoPoster = '';
+      clearVideoUploadStatus();
       renderVideoPreview();
       s.scrollIntoView({ behavior: 'smooth' });
     }
@@ -1994,7 +2042,16 @@
     async function handleVideoSubmit(e) {
       e.preventDefault();
       const src = document.getElementById('v-src').value.trim();
-      if (!src) { showToast('Please upload a video file or paste a video URL.', 'error'); return; }
+      if (!src) {
+        const statusEl = document.getElementById('v-upload-status');
+        const hadFailure = statusEl && statusEl.classList.contains('error');
+        const msg = hadFailure
+          ? 'The video file upload failed (see the red message above). Paste a YouTube/Vimeo URL into the "Or paste Video URL" field to save this video without uploading.'
+          : 'No video selected. Either pick a file using "Choose File" above, OR paste a YouTube/Vimeo/direct .mp4 URL in the field below — then click Save Video.';
+        showToast(msg, 'error');
+        document.getElementById('v-src').focus();
+        return;
+      }
       showLoading();
 
       const videoItem = {
@@ -2034,6 +2091,7 @@
         document.getElementById('video-form').reset();
         pendingVideoSrc = '';
         pendingVideoPoster = '';
+        clearVideoUploadStatus();
         renderVideoPreview();
         showToast(editId ? 'Video updated!' : 'Video added!');
       } catch (err) {

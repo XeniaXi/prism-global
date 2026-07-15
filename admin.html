@@ -781,9 +781,7 @@
       <h2 style="font-family:'Playfair Display',serif;color:#FFC107;font-size:1.4rem;margin-bottom:0.25rem;">Prism
         Global</h2>
       <p style="color:#6a7a70;font-size:0.8rem;margin-bottom:1.5rem;">Admin Dashboard</p>
-      <input type="text" id="admin-user" placeholder="Your admin username" autocomplete="username"
-        style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:0.75rem;outline:none;">
-      <input type="password" id="admin-pass" placeholder="Your password" autocomplete="current-password"
+      <input type="password" id="admin-pass" placeholder="Enter password" autocomplete="current-password"
         style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:1rem;outline:none;"
         onkeydown="if(event.key==='Enter') checkLogin()">
       <button onclick="checkLogin()"
@@ -819,7 +817,6 @@
     }
 
     async function checkLogin() {
-      const username = document.getElementById('admin-user').value.trim().toLowerCase();
       const password = document.getElementById('admin-pass').value;
       const error = document.getElementById('login-error');
       error.style.display = 'none';
@@ -828,7 +825,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ password })
         });
         const result = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(result.error || 'Sign-in failed');

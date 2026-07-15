@@ -17,7 +17,6 @@ $dataFile = __DIR__ . '/data.json';
 $uploadDir = __DIR__ . '/uploads/';
 $privateDir = dirname(__DIR__) . '/prism-private';
 $auditFile = $privateDir . '/audit-log.jsonl';
-$usersFile = $privateDir . '/admin-users.json';
 $legacyPasswordHash = '7b449ef509eb63fc0dbccf41c88b79d1307004c453bbd5fff97fd53f1b066ad4';
 
 function respond(array $payload, int $status = 200): void
@@ -87,32 +86,7 @@ function audit_event(string $event, array $details = [], ?string $actor = null):
     );
 }
 
-function load_admin_users(): array
-{
-    global $usersFile;
-    $raw = getenv('PRISM_ADMIN_USERS_JSON') ?: '';
-    if ($raw === '' && is_file($usersFile)) {
-        $raw = (string) file_get_contents($usersFile);
-    }
-    $users = json_decode($raw, true);
-    return is_array($users) ? $users : [];
-}
 
-function verify_named_password(string $username, string $password, array $users): bool
-{
-    if (!array_key_exists($username, $users)) {
-        return false;
-    }
-    $entry = $users[$username];
-    $hash = is_array($entry) ? (string) ($entry['password_hash'] ?? '') : (string) $entry;
-    if ($hash === '') {
-        return false;
-    }
-    if (str_starts_with($hash, 'sha256:')) {
-        return hash_equals(substr($hash, 7), hash('sha256', $password));
-    }
-    return password_verify($password, $hash);
-}
 
 function require_admin(bool $csrf = false): void
 {
@@ -217,50 +191,40 @@ $action = (string) ($_GET['action'] ?? '');
 
 if ($action === 'login') {
     $input = input_json();
-    $username = strtolower(trim((string) ($input['username'] ?? '')));
     $password = (string) ($input['password'] ?? '');
 
-    if (!preg_match('/^[a-z0-9._-]{2,50}$/', $username) || $password === '') {
-        audit_event('auth.login_failed', ['username' => $username], $username ?: 'anonymous');
-        respond(['error' => 'Invalid username or password'], 401);
+    if ($password === '') {
+        audit_event('auth.login_failed');
+        respond(['error' => 'Incorrect password'], 401);
     }
 
     $attempts = (int) ($_SESSION['prism_login_attempts'] ?? 0);
     $lastAttempt = (int) ($_SESSION['prism_login_last'] ?? 0);
     if ($attempts >= 5 && time() - $lastAttempt < 900) {
-        audit_event('auth.rate_limited', ['username' => $username], $username);
+        audit_event('auth.rate_limited');
         respond(['error' => 'Too many attempts. Try again later.'], 429);
     }
 
-    $users = load_admin_users();
-    $mode = $users ? 'named-credentials' : 'legacy-shared';
-    $valid = $users
-        ? verify_named_password($username, $password, $users)
-        : hash_equals($legacyPasswordHash, hash('sha256', $password));
-
-    if (!$valid) {
+    if (!hash_equals($legacyPasswordHash, hash('sha256', $password))) {
         $_SESSION['prism_login_attempts'] = $attempts + 1;
         $_SESSION['prism_login_last'] = time();
-        audit_event('auth.login_failed', ['username' => $username], $username);
-        respond(['error' => 'Invalid username or password'], 401);
+        audit_event('auth.login_failed');
+        respond(['error' => 'Incorrect password'], 401);
     }
 
     session_regenerate_id(true);
     $_SESSION['prism_admin'] = true;
-    $_SESSION['prism_admin_user'] = $username;
-    $_SESSION['prism_admin_mode'] = $mode;
+    $_SESSION['prism_admin_user'] = 'shared-admin';
+    $_SESSION['prism_admin_mode'] = 'shared-password';
     $_SESSION['prism_csrf'] = bin2hex(random_bytes(24));
     $_SESSION['prism_login_attempts'] = 0;
     audit_event('auth.login_success');
 
     respond([
         'success' => true,
-        'actor' => $username,
-        'authMode' => $mode,
-        'csrf' => $_SESSION['prism_csrf'],
-        'warning' => $mode === 'legacy-shared'
-            ? 'Shared-password compatibility mode is active. Configure named credentials for reliable attribution.'
-            : null
+        'actor' => 'Shared admin',
+        'authMode' => 'shared-password',
+        'csrf' => $_SESSION['prism_csrf']
     ]);
 }
 

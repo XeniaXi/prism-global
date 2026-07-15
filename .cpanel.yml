@@ -7,6 +7,8 @@ deployment:
     - /bin/cp -rf api.php $DEPLOYPATH/
     - /bin/cp -rf data.json $DEPLOYPATH/
     - /bin/cp -rf favicon.svg $DEPLOYPATH/
+    - /bin/cp -rf robots.txt llms.txt sitemap.xml $DEPLOYPATH/
+    - /bin/cp -rf nigerians-in-diaspora-property-investment trust privacy terms $DEPLOYPATH/
     - /bin/cp -rf images $DEPLOYPATH/
     - /bin/cp -rf api $DEPLOYPATH/
     - /bin/cp -rf uploads $DEPLOYPATH/

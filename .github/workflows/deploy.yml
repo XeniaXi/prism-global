@@ -15,7 +15,7 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.prismglobalservicesltd.com
+          server: prismglobalservicesltd.com
           username: priseghy
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./

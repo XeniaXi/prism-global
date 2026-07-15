@@ -781,7 +781,9 @@
       <h2 style="font-family:'Playfair Display',serif;color:#FFC107;font-size:1.4rem;margin-bottom:0.25rem;">Prism
         Global</h2>
       <p style="color:#6a7a70;font-size:0.8rem;margin-bottom:1.5rem;">Admin Dashboard</p>
-      <input type="password" id="admin-pass" placeholder="Enter password"
+      <input type="text" id="admin-user" placeholder="Your admin username" autocomplete="username"
+        style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:0.75rem;outline:none;">
+      <input type="password" id="admin-pass" placeholder="Your password" autocomplete="current-password"
         style="width:100%;background:#1a2a1e;border:1px solid #2a3a2e;color:#fff;padding:0.85rem 1rem;border-radius:10px;font-size:0.95rem;margin-bottom:1rem;outline:none;"
         onkeydown="if(event.key==='Enter') checkLogin()">
       <button onclick="checkLogin()"
@@ -794,29 +796,74 @@
   </div>
 
   <script>
+    window.prismAdminSession = { csrf: '', actor: '', authMode: '' };
+
+    function setAdminSession(payload) {
+      window.prismAdminSession = {
+        csrf: payload.csrf || '',
+        actor: payload.actor || '',
+        authMode: payload.authMode || ''
+      };
+      sessionStorage.setItem('prism-admin-actor', window.prismAdminSession.actor);
+      const actor = document.getElementById('admin-actor');
+      if (actor) actor.textContent = window.prismAdminSession.actor || 'Admin';
+    }
+
+    function requireFreshLogin(message) {
+      window.prismAdminSession = { csrf: '', actor: '', authMode: '' };
+      sessionStorage.removeItem('prism-admin-actor');
+      document.getElementById('login-gate').style.display = 'flex';
+      const error = document.getElementById('login-error');
+      error.textContent = message || 'Your session expired. Sign in again.';
+      error.style.display = 'block';
+    }
+
     async function checkLogin() {
-      const pass = document.getElementById('admin-pass').value;
+      const username = document.getElementById('admin-user').value.trim().toLowerCase();
+      const password = document.getElementById('admin-pass').value;
+      const error = document.getElementById('login-error');
+      error.style.display = 'none';
       try {
         const res = await fetch('/api.php?action=login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({ password: pass })
+          body: JSON.stringify({ username, password })
         });
-        if (!res.ok) throw new Error('Unauthorized');
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(result.error || 'Sign-in failed');
+        setAdminSession(result);
         document.getElementById('login-gate').style.display = 'none';
-        sessionStorage.setItem('prism-admin', '1');
-      } catch {
-        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('admin-pass').value = '';
+        if (result.warning) showToast(result.warning, 'error');
+      } catch (err) {
+        error.textContent = err.message;
+        error.style.display = 'block';
         document.getElementById('admin-pass').value = '';
       }
     }
-    // Auto-unlock if already authenticated this session
-    if (sessionStorage.getItem('prism-admin') === '1') {
-      document.addEventListener('DOMContentLoaded', () => {
+
+    async function restoreAdminSession() {
+      try {
+        const res = await fetch('/api.php?action=session', { credentials: 'same-origin' });
+        if (!res.ok) return;
+        const result = await res.json();
+        setAdminSession(result);
         document.getElementById('login-gate').style.display = 'none';
-      });
+      } catch {
+        // The login gate remains visible.
+      }
     }
+
+    async function adminLogout() {
+      try {
+        await fetch('/api.php?action=logout', { method: 'POST', credentials: 'same-origin' });
+      } finally {
+        requireFreshLogin('Signed out.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', restoreAdminSession);
   </script>
 
   <!-- HEADER -->
@@ -827,7 +874,9 @@
       <span class="header-badge">Admin</span>
     </a>
     <div class="header-actions">
-      <a href="/" target="_blank" class="view-site-btn">↗ View Site</a>
+      <span id="admin-actor" style="font-size:0.78rem;color:#9dac9f;">Not signed in</span>
+      <button type="button" class="view-site-btn" onclick="adminLogout()" style="border:1px solid var(--border);background:transparent;">Sign out</button>
+      <a href="/" target="_blank" class="view-site-btn">View Site</a>
     </div>
   </header>
 
@@ -1146,6 +1195,11 @@
           </form>
         </div>
 
+        <div class="table-section" id="orphaned-video-section" style="margin-top:2rem;display:none;">
+          <div class="table-header"><span class="table-title">Uploaded files not attached to a video</span></div>
+          <div id="orphaned-videos-list" style="padding:1rem;"></div>
+        </div>
+
         <div class="table-section" style="margin-top:2rem;">
           <div class="table-header">
             <span class="table-title">All Videos</span>
@@ -1233,47 +1287,32 @@
 
     // ── Data API
     async function loadData() {
-      // Try api.php → JSONBlob → direct data.json (triple fallback)
-      let res;
-      try {
-        res = await fetch('/api.php?action=getData');
-        if (!res.ok) throw new Error('API unavailable');
-      } catch {
-        try {
-          res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
-            headers: { 'Accept': 'application/json' }
-          });
-          if (!res.ok) throw new Error('JSONBlob unavailable');
-        } catch {
-          res = await fetch('data.json');
-        }
-      }
-      if (!res.ok) throw new Error('Failed to load data');
-      return res.json();
+      const res = await fetch('/api.php?action=getData', { credentials: 'same-origin' });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(result.error || 'Production data is unavailable');
+      return result;
     }
 
     async function saveData(data) {
-      // Try local PHP API first (Namecheap hosting), fall back to JSONBlob
-      try {
-        const res = await fetch('/api.php?action=saveData', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'same-origin',
-          body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('API error');
-        return res.json();
-      } catch {
-        const res = await fetch('https://jsonblob.com/api/jsonBlob/019ca8b7-fa29-7eaf-b00e-f909b00ffc62', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('Failed to save data');
-        return res.json();
+      const res = await fetch('/api.php?action=saveData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': window.prismAdminSession.csrf
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 403) {
+        requireFreshLogin(result.error);
+        throw new Error(result.error || 'Sign in again');
       }
+      if (!res.ok) {
+        throw new Error(result.error || 'Production save failed');
+      }
+      if (result.revision) data._revision = result.revision;
+      return result;
     }
 
     // Image upload via api.php
@@ -1293,12 +1332,16 @@
       const res = await fetch('/api.php?action=uploadImage', {
         method: 'POST',
         credentials: 'same-origin',
+        headers: { 'X-CSRF-Token': window.prismAdminSession.csrf },
         body: formData
       });
+      const result = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 403) {
+        requireFreshLogin(result.error);
+        throw new Error(result.error || 'Sign in again');
+      }
       const explained = explainUploadStatus(res.status, 'image');
       if (explained) throw new Error(explained);
-      let result = {};
-      try { result = await res.json(); } catch { throw new Error('Invalid server response from upload endpoint (not JSON).'); }
       if (!res.ok || !result.url) throw new Error(result.error || 'Upload failed');
       return result.url;
     }
@@ -1735,36 +1778,41 @@
 
     async function loadActivity() {
       try {
-        const data = await loadData();
+        const res = await fetch('/api.php?action=getActivity', { credentials: 'same-origin' });
+        const result = await res.json().catch(() => ({}));
+        if (res.status === 401 || res.status === 403) {
+          requireFreshLogin(result.error);
+          throw new Error(result.error || 'Sign in again');
+        }
+        if (!res.ok) throw new Error(result.error || 'Unable to load activity');
         const list = document.getElementById('activity-list');
-        const items = data.activity || [];
+        const items = result.activity || [];
         if (!items.length) {
-          list.innerHTML = `<li style="padding:2rem;color:#6a7a70;text-align:center;">No activity yet.</li>`;
+          list.innerHTML = '<li style="padding:2rem;color:#6a7a70;text-align:center;">No server-recorded activity yet. New logins, uploads and saves will appear here.</li>';
           return;
         }
-        list.innerHTML = items.slice(0, 50).map(a => {
+        list.innerHTML = items.map(a => {
           const d = new Date(a.time);
-          const timeStr = isNaN(d) ? a.time : d.toLocaleString('en-GB', {
+          const timeStr = isNaN(d) ? escapeHtml(a.time || '') : d.toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric',
             hour: '2-digit', minute: '2-digit'
           });
-          return `
-          <li class="activity-item">
-            <div class="activity-dot"></div>
-            <div>
-              <div class="activity-text">${a.action}</div>
-              <div class="activity-time">${timeStr}</div>
-            </div>
-          </li>
-        `;
+          const details = a.details && Object.keys(a.details).length
+            ? ' - ' + Object.entries(a.details).map(([key, value]) => key + ': ' + value).join(', ')
+            : '';
+          return '<li class="activity-item"><div class="activity-dot"></div><div>' +
+            '<div class="activity-text"><strong>' + escapeHtml(a.actor || 'system') + '</strong> - ' +
+            escapeHtml(a.event || 'activity') + escapeHtml(details) + '</div>' +
+            '<div class="activity-time">' + timeStr + ' - ' + escapeHtml(a.ip || '') + '</div>' +
+            '</div></li>';
         }).join('');
       } catch (err) {
         document.getElementById('activity-list').innerHTML =
-          `<li style="padding:2rem;color:#e05252;text-align:center;">Error loading activity.</li>`;
+          '<li style="padding:2rem;color:#e05252;text-align:center;">' + escapeHtml(err.message) + '</li>';
       }
     }
 
-    // ─────────── VIDEOS ───────────
+    // VIDEOS
     function detectVideoType(src) {
       if (!src) return 'file';
       const s = src.toLowerCase();
@@ -1801,6 +1849,7 @@
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/api.php?action=uploadVideo');
         xhr.withCredentials = true;
+        xhr.setRequestHeader('X-CSRF-Token', window.prismAdminSession.csrf);
         xhr.upload.onprogress = e => {
           if (e.lengthComputable && onProgress) onProgress((e.loaded / e.total) * 100);
         };
@@ -1988,13 +2037,52 @@
       }).join('');
     }
 
+    function renderOrphanedUploads(uploads) {
+      const section = document.getElementById('orphaned-video-section');
+      const list = document.getElementById('orphaned-videos-list');
+      const orphaned = (uploads || []).filter(item => !item.attached);
+      if (!orphaned.length) {
+        section.style.display = 'none';
+        list.innerHTML = '';
+        return;
+      }
+      section.style.display = 'block';
+      list.innerHTML = orphaned.map(item => {
+        const uploaded = new Date(item.uploadedAt);
+        const uploadedText = isNaN(uploaded) ? item.uploadedAt : uploaded.toLocaleString('en-GB');
+        return '<div style="display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:0.85rem 0;border-bottom:1px solid var(--border);">' +
+          '<div><strong style="display:block;color:var(--cream);">' + escapeHtml(item.name) + '</strong>' +
+          '<small style="color:#829187;">' + formatBytes(item.size || 0) + ' - uploaded ' + escapeHtml(uploadedText) + '</small></div>' +
+          '<button type="button" class="btn-sm btn-edit" data-url="' + escapeHtml(item.url) + '" onclick="recoverUploadedVideo(this.dataset.url)">Attach to a video</button>' +
+          '</div>';
+      }).join('');
+    }
+
+    function recoverUploadedVideo(url) {
+      toggleVideoForm();
+      document.getElementById('v-src').value = url;
+      document.getElementById('v-caption').value = url.split('/').pop().replace(/^vid_/, '').replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ');
+      pendingVideoSrc = url;
+      renderVideoPreview();
+      setVideoUploadStatus('success', '<strong>Recovered upload:</strong> <code>' + escapeHtml(url) + '</code><br>Add a clear title, then click <strong>Save Video</strong>.');
+    }
+
     async function loadVideos() {
       try {
-        const data = await loadData();
+        const [data, uploadResponse] = await Promise.all([
+          loadData(),
+          fetch('/api.php?action=listVideoUploads', { credentials: 'same-origin' })
+        ]);
         renderVideos(data.videos || []);
+        const uploadResult = await uploadResponse.json().catch(() => ({}));
+        if (uploadResponse.status === 401 || uploadResponse.status === 403) {
+          requireFreshLogin(uploadResult.error);
+          return;
+        }
+        if (uploadResponse.ok) renderOrphanedUploads(uploadResult.uploads || []);
       } catch (err) {
         document.getElementById('videos-tbody').innerHTML =
-          `<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">Error loading videos.</td></tr>`;
+          '<tr><td colspan="6" style="text-align:center;color:#e05252;padding:2rem;">' + escapeHtml(err.message) + '</td></tr>';
       }
     }
 
@@ -2042,58 +2130,60 @@
     async function handleVideoSubmit(e) {
       e.preventDefault();
       const src = document.getElementById('v-src').value.trim();
+      const caption = document.getElementById('v-caption').value.trim();
       if (!src) {
         const statusEl = document.getElementById('v-upload-status');
         const hadFailure = statusEl && statusEl.classList.contains('error');
-        const msg = hadFailure
-          ? 'The video file upload failed (see the red message above). Paste a YouTube/Vimeo URL into the "Or paste Video URL" field to save this video without uploading.'
-          : 'No video selected. Either pick a file using "Choose File" above, OR paste a YouTube/Vimeo/direct .mp4 URL in the field below — then click Save Video.';
-        showToast(msg, 'error');
+        showToast(hadFailure
+          ? 'The upload failed. Use a YouTube, Vimeo or direct video URL instead.'
+          : 'Choose a video file or paste a video URL before saving.', 'error');
         document.getElementById('v-src').focus();
         return;
       }
-      showLoading();
+      if (!caption) {
+        showToast('Add a clear title before saving the video.', 'error');
+        document.getElementById('v-caption').focus();
+        return;
+      }
 
-      const videoItem = {
+      showLoading();
+      const video = {
         src,
-        caption: document.getElementById('v-caption').value.trim(),
+        caption,
         category: document.getElementById('v-category').value,
         featured: document.getElementById('v-featured').value === 'true',
         poster: document.getElementById('v-poster').value.trim(),
         description: document.getElementById('v-description').value.trim(),
         videoType: detectVideoType(src)
       };
+      const editId = document.getElementById('video-edit-id').value;
 
       try {
-        const data = await loadData();
-        data.videos = data.videos || [];
-        data.activity = data.activity || [];
-        const editId = document.getElementById('video-edit-id').value;
-
-        if (editId) {
-          const idx = data.videos.findIndex(v => v.id === editId);
-          if (idx > -1) {
-            data.videos[idx] = { ...data.videos[idx], ...videoItem };
-            data.activity.unshift({ action: 'Updated video: ' + videoItem.caption, time: new Date().toISOString() });
-          }
-        } else {
-          data.videos.push({
-            id: 'vid_' + Date.now(),
-            createdAt: new Date().toISOString(),
-            ...videoItem
-          });
-          data.activity.unshift({ action: 'Added video: ' + videoItem.caption, time: new Date().toISOString() });
+        const res = await fetch('/api.php?action=upsertVideo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': window.prismAdminSession.csrf
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({ id: editId, video })
+        });
+        const result = await res.json().catch(() => ({}));
+        if (res.status === 401 || res.status === 403) {
+          requireFreshLogin(result.error);
+          throw new Error(result.error || 'Sign in again');
         }
+        if (!res.ok) throw new Error(result.error || 'Production video save failed');
 
-        await saveData(data);
-        renderVideos(data.videos);
+        renderVideos(result.videos || []);
         hideVideoForm();
         document.getElementById('video-form').reset();
         pendingVideoSrc = '';
         pendingVideoPoster = '';
         clearVideoUploadStatus();
         renderVideoPreview();
-        showToast(editId ? 'Video updated!' : 'Video added!');
+        await loadVideos();
+        showToast(editId ? 'Video updated and logged.' : 'Video saved to the live website and logged.');
       } catch (err) {
         showToast('Error saving video: ' + err.message, 'error');
       } finally {
@@ -2103,17 +2193,27 @@
 
     async function deleteVideo(id) {
       const item = allVideos.find(x => x.id === id);
-      if (!confirm(`Delete "${item?.caption || id}" video?`)) return;
+      if (!confirm('Delete "' + (item?.caption || id) + '" from the public video list? The uploaded file will be preserved for recovery.')) return;
       showLoading();
-      await fadeRowOut('videos-tbody', id);
       try {
-        const data = await loadData();
-        data.videos = (data.videos || []).filter(v => v.id !== id);
-        data.activity = data.activity || [];
-        data.activity.unshift({ action: 'Deleted video: ' + (item?.caption || id), time: new Date().toISOString() });
-        await saveData(data);
-        renderVideos(data.videos);
-        showToast('Video deleted');
+        const res = await fetch('/api.php?action=deleteVideo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': window.prismAdminSession.csrf
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({ id })
+        });
+        const result = await res.json().catch(() => ({}));
+        if (res.status === 401 || res.status === 403) {
+          requireFreshLogin(result.error);
+          throw new Error(result.error || 'Sign in again');
+        }
+        if (!res.ok) throw new Error(result.error || 'Delete failed');
+        renderVideos(result.videos || []);
+        await loadVideos();
+        showToast('Video record deleted; uploaded file preserved and logged.');
       } catch (err) {
         showToast('Error deleting video: ' + err.message, 'error');
       } finally {
@@ -2121,7 +2221,7 @@
       }
     }
 
-    // ── Init
+    // Init
     async function init() {
       try {
         const data = await loadData();

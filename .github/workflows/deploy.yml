@@ -26,6 +26,7 @@ jobs:
             **/node_modules/**
             **/.github/**
             **/SETUP.md
+            **/*.md
             **/aeo-source-of-truth.json
             **/aeo-report.*
             **/*.zip

@@ -24,6 +24,8 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
+            **/data.json
+            **/uploads/**
             **/.github/**
             **/SETUP.md
             **/*.md

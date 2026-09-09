@@ -38,6 +38,9 @@
       min-height: 100vh;
     }
 
+    button:disabled { opacity: 0.4; cursor: default; }
+    button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
     /* ── TOP BAR ── */
     header {
       background: var(--surface);
@@ -987,6 +990,7 @@
               </div>
               <div class="form-group form-full">
                 <label class="form-label">Property Images</label>
+                <p style="font-size:0.85rem;color:#a5b4aa;margin-bottom:12px;">The first image is the listing cover. Arrange exterior, living spaces, bedrooms, then details. Save the property to apply changes.</p>
                 <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;" id="image-preview-area">
                 </div>
                 <input type="file" id="f-img-upload" accept="image/*" multiple
@@ -999,6 +1003,7 @@
                 <div id="uploaded-imgs-list" style="display:none;"></div>
               </div>
             </div>
+            <div id="development-fields"></div>
             <div class="form-actions">
               <button type="submit" class="btn-primary" id="submit-btn">Save Property</button>
               <button type="button" class="btn-cancel" onclick="hideAddForm()">Cancel</button>
@@ -1042,7 +1047,7 @@
         <div class="page-header">
           <div>
             <h1 class="page-title">Photo Gallery</h1>
-            <p class="page-sub">Manage the homepage gallery images, captions, categories, and featured layout.</p>
+            <p class="page-sub">Arrange homepage photos with the arrow buttons; order saves immediately. Edit captions, capture dates and categories below.</p>
           </div>
           <button class="btn-primary" onclick="toggleGalleryForm()">
             <span id="gallery-add-btn-icon">+</span> Add Gallery Photo
@@ -1066,6 +1071,7 @@
                   <option value="bathroom">Bathrooms</option>
                   <option value="aerial">Aerial Views</option>
                   <option value="aerial exterior">Aerial + Exterior</option>
+                  <option value="construction">Construction progress</option>
                 </select>
               </div>
               <div class="form-group">
@@ -1074,6 +1080,10 @@
                   <option value="false">No</option>
                   <option value="true">Yes</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="g-captured-at">Photo capture date (optional)</label>
+                <input type="date" class="form-input" id="g-captured-at">
               </div>
               <div class="form-group form-full">
                 <label class="form-label">Gallery Image *</label>
@@ -1359,41 +1369,38 @@
       e.target.value = '';
     });
 
-    function renderImagePreviews() {
-      const area = document.getElementById('image-preview-area');
-      const allImgs = [
-        ...pendingUploadedImages,
-        document.getElementById('f-img1').value.trim(),
-        document.getElementById('f-img2').value.trim(),
-        document.getElementById('f-img3').value.trim()
-      ].filter(Boolean);
-      area.innerHTML = allImgs.map((url, i) => `
-      <div style="position:relative;">
-        <img src="${url}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
-        <button type="button" onclick="removePreviewImage(${i})" style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
-      </div>
-    `).join('');
+    function getPropertyImages() {
+      return [...pendingUploadedImages, ...['f-img1', 'f-img2', 'f-img3'].map(id => document.getElementById(id).value.trim()).filter(Boolean)];
     }
-
-    function removePreviewImage(idx) {
-      const area = document.getElementById('image-preview-area');
-      const tile = area.children[idx];
-      const apply = () => {
-        if (idx < pendingUploadedImages.length) {
-          pendingUploadedImages.splice(idx, 1);
-        } else {
-          const urlIdx = idx - pendingUploadedImages.length;
-          const ids = ['f-img1', 'f-img2', 'f-img3'];
-          if (ids[urlIdx]) document.getElementById(ids[urlIdx]).value = '';
-        }
-        renderImagePreviews();
-      };
-      if (tile) {
-        tile.classList.add('removing');
-        setTimeout(apply, 200);
-      } else {
-        apply();
-      }
+    function setPropertyImages(images) {
+      pendingUploadedImages = [...images];
+      ['f-img1', 'f-img2', 'f-img3'].forEach(id => document.getElementById(id).value = '');
+      renderImagePreviews();
+    }
+    function renderImagePreviews() {
+      const images = getPropertyImages();
+      document.getElementById('image-preview-area').innerHTML = images.map((url, i) => `
+        <div style="width:150px;">
+          <img src="${escapeHtml(url)}" alt="Property photo ${i + 1}" style="width:150px;height:105px;object-fit:cover;border-radius:6px;">
+          <div style="font-size:0.8rem;margin:6px 0;">${i === 0 ? 'Cover photo' : 'Photo ' + (i + 1)}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <button type="button" class="btn-sm btn-edit" onclick="movePropertyImage(${i}, 0)" ${i === 0 ? 'disabled' : ''}>Make cover</button>
+            <button type="button" class="btn-sm btn-edit" aria-label="Move photo ${i + 1} earlier" onclick="movePropertyImage(${i}, ${i - 1})" ${i === 0 ? 'disabled' : ''}>&larr;</button>
+            <button type="button" class="btn-sm btn-edit" aria-label="Move photo ${i + 1} later" onclick="movePropertyImage(${i}, ${i + 1})" ${i === images.length - 1 ? 'disabled' : ''}>&rarr;</button>
+            <button type="button" class="btn-sm btn-delete" onclick="removePreviewImage(${i})">Remove</button>
+          </div>
+        </div>`).join('');
+    }
+    function movePropertyImage(from, to) {
+      const images = getPropertyImages();
+      if (from < 0 || to < 0 || from >= images.length || to >= images.length) return;
+      images.splice(to, 0, images.splice(from, 1)[0]);
+      setPropertyImages(images);
+    }
+    function removePreviewImage(index) {
+      const images = getPropertyImages();
+      images.splice(index, 1);
+      setPropertyImages(images);
     }
 
     document.getElementById('g-img-upload').addEventListener('change', async function (e) {
@@ -1471,7 +1478,7 @@
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#6a7a70;padding:3rem;">No gallery photos yet. Add one above.</td></tr>`;
         return;
       }
-      tbody.innerHTML = allGallery.map(item => `
+      tbody.innerHTML = allGallery.map((item, index) => `
       <tr data-id="${item.id}">
         <td>
           <img src="${escapeHtml(item.src)}" class="prop-img-thumb" onerror="this.style.display='none'">
@@ -1486,12 +1493,40 @@
         <td><span class="status-badge ${item.featured ? 'status-available' : 'status-off-plan'}">${item.featured ? 'Featured' : 'Standard'}</span></td>
         <td>
           <div class="row-actions">
+            <button type="button" class="btn-sm btn-edit" aria-label="Move gallery photo earlier" onclick="moveGalleryItem(${index}, -1)" ${index === 0 ? 'disabled' : ''}>&uarr;</button>
+            <button type="button" class="btn-sm btn-edit" aria-label="Move gallery photo later" onclick="moveGalleryItem(${index}, 1)" ${index === allGallery.length - 1 ? 'disabled' : ''}>&darr;</button>
             <button class="btn-sm btn-edit" onclick="editGalleryItem('${item.id}')">✏️ Edit</button>
             <button class="btn-sm btn-delete" onclick="deleteGalleryItem('${item.id}')">🗑 Delete</button>
           </div>
         </td>
       </tr>
     `).join('');
+    }
+
+    let galleryOrderSaving = false;
+    async function moveGalleryItem(index, direction) {
+      if (galleryOrderSaving) return;
+      const item = allGallery[index], neighbour = allGallery[index + direction];
+      if (!item || !neighbour) return;
+      galleryOrderSaving = true;
+      showLoading();
+      try {
+        const data = await loadData();
+        const from = (data.gallery || []).findIndex(photo => photo.id === item.id);
+        const to = (data.gallery || []).findIndex(photo => photo.id === neighbour.id);
+        if (from < 0 || to < 0) throw new Error('Gallery changed. Refresh and try again.');
+        data.gallery.splice(to, 0, data.gallery.splice(from, 1)[0]);
+        data.activity = data.activity || [];
+        data.activity.unshift({ action: 'Reordered gallery photo: ' + item.caption, time: new Date().toISOString() });
+        await saveData(data);
+        renderGallery(data.gallery);
+        showToast('Gallery order saved.');
+      } catch (err) {
+        showToast('Could not save gallery order: ' + err.message, 'error');
+      } finally {
+        galleryOrderSaving = false;
+        hideLoading();
+      }
     }
 
     function renderGalleryPreview() {
@@ -1542,6 +1577,7 @@
         document.getElementById('submit-btn').textContent = 'Save Property';
         document.getElementById('add-btn-icon').textContent = '−';
         document.getElementById('property-form').reset();
+        setPropertyImages([]);
         s.scrollIntoView({ behavior: 'smooth' });
       }
     }
@@ -1593,11 +1629,8 @@
       document.getElementById('f-bathrooms').value = p.bathrooms || '';
       document.getElementById('f-size').value = p.size || '';
       document.getElementById('f-description').value = p.description || '';
-      document.getElementById('f-img1').value = p.images?.[0] || '';
-      document.getElementById('f-img2').value = p.images?.[1] || '';
-      document.getElementById('f-img3').value = p.images?.[2] || '';
-      pendingUploadedImages = [...(p.images || []).slice(3)];
-      renderImagePreviews();
+      populateDevelopmentFields(p);
+      setPropertyImages(p.images || []);
 
       document.getElementById('add-form-section').scrollIntoView({ behavior: 'smooth' });
     }
@@ -1615,6 +1648,7 @@
       document.getElementById('g-category').value = item.category || 'exterior';
       document.getElementById('g-featured').value = item.featured ? 'true' : 'false';
       document.getElementById('g-src').value = item.src || '';
+      document.getElementById('g-captured-at').value = item.capturedAt || '';
       pendingGalleryImage = item.src || '';
       renderGalleryPreview();
       document.getElementById('gallery-form-section').scrollIntoView({ behavior: 'smooth' });
@@ -1628,7 +1662,8 @@
         src: document.getElementById('g-src').value.trim(),
         caption: document.getElementById('g-caption').value.trim(),
         category: document.getElementById('g-category').value,
-        featured: document.getElementById('g-featured').value === 'true'
+        featured: document.getElementById('g-featured').value === 'true',
+        capturedAt: document.getElementById('g-captured-at').value
       };
 
       try {
@@ -1696,12 +1731,7 @@
       e.preventDefault();
       showLoading();
 
-      const urlImages = [
-        document.getElementById('f-img1').value.trim(),
-        document.getElementById('f-img2').value.trim(),
-        document.getElementById('f-img3').value.trim()
-      ].filter(Boolean);
-      const images = [...pendingUploadedImages, ...urlImages];
+      const images = getPropertyImages();
 
       const formData = {
         title: document.getElementById('f-title').value.trim(),
@@ -1713,7 +1743,8 @@
         bathrooms: document.getElementById('f-bathrooms').value ? Number(document.getElementById('f-bathrooms').value) : null,
         size: document.getElementById('f-size').value.trim(),
         description: document.getElementById('f-description').value.trim(),
-        images
+        images,
+        ...readDevelopmentFields()
       };
 
       try {
@@ -2235,6 +2266,7 @@
 
     init();
   </script>
+<script src="/admin-development.js"></script>
 </body>
 
 </html>

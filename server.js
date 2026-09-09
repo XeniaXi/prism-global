@@ -1,137 +1,58 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+// Read-only local preview. Production continues to use api.php.
+import http from 'node:http';
+import { readFile, realpath, stat } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const PORT = 3001;
-const DATA_FILE = path.join(__dirname, 'data.json');
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
+const root = path.dirname(fileURLToPath(import.meta.url));
+const realRoot = await realpath(root);
+const port = Number(process.env.PORT || 3001);
+const rootFiles = new Set(['index.html', 'admin.html', 'admin-development.js', 'property.html', 'site.js', 'site.css', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'llms.txt', 'aeo-source-of-truth.json']);
+const pageFolders = new Set(['trust', 'terms', 'privacy', 'verify-property', 'nigerians-in-diaspora-property-investment']);
+const mime = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.xml': 'application/xml; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.avif': 'image/avif', '.gif': 'image/gif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime', '.ogg': 'video/ogg' };
+const mediaExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.mp4', '.webm', '.mov', '.ogg']);
+const within = (base, target) => { const relative = path.relative(base, target); return relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative); };
+function send(res, status, body, type = 'application/json; charset=utf-8', head = false) {
+  res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
+  res.end(head ? undefined : body);
+}
 
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
-if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({ properties: [], activity: [] }));
-
-const mimeTypes = {
-    '.html': 'text/html',
-    '.css': 'text/css',
-    '.js': 'text/javascript',
-    '.json': 'application/json',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.webp': 'image/webp',
-    '.svg': 'image/svg+xml',
-    '.mp4': 'video/mp4',
-    '.webm': 'video/webm',
-    '.mov': 'video/quicktime',
-    '.mkv': 'video/x-matroska',
-    '.ogg': 'video/ogg'
-};
-
-const VIDEO_EXTS = ['.mp4', '.webm', '.mov', '.mkv', '.ogg'];
-
-const server = http.createServer((req, res) => {
-    // 1. API ROUTES (Simulating api.php)
-    if (req.url.startsWith('/api.php')) {
-        const urlParams = new URLSearchParams(req.url.split('?')[1]);
-        const action = urlParams.get('action');
-
-        // GET DATA
-        if (action === 'getData' && req.method === 'GET') {
-            const data = fs.readFileSync(DATA_FILE, 'utf8');
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(data);
-        }
-
-        // SAVE DATA
-        if (action === 'saveData' && req.method === 'POST') {
-            let body = '';
-            req.on('data', chunk => body += chunk);
-            req.on('end', () => {
-                fs.writeFileSync(DATA_FILE, body);
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ success: true }));
-            });
-            return;
-        }
-
-        // UPLOAD IMAGE / VIDEO (Simple multipart simulation)
-        if ((action === 'uploadImage' || action === 'uploadVideo') && req.method === 'POST') {
-            let body = Buffer.alloc(0);
-            req.on('data', chunk => body = Buffer.concat([body, chunk]));
-            req.on('end', () => {
-                // Extremely primitive multipart parsing just for local testing the blob
-                const boundary = req.headers['content-type'].split('boundary=')[1];
-                const parts = body.toString('binary').split(boundary);
-                let savedUrl = '';
-                const isVideo = action === 'uploadVideo';
-
-                for (let part of parts) {
-                    if (part.includes('filename="')) {
-                        const fileMatch = part.match(/filename="(.*?)"/);
-                        if (fileMatch) {
-                            const ext = (path.extname(fileMatch[1]) || (isVideo ? '.mp4' : '.png')).toLowerCase();
-                            const prefix = isVideo ? 'vid_' : 'img_';
-                            const newName = prefix + Date.now() + ext;
-
-                            // Extract just the actual file data (strip headers)
-                            const headerEnd = part.indexOf('\r\n\r\n') + 4;
-                            const fileData = part.substring(headerEnd, part.lastIndexOf('\r\n--'));
-
-                            fs.writeFileSync(path.join(UPLOADS_DIR, newName), fileData, 'binary');
-                            savedUrl = 'uploads/' + newName;
-                            break;
-                        }
-                    }
-                }
-
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ url: savedUrl }));
-            });
-            return;
-        }
+http.createServer(async (req, res) => {
+  const head = req.method === 'HEAD';
+  try {
+    // Check the raw pathname before URL normalization can erase traversal segments.
+    const rawPath = decodeURIComponent((req.url || '/').split('?')[0]);
+    if (!rawPath.startsWith('/') || rawPath.includes('\\') || rawPath.includes('\0') || rawPath.split('/').some(part => part === '..' || part === '.' || part.startsWith('.'))) {
+      return send(res, 403, JSON.stringify({ error: 'Path is not available in preview.' }), undefined, head);
     }
-
-    // 2. STATIC FILE SERVER
-    let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : decodeURIComponent(req.url.split('?')[0]));
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = mimeTypes[ext] || 'application/octet-stream';
-
-    // Range request support — needed for HTML5 <video> seeking / streaming
-    if (VIDEO_EXTS.includes(ext) && req.headers.range) {
-        fs.stat(filePath, (err, stat) => {
-            if (err) {
-                res.writeHead(err.code === 'ENOENT' ? 404 : 500);
-                return res.end(err.code === 'ENOENT' ? 'File Not Found' : 'Server Error');
-            }
-            const range = req.headers.range;
-            const parts = range.replace(/bytes=/, '').split('-');
-            const start = parseInt(parts[0], 10);
-            const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1;
-            const chunkSize = (end - start) + 1;
-            res.writeHead(206, {
-                'Content-Range': `bytes ${start}-${end}/${stat.size}`,
-                'Accept-Ranges': 'bytes',
-                'Content-Length': chunkSize,
-                'Content-Type': contentType
-            });
-            fs.createReadStream(filePath, { start, end }).pipe(res);
-        });
-        return;
+    const url = new URL(req.url, 'http://localhost');
+    if (rawPath === '/api.php') {
+      const action = url.searchParams.get('action');
+      if (action === 'session' && req.method === 'GET') return send(res, 200, JSON.stringify({ actor: 'Local preview (read-only)', readOnly: true }));
+      if (action !== 'getData' || !['GET', 'HEAD'].includes(req.method)) {
+        return send(res, 405, JSON.stringify({ error: 'Local preview is read-only. Login, uploads and changes require the production PHP service.' }), undefined, head);
+      }
+      const data = JSON.parse(await readFile(path.join(root, 'data.json'), 'utf8'));
+      return send(res, 200, JSON.stringify(data), undefined, head);
     }
-
-    fs.readFile(filePath, (err, content) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                res.writeHead(404);
-                res.end('File Not Found');
-            } else {
-                res.writeHead(500);
-                res.end('Server Error');
-            }
-        } else {
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, ext === '.json' ? 'utf8' : 'binary');
-        }
-    });
-});
-
-server.listen(PORT, () => console.log(`Test server running at http://localhost:${PORT}`));
+    if (!['GET', 'HEAD'].includes(req.method)) {
+      return send(res, 405, JSON.stringify({ error: 'Local preview is read-only.' }));
+    }
+    let relative = rawPath.slice(1);
+    if (!relative) relative = 'index.html';
+    const folder = relative.replace(/\/$/, '');
+    if (pageFolders.has(folder)) relative = `${folder}/index.html`;
+    const parts = relative.split('/');
+    const ext = path.extname(relative).toLowerCase();
+    const allowed = rootFiles.has(relative) || (parts.length === 2 && pageFolders.has(parts[0]) && parts[1] === 'index.html') || (parts.length === 2 && ['images', 'uploads'].includes(parts[0]) && mediaExtensions.has(ext));
+    if (!allowed) return send(res, 404, JSON.stringify({ error: 'File is not available in preview.' }), undefined, head);
+    const filename = path.resolve(root, relative);
+    if (!within(root, filename)) return send(res, 403, JSON.stringify({ error: 'Path is not available in preview.' }), undefined, head);
+    const resolved = await realpath(filename);
+    if (!within(realRoot, resolved) || !(await stat(resolved)).isFile()) return send(res, 403, JSON.stringify({ error: 'Path is not available in preview.' }), undefined, head);
+    send(res, 200, await readFile(resolved), mime[ext] || 'application/octet-stream', head);
+  } catch (error) {
+    const status = error instanceof URIError ? 400 : error.code === 'ENOENT' || error.code === 'ENOTDIR' ? 404 : 500;
+    send(res, status, JSON.stringify({ error: status === 400 ? 'Invalid URL.' : status === 404 ? 'File not found.' : 'Preview could not load this file.' }), undefined, head);
+  }
+}).listen(port, '127.0.0.1', () => console.log(`Read-only preview: http://127.0.0.1:${port}`));
